@@ -1,10 +1,11 @@
-a
-a
-a
-a
-a
-a
-a
+message: Hello, World.
+a apple
+a 'phone',;
+a "pc"
+a (!@#$%^&*_-=+)
+a -\|/-
+a <?>
+a \n\r
 a
 a
 a

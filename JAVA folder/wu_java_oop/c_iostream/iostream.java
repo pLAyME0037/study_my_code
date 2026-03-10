@@ -2,6 +2,8 @@ import java.util.Locale;
 import java.util.Scanner;
 import java.util.Arrays;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.io.Console;
 import java.io.EOFException;
@@ -24,10 +26,12 @@ class iostream {
         // charStream();
         // readCharStream();
         // scanRead();
-        usingConsole();
+        // usingConsole();
         // System.out.format("%f, %1$+020.10f %n", Math.PI);
-        // dataStream();
+        // writeDataStream();
         // readDataStream();
+        writeObjStream();
+        readObjStream();
     }
 
     public static void byteStream() throws IOException {
@@ -67,8 +71,10 @@ class iostream {
         PrintWriter    os = null;
 
         try {
-            is = new BufferedReader(new FileReader("./data_files/input_text.txt"));
-            os = new PrintWriter(new FileWriter("./data_files/output_text.txt"));
+            is = new BufferedReader(
+                 new FileReader("./data_files/input_text.txt"));
+            os = new PrintWriter(
+                 new FileWriter("./data_files/output_text.txt"));
 
             String l;
             while ((l = is.readLine()) != null) {
@@ -79,54 +85,6 @@ class iostream {
         } finally {
             if (is != null) is.close();
             if (os != null) os.close();
-        }
-    }
-
-    static final String dataFile = "./data_files/invoicedata";
-    static final double[] prices = { 19.99, 9.99, 15.99, 3.99, 4.99 };
-    static final int[] units = { 12, 8, 13, 29, 50 };
-    static final String[] descs = {
-        "Java T-shirt",
-        "Java Mug",
-        "java Duke Juggling Dolls",
-        "Java Pin",
-        "Java Key Chain"
-    };
-
-    public static void dataStream() throws IOException {
-        try (DataOutputStream out = new DataOutputStream(
-                                    new BufferedOutputStream(
-                                    new FileOutputStream(dataFile)))) {
-            for (int i = 0; i < prices.length; ++i) {
-                out.writeDouble(prices[i]);
-                out.writeInt(units[i]);
-                out.writeUTF(descs[i]);
-            }
-        }
-    }
-
-    public static void readDataStream() {
-        double total = 0.0;
-
-        try (DataInputStream in = new DataInputStream(
-                                  new BufferedInputStream(
-                                  new FileInputStream(dataFile)))) {
-            double price;
-            int unit;
-            String desc;
-
-            while (true) {
-                price = in.readDouble();
-                unit = in.readInt();
-                desc = in.readUTF();
-                System.out.format("You ordered %d units of %s at $%.2f%n",
-                                  unit, desc, price);
-                total += unit * price;
-            }
-        } catch (EOFException e) {
-            System.out.printf("Total: $%.2f", total);
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
@@ -176,8 +134,6 @@ class iostream {
             System.exit(1);
         }
 
-        // char[] oldPassword  = c.readPassword("Enter Your Old Password: ");
-
         boolean isMatch = false;
         do {
             char[] newPW  = c.readPassword("Enter new Password: ");
@@ -202,7 +158,100 @@ class iostream {
     static boolean verify(String pass, char[] oldPass) {
         return Arrays.equals(pass.toCharArray(), oldPass);
     }
+
     static void change(String login, char[] password) {
         System.out.println("Updating password...");
     }
+
+    static final String dataFile = "./data_files/invoicedata";
+    static final double[] prices = { 19.99, 9.99, 15.99, 3.99, 4.99 };
+    static final int[] units = { 12, 8, 13, 29, 50 };
+    static final String[] descs = {
+        "Java T-shirt",
+        "Java Mug",
+        "java Duke Juggling Dolls",
+        "Java Pin",
+        "Java Key Chain"
+    };
+
+    public static void writeDataStream() throws IOException {
+        try (DataOutputStream out = new DataOutputStream(
+                                    new BufferedOutputStream(
+                                    new FileOutputStream(dataFile)))) {
+            for (int i = 0; i < prices.length; ++i) {
+                out.writeDouble(prices[i]);
+                out.writeInt(units[i]);
+                out.writeUTF(descs[i]);
+            }
+        }
+    }
+
+    public static void readDataStream() {
+        double total = 0.0;
+
+        try (DataInputStream in = new DataInputStream(
+                                  new BufferedInputStream(
+                                  new FileInputStream(dataFile)))) {
+            double price;
+            int unit;
+            String desc;
+
+            while (true) {
+                price = in.readDouble();
+                unit  = in.readInt();
+                desc  = in.readUTF();
+                System.out.format("You ordered %d units of %s at $%.2f%n",
+                                  unit, desc, price);
+                total += unit * price;
+            }
+        } catch (EOFException e) {
+            System.out.printf("Total: $%.2f", total);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void writeObjStream() throws IOException {
+        FileOutputStream fos = null;
+        ObjectOutputStream out = null;
+        try {
+            fos = new FileOutputStream(dataFile);
+            out = new ObjectOutputStream(
+                  new BufferedOutputStream(fos));
+            for(int i = 0; i < units.length; ++i) {
+                out.writeObject(prices[i]);
+                out.writeObject(units[i]);
+                out.writeObject(descs[i]);
+            }
+        } finally {
+            if (out != null) out.close();
+            else if (fos != null) fos.close();
+        } 
+    }
+
+    public static void readObjStream() {
+        double total = 0.0;
+
+        try (ObjectInputStream in = new ObjectInputStream(
+                                    new BufferedInputStream(
+                                    new FileInputStream(dataFile)))) {
+            double price;
+            int unit;
+            String desc;
+
+            while (true) {
+                price = (Double) in.readObject();
+                unit  = (Integer) in.readObject();
+                desc  = (String) in.readObject();
+                System.out.format("You ordered %d units of %s at $%.2f%n",
+                                  unit, desc, price);
+                total += unit * price;
+            }
+        } catch (EOFException e) {
+            System.out.printf("Total: $%.2f", total);
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
