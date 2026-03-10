@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.io.Console;
 import java.io.EOFException;
 import java.io.FileInputStream;
@@ -211,6 +212,18 @@ class iostream {
         }
     }
 
+    public static class orderObject implements Serializable {
+        double price;
+        int unit;
+        String desc;
+
+        public orderObject(String desc, double price, int unit) {
+            this.unit = unit;
+            this.price = price;
+            this.desc = desc;
+        }
+    }
+
     public static void writeObjStream() throws IOException {
         FileOutputStream fos = null;
         ObjectOutputStream out = null;
@@ -219,9 +232,8 @@ class iostream {
             out = new ObjectOutputStream(
                   new BufferedOutputStream(fos));
             for(int i = 0; i < units.length; ++i) {
-                out.writeObject(prices[i]);
-                out.writeObject(units[i]);
-                out.writeObject(descs[i]);
+                orderObject item = new orderObject(descs[i], prices[i], units[i]);
+                out.writeObject(item);
             }
         } finally {
             if (out != null) out.close();
@@ -229,23 +241,17 @@ class iostream {
         } 
     }
 
-    public static void readObjStream() {
+    public static void readObjStream() { 
         double total = 0.0;
 
         try (ObjectInputStream in = new ObjectInputStream(
                                     new BufferedInputStream(
                                     new FileInputStream(dataFile)))) {
-            double price;
-            int unit;
-            String desc;
-
             while (true) {
-                price = (Double) in.readObject();
-                unit  = (Integer) in.readObject();
-                desc  = (String) in.readObject();
+                orderObject item = (orderObject) in.readObject();
                 System.out.format("You ordered %d units of %s at $%.2f%n",
-                                  unit, desc, price);
-                total += unit * price;
+                                  item.unit, item.desc, item.price);
+                total += item.unit * item.price;
             }
         } catch (EOFException e) {
             System.out.printf("Total: $%.2f", total);
