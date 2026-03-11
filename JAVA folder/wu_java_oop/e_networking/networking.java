@@ -1,7 +1,6 @@
 import java.net.URL;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.IOError;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -17,8 +16,7 @@ class networking {
         if (args.length < 1) {
             System.out.println("Usage: Java networking <1212>");
             port = 1212;
-        }
-        else {
+        } else {
             port = Integer.parseInt(args[0]);
         }
 
@@ -27,7 +25,7 @@ class networking {
             servThread.start();
             Thread.sleep(500);
 
-            socket_client.main(new String[] {"localhost", "8080"});
+            if (port == 1212) socket_client.main(new String[] { "localhost", "1212" });
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -53,10 +51,10 @@ class networking {
             int port = Integer.parseInt(args[1]);
 
             try {
-                System.out.format("Connecting to %s on port %d %n",
+                System.out.format("[Info] Connecting to %s on port %d %n",
                                   serverName, port);
                 Socket client = new Socket(serverName, port);
-                System.out.format("Connected to" + client.getRemoteSocketAddress());
+                System.out.println("[Info] Connected to" + client.getRemoteSocketAddress());
 
                 OutputStream toServer = client.getOutputStream();
                 DataOutputStream out = new DataOutputStream(toServer);
@@ -64,7 +62,7 @@ class networking {
 
                 InputStream fromServer = client.getInputStream();
                 DataInputStream in = new DataInputStream(fromServer);
-                System.out.println("From Server: " + in.readUTF());
+                System.out.println("[Info] From Server: " + in.readUTF());
 
                 client.close();
             } catch (Exception e) {
@@ -94,11 +92,11 @@ class networking {
         public void run() {
             while (true) {
                 try {
-                    System.out.println("Waiting for client on port "
+                    System.out.println("[Info] Waiting for client on port "
                                       + serverSocket.getLocalPort()
                                       + "...");
                     Socket server = serverSocket.accept();
-                    System.out.println("Connected to "
+                    System.out.println("[Info] Connected to "
                                       + server.getRemoteSocketAddress());
 
                     DataInputStream in = new DataInputStream(server.getInputStream());
