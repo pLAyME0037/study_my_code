@@ -11,13 +11,23 @@ import java.net.URI;
 
 class networking {
     public static void main(String[] args) {
-        createUrl();
+        // createUrl();
+        int port;
+
+        if (args.length < 1) {
+            System.out.println("Usage: Java networking <1212>");
+            port = 1212;
+        }
+        else {
+            port = Integer.parseInt(args[0]);
+        }
+
         try {
-            socket_server servThread = new socket_server(1212);
+            socket_server servThread = new socket_server(port);
             servThread.start();
             Thread.sleep(500);
 
-            socket_client.main(new String[] {"localhost", "1212"});
+            socket_client.main(new String[] {"localhost", "8080"});
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -95,7 +105,7 @@ class networking {
                     System.out.println(in.readUTF());
 
                     DataOutputStream out = new DataOutputStream(server.getOutputStream());
-                    out.writeUTF("Welcom you are now connected to"
+                    out.writeUTF("Welcome you are now connected to"
                                 + server.getLocalSocketAddress()
                                 + "\nGoodbye!");
 
