@@ -7,6 +7,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <sys/types.h>
+#define OLIVE_IMPLEMENTATION
+#include "olive.c"
 
 #define GREEN_COLOR 0xFF00FF00
 #define RED_COLOR 0xFF0000FF 
@@ -25,6 +27,20 @@
 #define FOREGROUND_COLOR 0x6495EDFF
 
 static uint32_t pixels[WIDTH*HEIGHT];
+
+bool checkerEx(void);
+bool circleEx(void);
+bool lineEx(void);
+bool fill_triangle(void);
+
+int main(void) {
+    if (! checkerEx()) return -1;
+    if (! circleEx()) return -1;
+    if (! lineEx()) return -1;
+    if (! fill_triangle()) return -1;
+
+    return 0;
+}
 
 bool lineEx(void) {
     olivec_fill(pixels, WIDTH, HEIGHT, BACKGROUND_COLOR);
@@ -61,7 +77,7 @@ bool lineEx(void) {
                      WIDTH/2, 0, WIDTH/2, HEIGHT,
                      0xFFFF3030);
 
-    const char *file_path = "line_example.ppm";
+    const char *file_path = "sample_output/line_example.ppm";
     Errno err = olivec_save_to_ppm_file(pixels, WIDTH, HEIGHT, file_path);
     if (err) {
         fprintf(stderr, "ERROR: could not save file %s: %s\n", file_path, strerror(errno));
@@ -85,7 +101,7 @@ bool checkerEx(void) {
         }
     }
 
-    const char *file_path = "checker_example.ppm";
+    const char *file_path = "sample_output/checker_example.ppm";
     Errno err = olivec_save_to_ppm_file(pixels, WIDTH, HEIGHT, file_path);
     if (err) {
         fprintf(stderr, "ERROR: could not save file %s: %s\n", file_path, strerror(errno));
@@ -114,7 +130,7 @@ bool circleEx(void) {
         }
     }
 
-    const char *file_path = "circle.ppm";
+    const char *file_path = "sample_output/circle.ppm";
     Errno err = olivec_save_to_ppm_file(pixels, WIDTH, HEIGHT, file_path);
     if (err) {
         fprintf(stderr, "ERROR: could not save file %s: %s\n", file_path, strerror(errno));
@@ -140,7 +156,7 @@ bool fill_triangle(void) {
         olivec_draw_triangle(pixels, WIDTH, HEIGHT, x1, y1, x2, y2, x3, y3, BLUE_COLOR);
     }
 
-    const char *file_path = "test_triangle.ppm";
+    const char *file_path = "sample_output/test_triangle.ppm";
     Errno err = olivec_save_to_ppm_file(pixels, WIDTH, HEIGHT, file_path);
     if (err) {
         fprintf(stderr, "ERROR: could not save file %s: %s\n", file_path, strerror(errno));
