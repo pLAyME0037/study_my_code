@@ -2,14 +2,15 @@ import 'package:cloth_app/main_screen/customer_home.dart';
 import 'package:flutter/material.dart';
 
 void main(List<String> args) {
-  runApp(const MyApp);
+  runApp(const MyApp());
+}
 
-  class MyApp extends StatelessWidget {
-      const MyApp ({super.key});
-  }
+class MyApp extends StatelessWidget {
+  const MyApp ({super.key});
 
   @override
   Widget build(BuildContext context) {
-      return MaterialApp(home: CustomerHomeScreen());
+      return MaterialApp(home: CustomerHomeScreen(), 
+                         debugShowCheckedModeBanner: false,);
   }
 }
