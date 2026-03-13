@@ -4,7 +4,6 @@
 #define OLIVE_C_
 
 #include <stdint.h>
-#include <stddef.h>
 
 typedef int Errno;
 
@@ -35,7 +34,7 @@ void olivec_draw_triangle(uint32_t *pixels, size_t width, size_t height,
                           int x3, int y3,
                           uint32_t color);
 Errno olivec_save_to_ppm_file(uint32_t *pixels, size_t width, size_t height, const char *file_path);
-    
+
 #endif /* ifdef OLIVE_C_ */
 
 #ifdef OLIVE_IMPLEMENTATION
@@ -113,8 +112,8 @@ void olivec_fill_rect(uint32_t *pixels, size_t pixels_width, size_t pixels_heigh
  * @param pixels A pointer to the memory buffer representing image
  * @param pixels_width The total number of horizontal pixels in image
  * @param pixels_heigth	The total number of vertical pixels in image
- * @param cx, cy Center X and Y coords where the circle's middle sits 
- * @param r Radius 
+ * @param cx, cy Center X and Y coords where the circle's middle sits
+ * @param r Radius
  * @param color hex color value to fill the circle
  */
 void olivec_fill_circle(uint32_t *pixels, size_t pixels_width, size_t pixels_heigth,
@@ -209,6 +208,7 @@ void olivec_draw_triangle(uint32_t *pixels, size_t width, size_t height,
     int dy13 = y3 - y1;
     int dx23 = x3 - x2;
     int dy23 = y3 - y2;
+
     for (int y = y1; y <= y2; ++y) {
         if (0 <= y && (size_t) y < height) {
             // (y -c)/k -x
@@ -220,7 +220,7 @@ void olivec_draw_triangle(uint32_t *pixels, size_t width, size_t height,
                     pixels[y*width + x] = color;
                 }
             }
-        } 
+        }
     }
     for (int y = y2; y <= y3; ++y) {
         if (0 <= y && (size_t) y < height) {
