@@ -1,6 +1,6 @@
 /* i learn this form Tsoding Daily */
 
-#ifndef OLIVE_C_
+#ifsample_outputndef OLIVE_C_
 #define OLIVE_C_
 
 #include <stdint.h>
