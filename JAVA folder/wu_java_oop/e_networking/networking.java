@@ -14,8 +14,8 @@ class networking {
         int port;
 
         if (args.length < 1) {
-            System.out.println("Usage: Java networking <1212>");
-            port = 1212;
+            System.out.println("Usage: Java networking <8080>");
+            port = 8080;
         } else {
             port = Integer.parseInt(args[0]);
         }
@@ -25,7 +25,7 @@ class networking {
             servThread.start();
             Thread.sleep(500);
 
-            if (port == 1212) socket_client.main(new String[] { "localhost", "1212" });
+            if (port == 8080) socket_client.main(new String[] { "localhost", "8080" });
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -51,20 +51,20 @@ class networking {
             int port = Integer.parseInt(args[1]);
 
             try {
+                Socket client = new Socket(serverName, port);
                 System.out.format("[Info] Connecting to %s on port %d %n",
                                   serverName, port);
-                Socket client = new Socket(serverName, port);
                 System.out.println("[Info] Connected to" + client.getRemoteSocketAddress());
 
-                OutputStream toServer = client.getOutputStream();
-                DataOutputStream out = new DataOutputStream(toServer);
+                // OutputStream toServer = client.getOutputStream();
+                DataOutputStream out = new DataOutputStream(client.getOutputStream());
                 out.writeUTF("Hello from" + client.getLocalSocketAddress());
 
-                InputStream fromServer = client.getInputStream();
-                DataInputStream in = new DataInputStream(fromServer);
+                // InputStream fromServer = client.getInputStream();
+                DataInputStream in = new DataInputStream(client.getInputStream());
                 System.out.println("[Info] From Server: " + in.readUTF());
 
-                client.close();
+                // client.close();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -76,7 +76,7 @@ class networking {
 
         public socket_server(int port) throws IOException {
             serverSocket = new ServerSocket(port);
-            serverSocket.setSoTimeout(10000);
+            serverSocket.setSoTimeout(0);
         }
 
         public static void main(String[] args) {
