@@ -23,7 +23,7 @@ class iostream {
     static FileOutputStream out = null;
 
     public static void main(String[] args) throws IOException {
-        // byteStream();
+        byteStream();
         // charStream();
         // readCharStream();
         // scanRead();
@@ -31,21 +31,22 @@ class iostream {
         // System.out.format("%f, %1$+020.10f %n", Math.PI);
         // writeDataStream();
         // readDataStream();
-        writeObjStream();
-        readObjStream();
+        // writeObjStream();
+        // readObjStream();
     }
 
     public static void byteStream() throws IOException {
         try {
-            in = new FileInputStream("./data_files/input_text.txt");
-            out = new FileOutputStream("./data_files/output_text.txt");
-            String message = "message: Hello, World.\n";
-            out.write(message.getBytes());
+            in = new FileInputStream("./data_files/wallpaper1.jpg");
+            out = new FileOutputStream("./data_files/wallpaper2.jpg");
             int c;
             while ((c = in.read()) != -1) { out.write(c); }
+            // String message = "message: Hello, World.\n";
+            // out.write(message.getBytes());
         } finally {
             if (in != null) in.close();
             if (out != null) out.close();
+            System.out.println("done");
         }
     }
 
