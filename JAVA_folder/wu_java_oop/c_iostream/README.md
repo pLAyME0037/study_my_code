@@ -27,7 +27,7 @@ This is where the "smart" vs "bloated" comparison comes in.
 *   For **Western languagess almost always smaller.
 *   For **Asian languages**, UTF-16 is actually sometimes smaller (2 bytes vs 3 bytes).
 
-### 3. Why UTF-8 won the IntBackwards Compatibility (The "Magic" Trick):
+### 3. Why UTF-8 won the Internet Backwards Compatibility (The "Magic" Trick):
 1. **Backwards Compatibility (The "Magic" Trick):** If you have an old file from
    alreadyn in ASCII (8-bit English), that file is **already** a valid UTF-8
    file. You don't have to convert it. UTF-16 cannot do this; it wNo "Null"
