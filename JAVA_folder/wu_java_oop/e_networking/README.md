@@ -31,12 +31,12 @@
     * Socket A = Conversation with You (via your unique door number).
     * Socket B = Conversation with Someone Else (via their unique door number).
   
-* When the connection is made, the server creates a socket object on its end of 
-  the communication. The client and the server can now communicate by writing to 
+* When the connection is made, the server creates a socket object on its end of
+  the communication. The client and the server can now communicate by writing to
   and reading from the socket.
 
-* The java.net.Socket class represents a socket, and the java.net.ServerSocket 
-  class provides a mechanism for the server program to listen for clients and 
+* The java.net.Socket class represents a socket, and the java.net.ServerSocket
+  class provides a mechanism for the server program to listen for clients and
   establish connections with them.
 ```java
 public static class socket_client {
@@ -72,3 +72,4 @@ A URL can be broken down into parts, as follows (default port 80) −
 protocol://host:port     /path     ?query      #ref
 https   ://www.amrood.com/index.htm?language=en#j2se
 ```
+

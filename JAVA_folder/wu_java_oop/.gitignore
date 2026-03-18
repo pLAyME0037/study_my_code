@@ -1,0 +1,3 @@
+*.class
+./c_iostream/*.class
+./e_networking/*class
