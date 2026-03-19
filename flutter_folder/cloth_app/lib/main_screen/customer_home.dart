@@ -1,3 +1,4 @@
+import 'package:cloth_app/main_screen/home.dart';
 import 'package:flutter/material.dart';
 
 class CustomerHomeScreen extends StatefulWidget {
@@ -8,9 +9,9 @@ class CustomerHomeScreen extends StatefulWidget {
 }
 
 class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
-    int _index = 1;
+    int _index = 0;
     final _page = const [
-        Text("hello"),
+        HomeScreen(),
         Text("hello1111kl"),
         Text("hello12wythgtyghgeashkggfTUY7U8JIFNBJHBGNVMRUKGHDJIHJWEG"),
         Text("hellofnrejlfbefregregregbnehjghhebhfbbvgfwwfqcdfwgdcwgfqdcgffcdfge"),

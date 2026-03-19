@@ -64,7 +64,7 @@ class networking {
                 DataInputStream in = new DataInputStream(client.getInputStream());
                 System.out.println("[Info] From Server: " + in.readUTF());
 
-                // client.close();
+                client.close();
             } catch (Exception e) {
                 e.printStackTrace();
             }
