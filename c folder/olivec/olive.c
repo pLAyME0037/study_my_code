@@ -12,9 +12,17 @@ typedef int Errno;
 #define OLIVEC_SIGN(T, x) ((T)((x) > 0) - (T)((x) < 0))
 #define OLIVEC_ABS(T, x) (OLIVEC_SIGN(T, x)*(x))
 #define UNREACHABLE()
+#define RETURN_DEFER(value) do { result = (value); goto defer; } while (0)
+
+#define GREEN_COLOR 0xFF00FF00
+#define RED_COLOR 0xFF0000FF
+#define BLUE_COLOR 0x00FFFF00
+#define YELLOW_COLOR 0x0000FFFF
+#define GRAY_COLOR 0x00808080
+#define TERCOISE_COLOR 0x80808000
 
 void swap_int(int *a, int *b);
-float lerpf(float a, float b, float t);
+/* float lerpf(float a, float b, float t); */
 void olivec_fill(uint32_t *pixels, size_t width, size_t height, uint32_t color);
 void olivec_fill_rect(uint32_t *pixels, size_t pixels_width, size_t pixels_height,
                       int x0, int y0, size_t w, size_t h,
@@ -40,8 +48,10 @@ Errno olivec_save_to_ppm_file(uint32_t *pixels, size_t width, size_t height, con
 #ifdef OLIVE_IMPLEMENTATION
 #undef OLIVE_IMPLEMENTATION
 
+#ifdef OLIVE_NO_STDLIB
 #include <stdio.h>
 #include <errno.h>
+#endif /* ifdef OLIVE_NO_STDLIB */
 
 void swap_int(int *a, int *b) {
     int t = *a;
@@ -49,9 +59,9 @@ void swap_int(int *a, int *b) {
     *b = t;
 }
 
-float lerpf(float a, float b, float t) {
-    return a + (b - a) * t;
-}
+/* float lerpf(float a, float b, float t) { */
+/*     return a + (b - a) * t; */
+/* } */
 
 void olivec_fill(uint32_t *pixels, size_t width, size_t height, uint32_t color) {
 
@@ -60,8 +70,7 @@ void olivec_fill(uint32_t *pixels, size_t width, size_t height, uint32_t color) 
     }
 }
 
-#define RETURN_DEFER(value) do { result = (value); goto defer; } while (0)
-
+#ifdef OLIVE_NO_STDLIB
 Errno olivec_save_to_ppm_file(uint32_t *pixels, size_t width, size_t height, const char *file_path) {
 
     int result = 0;
@@ -91,6 +100,7 @@ defer:
     if (f) fclose(f);
     return result;
 }
+#endif /* ifdef OLIVE_NO_STDLIB */
 
 void olivec_fill_rect(uint32_t *pixels, size_t pixels_width, size_t pixels_height,
                       int x0, int y0, size_t w, size_t h,
