@@ -7,13 +7,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <sys/types.h>
+#define OLIVE_NO_STDLIB
 #define OLIVE_IMPLEMENTATION
 #include "olive.c"
-
-#define GREEN_COLOR 0xFF00FF00
-#define RED_COLOR 0xFF0000FF 
-#define BLUE_COLOR 0x00FFFF00
-#define YELLOW_COLOR 0x0000FFFF
 
 #define WIDTH 800
 #define HEIGHT 600
@@ -45,35 +41,35 @@ int main(void) {
 bool lineEx(void) {
     olivec_fill(pixels, WIDTH, HEIGHT, BACKGROUND_COLOR);
 
-    olivec_draw_line(pixels, WIDTH, HEIGHT, 
-                     0, 0, WIDTH, HEIGHT, 
+    olivec_draw_line(pixels, WIDTH, HEIGHT,
+                     0, 0, WIDTH, HEIGHT,
                      FOREGROUND_COLOR);
 
-    olivec_draw_line(pixels, WIDTH, HEIGHT, 
-                     0, 0, WIDTH/4, HEIGHT, 
+    olivec_draw_line(pixels, WIDTH, HEIGHT,
+                     0, 0, WIDTH/4, HEIGHT,
                      FOREGROUND_COLOR);
 
-    olivec_draw_line(pixels, WIDTH, HEIGHT, 
-                     WIDTH, 0, 0, HEIGHT, 
+    olivec_draw_line(pixels, WIDTH, HEIGHT,
+                     WIDTH, 0, 0, HEIGHT,
                      FOREGROUND_COLOR);
 
-    olivec_draw_line(pixels, WIDTH, HEIGHT, 
-                     WIDTH/4, 0, 0, HEIGHT, 
+    olivec_draw_line(pixels, WIDTH, HEIGHT,
+                     WIDTH/4, 0, 0, HEIGHT,
                      FOREGROUND_COLOR);
 
-    olivec_draw_line(pixels, WIDTH, HEIGHT, 
-                     WIDTH, 0, WIDTH/4*3, HEIGHT, 
+    olivec_draw_line(pixels, WIDTH, HEIGHT,
+                     WIDTH, 0, WIDTH/4*3, HEIGHT,
                      FOREGROUND_COLOR);
 
-    olivec_draw_line(pixels, WIDTH, HEIGHT, 
-                     WIDTH/4*3, 0, WIDTH, HEIGHT, 
+    olivec_draw_line(pixels, WIDTH, HEIGHT,
+                     WIDTH/4*3, 0, WIDTH, HEIGHT,
                      FOREGROUND_COLOR);
 
-    olivec_draw_line(pixels, WIDTH, HEIGHT, 
-                     0, HEIGHT/2, WIDTH, HEIGHT/2, 
+    olivec_draw_line(pixels, WIDTH, HEIGHT,
+                     0, HEIGHT/2, WIDTH, HEIGHT/2,
                      0xFF20FF20);
 
-    olivec_draw_line(pixels, WIDTH, HEIGHT, 
+    olivec_draw_line(pixels, WIDTH, HEIGHT,
                      WIDTH/2, 0, WIDTH/2, HEIGHT,
                      0xFFFF3030);
 
@@ -124,8 +120,8 @@ bool circleEx(void) {
             int cx = x*CELL_WIDTH + CELL_WIDTH/2;
             int cy = y*CELL_HEIGHT + CELL_HEIGHT/2;
             olivec_fill_circle(pixels, WIDTH, HEIGHT,
-                               cx, cy, 
-                               (size_t) lerpf(radius/8, radius/2, t),
+                               cx, cy,
+                               (size_t) OLIVEC_LERPF(radius/8, radius/2, t),
                                FOREGROUND_COLOR);
         }
     }
@@ -142,14 +138,14 @@ bool circleEx(void) {
 bool fill_triangle(void) {
     olivec_fill(pixels, WIDTH, HEIGHT, BACKGROUND_COLOR);
 
-    { 
+    {
         int x1 = WIDTH/2,   y1 = HEIGHT/8;
         int x2 = WIDTH/8,   y2 = HEIGHT/2;
         int x3 = WIDTH*7/8, y3 = HEIGHT*7/8;
-        olivec_draw_triangle(pixels, WIDTH, HEIGHT, x1, y1, x2, y2, x3, y3, YELLOW_COLOR); 
+        olivec_draw_triangle(pixels, WIDTH, HEIGHT, x1, y1, x2, y2, x3, y3, YELLOW_COLOR);
     }
 
-    { 
+    {
         int x1 = WIDTH/2,   y1 = HEIGHT/8;
         int x2 = WIDTH*2/8,   y2 = HEIGHT/2;
         int x3 = WIDTH*6/8, y3 = HEIGHT/2;
