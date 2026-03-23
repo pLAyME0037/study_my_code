@@ -24,21 +24,32 @@
 
 static uint32_t pixels[WIDTH*HEIGHT];
 
-bool checkerEx(void);
-bool circleEx(void);
-bool lineEx(void);
-bool fill_triangle(void);
+void checkerEx(void);
+void circleEx(void);
+void lineEx(void);
+void fill_triangle(void);
+void test_alpha_blending(void);
 
 int main(void) {
-    if (! checkerEx()) return -1;
-    if (! circleEx()) return -1;
-    if (! lineEx()) return -1;
-    if (! fill_triangle()) return -1;
+    checkerEx();
+    circleEx();
+    lineEx();
+    fill_triangle();
+    test_alpha_blending();
 
     return 0;
 }
 
-bool lineEx(void) {
+bool saveFile(const char *file_path) {
+    Errno err = olivec_save_to_ppm_file(pixels, WIDTH, HEIGHT, file_path);
+    if (err) {
+        fprintf(stderr, "ERROR: could not save file %s: %s\n", file_path, strerror(errno));
+        return false;
+    }
+    return true;
+}
+
+void lineEx(void) {
     olivec_fill(pixels, WIDTH, HEIGHT, BACKGROUND_COLOR);
 
     olivec_draw_line(pixels, WIDTH, HEIGHT,
@@ -73,16 +84,10 @@ bool lineEx(void) {
                      WIDTH/2, 0, WIDTH/2, HEIGHT,
                      0xFFFF3030);
 
-    const char *file_path = "sample_output/line_example.ppm";
-    Errno err = olivec_save_to_ppm_file(pixels, WIDTH, HEIGHT, file_path);
-    if (err) {
-        fprintf(stderr, "ERROR: could not save file %s: %s\n", file_path, strerror(errno));
-        return false;
-    }
-    return true;
+    saveFile("sample_output/line_example.ppm");
 }
 
-bool checkerEx(void) {
+void checkerEx(void) {
     olivec_fill(pixels, WIDTH, HEIGHT, BACKGROUND_COLOR);
 
     for (int x = 0; x < COLS; ++x) {
@@ -97,16 +102,10 @@ bool checkerEx(void) {
         }
     }
 
-    const char *file_path = "sample_output/checker_example.ppm";
-    Errno err = olivec_save_to_ppm_file(pixels, WIDTH, HEIGHT, file_path);
-    if (err) {
-        fprintf(stderr, "ERROR: could not save file %s: %s\n", file_path, strerror(errno));
-        return false;
-    }
-    return true;
+    saveFile("sample_output/checker_example.ppm");
 }
 
-bool circleEx(void) {
+void circleEx(void) {
     olivec_fill(pixels, WIDTH, HEIGHT, BACKGROUND_COLOR);
 
     for (int x = 0; x < COLS; ++x) {
@@ -126,16 +125,10 @@ bool circleEx(void) {
         }
     }
 
-    const char *file_path = "sample_output/circle.ppm";
-    Errno err = olivec_save_to_ppm_file(pixels, WIDTH, HEIGHT, file_path);
-    if (err) {
-        fprintf(stderr, "ERROR: could not save file %s: %s\n", file_path, strerror(errno));
-        return false;
-    }
-    return true;
+    saveFile("sample_output/circle.ppm");
 }
 
-bool fill_triangle(void) {
+void fill_triangle(void) {
     olivec_fill(pixels, WIDTH, HEIGHT, BACKGROUND_COLOR);
 
     {
@@ -152,13 +145,14 @@ bool fill_triangle(void) {
         olivec_draw_triangle(pixels, WIDTH, HEIGHT, x1, y1, x2, y2, x3, y3, BLUE_COLOR);
     }
 
-    const char *file_path = "sample_output/test_triangle.ppm";
-    Errno err = olivec_save_to_ppm_file(pixels, WIDTH, HEIGHT, file_path);
-    if (err) {
-        fprintf(stderr, "ERROR: could not save file %s: %s\n", file_path, strerror(errno));
-        return false;
-    }
-    return true;
+    saveFile("sample_output/test_triangle.ppm");
+}
+
+void test_alpha_blending(void) {
+    olivec_fill(pixels, WIDTH, HEIGHT, BACKGROUND_COLOR);
+    olivec_fill_rect(pixels, WIDTH, HEIGHT, 0, 0, WIDTH/3, HEIGHT, RED_COLOR);
+
+    saveFile("sample_output/alpha_blending.ppm");
 }
 
 #endif /* ifndef TEST_C_ #define  TEST_C_ */
