@@ -21,8 +21,6 @@ typedef int Errno;
 #define GRAY_COLOR 0x00808080
 #define TERCOISE_COLOR 0x80808000
 
-void swap_int(int *a, int *b);
-/* float lerpf(float a, float b, float t); */
 void olivec_fill(uint32_t *pixels, size_t width, size_t height, uint32_t color);
 void olivec_fill_rect(uint32_t *pixels, size_t pixels_width, size_t pixels_height,
                       int x0, int y0, size_t w, size_t h,
@@ -33,16 +31,18 @@ void olivec_fill_circle(uint32_t *pixels, size_t pixels_width, size_t pixels_hei
 void olivec_draw_line(uint32_t *pixels, size_t pixels_width, size_t pixels_height,
                       int x1, int y1, int x2, int y2,
                       uint32_t color);
-void olivec_sort_tri_points_by_y(int *x1, int *y1,
-                                 int *x2, int *y2,
-                                 int *x3, int *y3);
 void olivec_draw_triangle(uint32_t *pixels, size_t width, size_t height,
                           int x1, int y1,
                           int x2, int y2,
                           int x3, int y3,
                           uint32_t color);
 Errno olivec_save_to_ppm_file(uint32_t *pixels, size_t width, size_t height, const char *file_path);
-
+// abstract dependency
+void olivec_sort_tri_points_by_y(int *x1, int *y1,
+                                 int *x2, int *y2,
+                                 int *x3, int *y3);
+void swap_int(int *a, int *b);
+// float lerpf(float a, float b, float t);
 #endif /* ifdef OLIVE_C_ */
 
 #ifdef OLIVE_IMPLEMENTATION
@@ -59,9 +59,9 @@ void swap_int(int *a, int *b) {
     *b = t;
 }
 
-/* float lerpf(float a, float b, float t) { */
-/*     return a + (b - a) * t; */
-/* } */
+// float lerpf(float a, float b, float t) {
+//     return a + (b - a) * t;
+// }
 
 void olivec_fill(uint32_t *pixels, size_t width, size_t height, uint32_t color) {
 
