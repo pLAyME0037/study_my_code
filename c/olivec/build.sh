@@ -9,3 +9,4 @@ wasm-ld -m wasm32 --no-entry --export-all --allow-undefined -o wasm.wasm wasm.o
 
 ./bin/example
 ./bin/test
+feh ./sample_output/alpha_blending.png

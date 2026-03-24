@@ -150,9 +150,13 @@ void fill_triangle(void) {
 
 void test_alpha_blending(void) {
     olivec_fill(pixels, WIDTH, HEIGHT, BACKGROUND_COLOR);
-    olivec_fill_rect(pixels, WIDTH, HEIGHT, 0, 0, WIDTH/3, HEIGHT, RED_COLOR);
+    olivec_fill_rect(pixels, WIDTH, HEIGHT, 0, 0, WIDTH*3/4, HEIGHT*3/4, RED_COLOR);
+    olivec_fill_rect(pixels, WIDTH, HEIGHT, WIDTH/4, HEIGHT/4, WIDTH*3/4, HEIGHT*3/4, 0x5500FF00);
+    olivec_fill_circle(pixels, WIDTH, HEIGHT, WIDTH/2, HEIGHT/2, WIDTH/4, 0x55AA2020);
+    olivec_draw_triangle(pixels, WIDTH, HEIGHT, 0, HEIGHT, WIDTH, HEIGHT, WIDTH/2, 0, 0x9920AAAA);
+    /* printf("%d/n", 400/800); */
 
-    saveFile("sample_output/alpha_blending.ppm");
+    saveFile("sample_output/alpha_blending.png");
 }
 
 #endif /* ifndef TEST_C_ #define  TEST_C_ */
