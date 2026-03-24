@@ -3,6 +3,7 @@
 #ifndef OLIVE_C_
 #define OLIVE_C_
 
+#include <stddef.h>
 #include <stdint.h>
 
 typedef int Errno;
@@ -16,7 +17,8 @@ typedef int Errno;
 
 #define GREEN_COLOR 0xFF00FF00
 #define RED_COLOR 0xFF0000FF
-#define BLUE_COLOR 0x00FFFF00
+#define SKYBLUE_COLOR 0x00FFFF00
+#define BLUE_COLOR 0x00AA2020
 #define YELLOW_COLOR 0x0000FFFF
 #define GRAY_COLOR 0x00808080
 #define TERCOISE_COLOR 0x80808000
@@ -42,7 +44,47 @@ void olivec_sort_tri_points_by_y(int *x1, int *y1,
                                  int *x2, int *y2,
                                  int *x3, int *y3);
 void swap_int(int *a, int *b);
-// float lerpf(float a, float b, float t);
+
+typedef enum {
+    COMP_RED = 0,
+    COMP_GREEN,
+    COMP_BLUE,
+    COMP_ALPHA,
+    COMP_COUNT,
+} Comp_Index;
+
+void unpack_rgba32(uint32_t col, uint8_t comp[COMP_COUNT]) {
+    for (size_t i = 0; i < COMP_COUNT; ++i) {
+        comp[i] = col&0xFF;
+        col >>= 8;
+    }
+}
+
+uint32_t pack_rgba32(uint8_t comp[COMP_COUNT]) {
+    uint32_t result = 0;
+    for (size_t i = 0; i < COMP_COUNT; ++i) {
+        result |= comp[i]<<(8*i);
+    }
+    return result;
+}
+
+uint8_t olivec_mix_comp(uint16_t col1, uint16_t col2, uint16_t alpa) {
+    return col1 + (col2 - col1) * alpa/255;
+}
+
+uint32_t olivec_mix_colors(uint32_t col1, uint32_t col2) {
+    uint8_t comp1[COMP_COUNT];
+    unpack_rgba32(col1, comp1);
+
+    uint8_t comp2[COMP_COUNT];
+    unpack_rgba32(col2, comp2);
+
+    for (size_t i = 0; i < COMP_ALPHA; ++i) {
+        comp1[i] = olivec_mix_comp(comp1[i], comp2[i], comp2[COMP_ALPHA]);
+    }
+
+    return pack_rgba32(comp1);
+}
 #endif /* ifdef OLIVE_C_ */
 
 #ifdef OLIVE_IMPLEMENTATION
@@ -58,10 +100,6 @@ void swap_int(int *a, int *b) {
     *a = *b;
     *b = t;
 }
-
-// float lerpf(float a, float b, float t) {
-//     return a + (b - a) * t;
-// }
 
 void olivec_fill(uint32_t *pixels, size_t width, size_t height, uint32_t color) {
 
@@ -111,7 +149,7 @@ void olivec_fill_rect(uint32_t *pixels, size_t pixels_width, size_t pixels_heigh
             for (int dx = 0; dx < (int) w; ++dx) {
                 int x = x0 + dx;
                 if (0 <= x && x < (int) pixels_width) {
-                    pixels[y*pixels_width + x] = color;
+                    pixels[y*pixels_width + x] = olivec_mix_colors(pixels[y*pixels_width + x], color);
                 }
             }
         }
@@ -140,7 +178,7 @@ void olivec_fill_circle(uint32_t *pixels, size_t pixels_width, size_t pixels_hei
                     int dx = x - cx;
                     int dy = y - cy;
                     if (dx*dx + dy*dy <= r*r) {
-                        pixels[y*pixels_width + x] = color;
+                        pixels[y*pixels_width + x] = olivec_mix_colors(pixels[y*pixels_width + x], color);
                     }
                 }
             }
@@ -227,7 +265,7 @@ void olivec_draw_triangle(uint32_t *pixels, size_t width, size_t height,
             if (s1 > s2) OLIVEC_SWAP(int, s1, s2);
             for (int x = s1; x <= s2; ++x) {
                 if (0 <= x && (size_t) x < width) {
-                    pixels[y*width + x] = color;
+                    pixels[y*width + x] = olivec_mix_colors(pixels[y*width + x], color);
                 }
             }
         }
@@ -239,7 +277,7 @@ void olivec_draw_triangle(uint32_t *pixels, size_t width, size_t height,
             if (s1 > s2) OLIVEC_SWAP(int, s1, s2);
             for (int x = s1; x <= s2; ++x) {
                 if (0 <= x && (size_t) x < width) {
-                    pixels[y*width + x] = color;
+                    pixels[y*width + x] = olivec_mix_colors(pixels[y*width + x], color);
                 }
             }
         }

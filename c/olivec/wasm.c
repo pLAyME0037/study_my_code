@@ -17,10 +17,10 @@ float sinf(float x);
 void rotate_point(int *x, int *y) {
     int dx = *x - WIDTH/2;
     int dy = *y - HEIGHT/2;
-    float mag = sqrtf(dx*dx + dy*dy);
+    float mag = sqrtf(dx * dx + dy * dy);
     float dir = atan2f(dy, dx) + angle;
-    *x = cosf(dir)*mag + (float) WIDTH/2;
-    *y = sinf(dir)*mag + (float) HEIGHT/2;
+    *x = cosf(dir) * mag + (float) WIDTH/2;
+    *y = sinf(dir) * mag + (float) HEIGHT/2;
 }
 
 uint32_t *render(float dt) {
