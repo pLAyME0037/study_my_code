@@ -1,3 +1,17 @@
+# Package java.net
+package **java.net** Provides the classes for implementing networking applications.
+The java.net package can be roughly divided in two sections:
+
+  - A Low Level API, which deals with the following abstractions:
+    - Addresses, which are networking identifiers, like IP addresses.
+    - Sockets, which are basic bidirectional data communication mechanisms.
+    - Interfaces, which describe network interfaces.
+
+  - A High Level API, which deals with the following abstractions:
+    - URIs, which represent Universal Resource Identifiers.
+    - URLs, which represent Universal Resource Locators.
+    - Connections, which represents connections to the resource pointed to by URLs.
+
 ### Advantages of Java Networking
 - Creating server-client applications
 - Implementing networking protocols
@@ -5,6 +19,26 @@
 - Creating web services
 
 **Socket Programming**
+  Sockets are means to establish a communication link between machines over the
+  network. 
+  The java.net package provides 4 kinds of Sockets:
+
+  - ***Socket*** is a TCP client API, and will typically be used to connect to a
+    remote host.
+
+  - ***ServerSocket*** is a TCP server API, and will typically accept connections
+    from client sockets.
+
+  - ***DatagramSocket*** is a UDP endpoint API and is used to send and receive
+    datagram packets.
+
+  - ***MulticastSocket*** is a subclass of DatagramSocket used when dealing with
+    multicast groups.
+  
+  Sending and receiving with TCP sockets is done through InputStreams and
+  OutputStreams which can be obtained via the Socket.getInputStream() and
+  Socket.getOutputStream() methods.
+
 ### Socket Programming in Java Networking
 * Sockets provide the communication mechanism between two computers using TCP. 
   A client program creates a socket on its end of the communication and attempts 
