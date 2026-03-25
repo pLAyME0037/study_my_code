@@ -1,4 +1,3 @@
-#include <stdlib.h>
 #define OLIVE_NO_STDLIB
 #define OLIVE_IMPLEMENTATION
 #include "olive.c"
@@ -50,6 +49,12 @@ uint32_t *render(float dt) {
     }
     return pixels;
 }
+
+#ifdef SDL_PLATFORM
+#include <stdio.h>
+#include <SDL2/SDL.h>
+
+#endif /* ifdef SDL_PLATFORM */
 
 int main(int argc, char **argv) {
 }
