@@ -23,6 +23,9 @@ typedef int Errno;
 #define GRAY_COLOR 0x00808080
 #define TERCOISE_COLOR 0x80808000
 
+#define BACKGROUND_COLOR 0xFF202020
+#define FOREGROUND_COLOR 0x6495EDFF
+
 void olivec_fill(uint32_t *pixels, size_t width, size_t height, uint32_t color);
 void olivec_fill_rect(uint32_t *pixels, size_t pixels_width, size_t pixels_height,
                       int x0, int y0, size_t w, size_t h,

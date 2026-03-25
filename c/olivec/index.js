@@ -12,7 +12,7 @@ function make_enviroment(...envs) {
                     return env[prop];
                 }
             }
-            return (...args) => { console.error("NOT TMPLEMENTED " + prop, args )}
+            return (...args) => { console.error("NOT IMPLEMENTED " + prop, args )}
         }
     });
 }

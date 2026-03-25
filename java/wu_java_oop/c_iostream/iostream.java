@@ -23,11 +23,11 @@ class iostream {
     static FileOutputStream out = null;
 
     public static void main(String[] args) throws IOException {
-        byteStream();
+        // byteStream();
         // charStream();
         // readCharStream();
         // scanRead();
-        // usingConsole();
+        usingConsole();
         // System.out.format("%f, %1$+020.10f %n", Math.PI);
         // writeDataStream();
         // readDataStream();
@@ -130,7 +130,7 @@ class iostream {
 
         char[] password = c.readPassword("Enter Your Password: ");
         String oldPasswordT = "12345678";
-        if (!verify(oldPasswordT, password)) {
+        if (!Arrays.equals(oldPasswordT.toCharArray(), password)) {
             System.out.println("Wrong Password!");
             Arrays.fill(password, ' ');
             System.exit(1);
@@ -142,7 +142,7 @@ class iostream {
             char[] newPWC = c.readPassword("Confirm new Password: ");
 
             if (Arrays.equals(newPW, newPWC)) {
-                change(oldPasswordT, newPW);
+                System.out.println("Updating password...");
                 c.format("Password change successfully %n");
                 c.format("Password %s has change. %n", password);
 
@@ -155,14 +155,6 @@ class iostream {
             }
         } while (!isMatch);
         Arrays.fill(password, ' ');
-    }
-
-    static boolean verify(String pass, char[] oldPass) {
-        return Arrays.equals(pass.toCharArray(), oldPass);
-    }
-
-    static void change(String login, char[] password) {
-        System.out.println("Updating password...");
     }
 
     static final String dataFile = "./data_files/invoicedata";
