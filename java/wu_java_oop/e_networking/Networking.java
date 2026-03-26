@@ -8,7 +8,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URI;
 
-class networking {
+class Networking {
     public static void main(String[] args) {
         // createUrl();
         int port;
