@@ -12,16 +12,16 @@ import java.time.Duration;
 
 class Mp4Dnloder {
     public static void main(String[] args) {
-        Downloader("https://youtu.be/aKnl8-qifvE?si=xnlRag6Id3PeNVTg");
+        VidDownloader("https://youtu.be/sVPYIRF9RCQ?si=3otIpNw99xX1wTQW");
     }
 
-    public static void Mp4Downloader(String link) {
+    public static void DocDownloader(String link) {
         try {
             URL url = new URL(link);
             URLConnection conn = url.openConnection();
 
             try (InputStream in = conn.getInputStream();
-                 FileOutputStream out = new FileOutputStream("./files/vid_1.mp4")) {
+                 FileOutputStream out = new FileOutputStream("./files/doc.txt")) {
 
                 byte[] buffer = new byte[4096];
                 int bytesRead;
@@ -39,7 +39,7 @@ class Mp4Dnloder {
         }
     }
 
-    public static void Downloader(String link) {
+    public static void VidDownloader(String link) {
         try {
             Path path = Paths.get("./files");
             Files.createDirectories(path);
