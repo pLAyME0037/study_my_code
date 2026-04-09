@@ -1,0 +1,10 @@
+C:/Users/pLAyME/Desktop/Shared/linux_home/mythings/study-o-code/flutter_folder/cloth_app/windows/CMakeFiles/INSTALL.dir
+C:/Users/pLAyME/Desktop/Shared/linux_home/mythings/study-o-code/flutter_folder/cloth_app/windows/CMakeFiles/ALL_BUILD.dir
+C:/Users/pLAyME/Desktop/Shared/linux_home/mythings/study-o-code/flutter_folder/cloth_app/windows/CMakeFiles/ZERO_CHECK.dir
+C:/Users/pLAyME/Desktop/Shared/linux_home/mythings/study-o-code/flutter_folder/cloth_app/windows/flutter/CMakeFiles/flutter_wrapper_plugin.dir
+C:/Users/pLAyME/Desktop/Shared/linux_home/mythings/study-o-code/flutter_folder/cloth_app/windows/flutter/CMakeFiles/flutter_wrapper_app.dir
+C:/Users/pLAyME/Desktop/Shared/linux_home/mythings/study-o-code/flutter_folder/cloth_app/windows/flutter/CMakeFiles/flutter_assemble.dir
+C:/Users/pLAyME/Desktop/Shared/linux_home/mythings/study-o-code/flutter_folder/cloth_app/windows/flutter/CMakeFiles/INSTALL.dir
+C:/Users/pLAyME/Desktop/Shared/linux_home/mythings/study-o-code/flutter_folder/cloth_app/windows/runner/CMakeFiles/cloth_app.dir
+C:/Users/pLAyME/Desktop/Shared/linux_home/mythings/study-o-code/flutter_folder/cloth_app/windows/runner/CMakeFiles/INSTALL.dir
+C:/Users/pLAyME/Desktop/Shared/linux_home/mythings/study-o-code/flutter_folder/cloth_app/windows/runner/CMakeFiles/ALL_BUILD.dir

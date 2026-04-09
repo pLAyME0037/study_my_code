@@ -1,0 +1,9 @@
+{
+	"InstallScripts" : 
+	[
+		"C:/Users/pLAyME/Desktop/Shared/linux_home/mythings/study-o-code/flutter_folder/cloth_app/windows/cmake_install.cmake",
+		"C:/Users/pLAyME/Desktop/Shared/linux_home/mythings/study-o-code/flutter_folder/cloth_app/windows/flutter/cmake_install.cmake",
+		"C:/Users/pLAyME/Desktop/Shared/linux_home/mythings/study-o-code/flutter_folder/cloth_app/windows/runner/cmake_install.cmake"
+	],
+	"Parallel" : false
+}
