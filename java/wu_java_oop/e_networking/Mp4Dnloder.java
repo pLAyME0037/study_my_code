@@ -45,7 +45,7 @@ class Mp4Dnloder {
             Files.createDirectories(path);
 
             ProcessBuilder pb = new ProcessBuilder(
-                "./yt-dlp",
+                "yt-dlp",
                 "-o", path.resolve("%(title)s.%(ext)s").toString(),
                 link
             );
