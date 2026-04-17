@@ -5,6 +5,7 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include <stdbool.h>
 #include "olivec.h"
 
 #define OLIVEC_SWAP(T, a, b) do { T t = a; a = b; b = t; } while (0)
@@ -70,6 +71,26 @@ void swap_int(int *a, int *b) {
     *b = t;
 }
 
+typedef struct {
+    uint32_t *pixels;
+    size_t width;
+    size_t height;
+    size_t stride;
+} Olivec_Canvas;
+
+#define OLIVEC_CANVAS_NULL ((Olivec_Canvas) {0})
+
+Olivec_Canvas Olivec_make_canvas(uint32_t *pixels, size_t width, size_t height) {
+
+    Olivec_Canvas oc = {
+        .pixels = pixels,
+        .width  = width,
+        .height = height,
+        .stride = width,
+    };
+    return oc;
+}
+
 void olivec_fill(uint32_t *pixels, size_t width, size_t height, uint32_t color) {
 
     for (size_t i = 0; i < width*height; ++i) {
@@ -123,6 +144,33 @@ void olivec_fill_rect(uint32_t *pixels, size_t pixels_width, size_t pixels_heigh
             }
         }
     }
+}
+
+bool olivec_normalize_rect(int x, int y, int w, int h,
+                           size_t pixels_width, size_t pixels_height,
+                           int *x1, int *x2, int *y1, int *y2) {
+    *x1 = x;
+    *y1 = y;
+
+    // convert the rectangle to 2 points repersentation
+    *x2 = *x1 + OLIVEC_SIGN(int, w)*(OLIVEC_ABS(int, w) - 1);
+    if (*x1 > *x2) OLIVEC_SWAP(int, *x1, *x2);
+    *y2 = *y1 + OLIVEC_SIGN(int, h)*(OLIVEC_ABS(int, h) - 1);
+    if (*y1 > *y2) OLIVEC_SWAP(int, *y1, *y2);
+
+    // call out invisible rectangle
+    if (*x1 >= (int) pixels_width) return false;
+    if (*x2 < 0) return false;
+    if (*y1 >= (int) pixels_height) return false;
+    if (*y2 < 0) return false;
+
+    // clamp the rectangle boundaries
+    if (*x1 < 0) *x1 = 0;
+    if (*x2 >= (int) pixels_width) *x2 = (int) pixels_width - 1;
+    if (*y1 < 0) *y1 = 0;
+    if (*y2 >= (int) pixels_width) *y2 = (int) pixels_height - 1;
+
+    return true;
 }
 
 /**
