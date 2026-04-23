@@ -1,3 +1,4 @@
+import 'package:cloth_app/utilities/categ_list.dart';
 import 'package:cloth_app/widgets/CateWidgets.dart';
 import 'package:flutter/material.dart';
 

@@ -1,4 +1,12 @@
-import 'package:cloth_app/categories/MenCateg.dart';
+import 'package:cloth_app/categories/accessories_categ.dart';
+import 'package:cloth_app/categories/bags_categ.dart';
+import 'package:cloth_app/categories/beauty_categ.dart';
+import 'package:cloth_app/categories/electro_categ.dart';
+import 'package:cloth_app/categories/home_garden_categ.dart';
+import 'package:cloth_app/categories/kids_categ.dart';
+import 'package:cloth_app/categories/men_categ.dart';
+import 'package:cloth_app/categories/shoes_categ.dart';
+import 'package:cloth_app/categories/women_categ.dart';
 import 'package:cloth_app/widgets/FakeScreen.dart';
 import 'package:flutter/material.dart';
 
@@ -95,7 +103,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
       return Container(
         height: size.height * 0.89,
         width: size.width * 0.8,
-        color: Colors.blue.shade200,
+        color: Colors.blue.shade50,
         child: PageView( 
             controller: _pc,
             onPageChanged: (value) {
@@ -108,16 +116,15 @@ class _CategoryScreenState extends State<CategoryScreen> {
             },
             scrollDirection: Axis.vertical,
             children: [
-                ManCateg(),
-                // Center(child: Text("Man Category")),
-                Center(child: Text("Woman Category")),
-                Center(child: Text("Accessories Category")),
-                Center(child: Text("Electronics Category")),
-                Center(child: Text("Shoes Category")),
-                Center(child: Text("Home && Garden Category")),
-                Center(child: Text("Beauty Category")),
-                Center(child: Text("Kids Category")),
-                Center(child: Text("Bags Category")),
+                MenCategory(),
+                WomenCategory(),
+                AccessoriesCategory(),
+                ElectronicsCategory(),
+                ShoesCategory(),
+                HomeGardenCategory(),
+                BeautyCategory(),
+                KidsCategory(),
+                BagsCategory(),
             ],
         ),
       );

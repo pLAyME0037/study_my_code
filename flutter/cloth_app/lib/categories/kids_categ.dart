@@ -1,7 +1,6 @@
+import 'package:cloth_app/widgets/CateWidgets.dart';
 import 'package:flutter/material.dart';
-
 import '../utilities/categ_list.dart';
-import '../widgets/categ_widgets.dart';
 
 
 class KidsCategory extends StatelessWidget {

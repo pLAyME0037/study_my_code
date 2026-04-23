@@ -29,13 +29,15 @@ public class i_BinarySearch {
     private static int binarySearch(int[] array, int target) {
 
         int low = 0;
-        int high = array.length -1;
+        int high = array.length - 1;
+        int time = 0;
 
         while (low <= high) {
             int middle = low + (high - low) / 2;
             int value = array[middle];
+            time++;
 
-            System.out.println("middle: " + value);
+            System.out.println(time + ". middle: " + value);
 
             if (value < target) low = middle + 1;
             else if (value > target) high = middle - 1;

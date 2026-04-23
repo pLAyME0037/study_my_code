@@ -1,7 +1,6 @@
+import 'package:cloth_app/widgets/CateWidgets.dart';
 import 'package:flutter/material.dart';
-
 import '../utilities/categ_list.dart';
-import '../widgets/categ_widgets.dart';
 
 class BagsCategory extends StatelessWidget {
   const BagsCategory({Key? key}) : super(key: key);
@@ -50,7 +49,8 @@ class BagsCategory extends StatelessWidget {
               child: SliderBar(
                 size: size,
                 sliderLabel: 'bags',
-              ))
+              )
+          )
         ],
       ),
     );
