@@ -1,5 +1,6 @@
 import 'package:cloth_app/widgets/CateWidgets.dart';
 import 'package:flutter/material.dart';
+import '../utilities/categ_list.dart';
 
 
 class HomeGardenCategory extends StatelessWidget {
