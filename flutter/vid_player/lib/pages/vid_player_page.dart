@@ -43,9 +43,21 @@ class _VideoListBodyState extends State<VideoListBody> {
   static const String _defaultAssetPath = 'videos/Easy trick I use to slice up images in memory (Olive.c Ep.05).mp4';
 
   final List<Map<String, String>> _videos = [
-    {'name': 'Olive.c Ep.05', 'path': 'videos/Easy trick I use to slice up images in memory (Olive.c Ep.05).mp4', 'type': 'asset'},
-    {'name': 'Angkor Heritage', 'path': 'videos/Angkor is our Heritage - Khmer with English subtitles.mp4', 'type': 'asset'},
-    {'name': 'Neon Abstract', 'path': 'videos/Neon Rounded Purple lines Abstract Gradient Background Animation __ Free Version.mp4', 'type': 'asset'},
+    {
+        'name': 'Olive.c Ep.05',
+        'path': 'videos/Easy trick I use to slice up images in memory (Olive.c Ep.05).mp4',
+        'type': 'asset'
+    },
+    {
+        'name': 'Angkor Heritage',
+        'path': 'videos/Angkor is our Heritage - Khmer with English subtitles.mp4',
+        'type': 'asset'
+    },
+    {
+        'name': 'Neon Abstract',
+        'path': 'videos/Neon Rounded Purple lines Abstract Gradient Background Animation __ Free Version.mp4',
+        'type': 'asset'
+    },
   ];
 
   String? _selectedPath;
@@ -194,6 +206,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
   bool _isInitialized = false;
   bool _isLoading = true;
   bool _showControls = true;
+  bool _isBuffering = false;
   String? _errorMessage;
   String? _blobUrl;
 
@@ -255,7 +268,12 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
   }
 
   void _onControllerUpdate() {
-    if (mounted) setState(() {});  // Trigger rebuild to update slider/time
+    if (_controller == null) return;
+    final buffering = _controller!.value.isBuffering;
+    if (buffering != _isBuffering) {
+      _isBuffering = buffering;
+    }
+    if (mounted) setState(() {});
   }
 
   void _togglePlayPause() {
@@ -340,6 +358,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
         fit: StackFit.expand,
         children: [
           Center(child: AspectRatio(aspectRatio: v.aspectRatio, child: VideoPlayer(c))),
+          if (_isBuffering) const Center(child: CircularProgressIndicator(color: Colors.red)),
           if (_showControls) _buildControls(v),
         ],
       ),
