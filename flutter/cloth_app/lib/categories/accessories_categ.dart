@@ -1,10 +1,9 @@
+import 'package:cloth_app/utilities/categ_list.dart';
+import 'package:cloth_app/widgets/CateWidgets.dart';
 import 'package:flutter/material.dart';
-import '../utilities/categ_list.dart';
-import '../widgets/categ_widgets.dart';
-
 
 class AccessoriesCategory extends StatelessWidget {
-  const AccessoriesCategory({Key? key}) : super(key: key);
+  const AccessoriesCategory({Key? key}): super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +49,8 @@ class AccessoriesCategory extends StatelessWidget {
               child: SliderBar(
                 size: size,
                 sliderLabel: 'accessories',
-              ))
+              )
+          )
         ],
       ),
     );

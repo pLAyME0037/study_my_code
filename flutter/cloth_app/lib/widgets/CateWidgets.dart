@@ -7,7 +7,7 @@ class SliderBar extends StatelessWidget {
     Key? key,
     required this.sliderLabel,
     required this.size,
-  }) : super(key: key);
+  }): super(key: key);
 
   final Size size;
 

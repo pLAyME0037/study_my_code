@@ -16,7 +16,7 @@
 #define RETURN_DEFER(value) do { result = (value); goto defer; } while (0)
 
 typedef enum {
-    COMP_RED = 0,
+    COMP_RED,
     COMP_GREEN,
     COMP_BLUE,
     COMP_ALPHA,

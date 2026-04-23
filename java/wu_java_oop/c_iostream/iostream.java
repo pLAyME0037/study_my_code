@@ -27,7 +27,7 @@ class iostream {
         // charStream();
         // readCharStream();
         // scanRead();
-        usingConsole();
+        // usingConsole();
         // System.out.format("%f, %1$+020.10f %n", Math.PI);
         // writeDataStream();
         // readDataStream();
@@ -231,10 +231,10 @@ class iostream {
         } finally {
             if (out != null) out.close();
             else if (fos != null) fos.close();
-        } 
+        }
     }
 
-    public static void readObjStream() { 
+    public static void readObjStream() {
         double total = 0.0;
 
         try (ObjectInputStream in = new ObjectInputStream(
