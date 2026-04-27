@@ -106,6 +106,7 @@ void checkerEx(void) {
 }
 
 void circleEx(void) {
+    Olivec_Canvas canvas = Olivec_make_canvas(pixels, WIDTH, HEIGHT);
     olivec_fill(pixels, WIDTH, HEIGHT, BACKGROUND_COLOR);
 
     for (int x = 0; x < COLS; ++x) {
@@ -118,10 +119,8 @@ void circleEx(void) {
             if (CELL_HEIGHT < radius) radius = CELL_HEIGHT;
             int cx = x*CELL_WIDTH + CELL_WIDTH/2;
             int cy = y*CELL_HEIGHT + CELL_HEIGHT/2;
-            olivec_fill_circle(pixels, WIDTH, HEIGHT,
-                               cx, cy,
-                               (size_t) OLIVEC_LERPF(radius/8, radius/2, t),
-                               FOREGROUND_COLOR);
+            int r = radius/8 + (radius/2 - radius/8)*(int)(t*255)/255;
+            olivec_fill_circle(canvas, cx, cy, r, FOREGROUND_COLOR);
         }
     }
 
@@ -149,10 +148,11 @@ void fill_triangle(void) {
 }
 
 void test_alpha_blending(void) {
+    Olivec_Canvas canvas = Olivec_make_canvas(pixels, WIDTH, HEIGHT);
     olivec_fill(pixels, WIDTH, HEIGHT, BACKGROUND_COLOR);
     olivec_fill_rect(pixels, WIDTH, HEIGHT, 0, 0, WIDTH*3/4, HEIGHT*3/4, RED_COLOR);
     olivec_fill_rect(pixels, WIDTH, HEIGHT, WIDTH/4, HEIGHT/4, WIDTH*3/4, HEIGHT*3/4, 0x5500FF00);
-    olivec_fill_circle(pixels, WIDTH, HEIGHT, WIDTH/2, HEIGHT/2, WIDTH/4, 0x55AA2020);
+    olivec_fill_circle(canvas, WIDTH/2, HEIGHT/2, WIDTH/4, 0x55AA2020);
     olivec_draw_triangle(pixels, WIDTH, HEIGHT, 0, HEIGHT, WIDTH, HEIGHT, WIDTH/2, 0, 0x9920AAAA);
 
     saveFile("sample_output/alpha_blending.png");
