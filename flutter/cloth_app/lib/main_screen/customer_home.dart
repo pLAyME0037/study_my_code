@@ -20,19 +20,20 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
 
     @override
     Widget build(BuildContext context) {
-        return Scaffold (
-         body: _page[_index],
-         bottomNavigationBar: BottomNavigationBar(
-           currentIndex: _index,
-             onTap: (i) => setState(() => _index = i),
-           items: [
-             BottomNavigationBarItem(icon: Icon(Icons.home), label: "home"), 
-             BottomNavigationBarItem(icon: Icon(Icons.search), label: "Categlory"),
-             BottomNavigationBarItem(icon: Icon(Icons.shop), label: "Story"),
-             BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: "Cart"),
-           ],
-           selectedItemColor: Colors.black,
-           unselectedItemColor: Colors.red));
+      return Scaffold (
+        body: _page[_index],
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: _index,
+            onTap: (i) => setState(() => _index = i),
+          items: [
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: "home"), 
+            BottomNavigationBarItem(icon: Icon(Icons.search), label: "Categlory"),
+            BottomNavigationBarItem(icon: Icon(Icons.shop), label: "Story"),
+            BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: "Cart"),
+          ],
+          selectedItemColor: Colors.black,
+          unselectedItemColor: Colors.red)
+      );
     }
     
 }

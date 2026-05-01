@@ -28,7 +28,8 @@ class iostream {
         // readCharStream();
         // scanRead();
         // usingConsole();
-        // System.out.format("%f, %1$+020.10f %n", Math.PI);
+        System.out.format("%+10d %n", 1900 - 1000);
+        System.out.format("%f, %1$+020.10f %n", Math.PI);
         // writeDataStream();
         // readDataStream();
         // writeObjStream();
