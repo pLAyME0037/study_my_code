@@ -12,12 +12,12 @@ List<String> accessories = [
 
 List<String> men = [
   'shirt',
-  'pants',
-  'jacket',
   'sweater',
-  'shorts',
-  'hoodie',
+  'jacket',
   'coat',
+  'hoodie',
+  'pants',
+  'shorts',
   'suit',
   'polo',
 ];
