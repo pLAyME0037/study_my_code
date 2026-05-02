@@ -43,7 +43,7 @@ int main() {
     Node *head = NULL;
     int val[] = {1, 2, 3, 4, 5};
 
-    for (int i = 0; i < sizeof(val)/sizeof(val[0]); ++i) {
+    for (size_t i = 0; i < sizeof(val)/sizeof(val[0]); ++i) {
        head = addTail(head, val[i]);
     }
     head = addHead(head, 9);
