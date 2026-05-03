@@ -48,3 +48,32 @@ has to read every single byte from the beginning to see if they are 1-byte,
 In **UTF-16**, almost every common character is exactly 2 bytes. The computer can
 just "math" its way there: 100 * 2 = 200. Jump to byte 200. It’s much faster for
 the CPU to haUTF-8 is "Smarter" for Storage:
+
+## *System.out.format*
+The full format spec grammar is:
+%[argument_index$][flags][width][.precision]conversion
+| Conversion| What it does                    |
+| -- 	        | --                              |
+| %d| Decimal integer                 |
+| %f| Decimal float                   |
+| %e| Scientific notation             |
+| %a| Hex float                       |
+| %x / %X| Hex integer                     |
+| %o| Octal                           |
+| %s| String                          |
+| %b| Boolean                         |
+| %c| Character                       |
+| %n| Platform newline                |
+| %t*| Date/time (many sub-conversions)|
+
+
+| Flag| What it does                        |
+| --       | --                                  |
+| -| Left-justify                        |
+| 0| Zero-pad                            |
+| ,| Locale-specific grouping separators |
+| (| Wrap negatives in parens            |
+| +| Always show sign                    |
+|  (space) | Leading space for positives         |
+
+
