@@ -28,8 +28,7 @@ class iostream {
         // readCharStream();
         // scanRead();
         // usingConsole();
-        System.out.format("%+10d %n", 1900 - 1000);
-        System.out.format("%f, %1$+020.10f %n", Math.PI);
+        sysOutFmt();
         // writeDataStream();
         // readDataStream();
         // writeObjStream();
@@ -156,6 +155,25 @@ class iostream {
             }
         } while (!isMatch);
         Arrays.fill(password, ' ');
+    }
+
+    static void sysOutFmt() {
+        // Left pad / Type conversion / new line
+        System.out.format("|%-30d| %n", (int)Math.pow(1900 - 1000, 10));
+        // def selection / show sign / 0 pad / padding / float num pad
+        System.out.format("%f, %1$+020.10f, %2s %n", Math.PI, "Math PI");
+        // Scientific / hex / boolean
+        System.out.format("%e, %a, %b%n", Math.PI, Math.PI, true);
+        // Comma-separated thousands, parenthesized negatives
+        System.out.format("%,(.2f, %(d%n", -1234567.89, -42);
+        // String truncation (precision = max chars)
+        System.out.format("%.5s%n", "Hello, World!");
+        // Reuse previous arg with %<
+        System.out.format("%d in hex: %<x, in octal: %<o%n", 255);
+        // Date/time (%t flags)
+        System.out.format("%tF %<tT%n", System.currentTimeMillis());
+        // Locale-aware
+        System.out.format(Locale.CANADA, "%,.2f%n", 1234567.89);
     }
 
     static final String dataFile = "./data_files/invoicedata";
