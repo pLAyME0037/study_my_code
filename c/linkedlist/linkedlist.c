@@ -28,6 +28,15 @@ Node *addTail(Node *head, int value) {
     return head;
 }
 
+Node *rmHead(Node *head) {
+    if (head == NULL) return NULL;
+    Node *newH = head->next;
+
+    free(head);
+
+    return newH;
+}
+
 void printList(Node *head) {
     Node *curr = head;
 
@@ -49,6 +58,12 @@ int main() {
     head = addHead(head, 9);
     head = addHead(head, 8);
     head = addHead(head, 7);
+
+    printList(head);
+
+    printf("\n----------------\n");
+    head = rmHead(head);
+    head = rmHead(head);
 
     printList(head);
 
