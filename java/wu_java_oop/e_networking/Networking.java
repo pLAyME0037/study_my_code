@@ -25,7 +25,7 @@ class Networking {
             servThread.start();
             Thread.sleep(500);
 
-            if (port == 8080) socket_client.main(new String[] { "localhost", "8080" });
+            if (port == 8080) socket_client.main(new String[] { "localhost", "8080", "Hello" });
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -42,32 +42,6 @@ class Networking {
             System.out.println(aboutme_url);
         } catch (Exception e) {
             e.printStackTrace();
-        }
-    }
-
-    public static class socket_client {
-        public static void main(String[] args) {
-            String serverName = args[0];
-            int port = Integer.parseInt(args[1]);
-
-            try {
-                Socket client = new Socket(serverName, port);
-                System.out.format("[Info] Connecting to %s on port %d %n",
-                                  serverName, port);
-                System.out.println("[Info] Connected to" + client.getRemoteSocketAddress());
-
-                // OutputStream toServer = client.getOutputStream();
-                DataOutputStream out = new DataOutputStream(client.getOutputStream());
-                out.writeUTF("Hello from" + client.getLocalSocketAddress());
-
-                // InputStream fromServer = client.getInputStream();
-                DataInputStream in = new DataInputStream(client.getInputStream());
-                System.out.println("[Info] From Server: " + in.readUTF());
-
-                client.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         }
     }
 
@@ -100,18 +74,48 @@ class Networking {
                                       + server.getRemoteSocketAddress());
 
                     DataInputStream in = new DataInputStream(server.getInputStream());
-                    System.out.println(in.readUTF());
+                    String recMsg = in.readUTF();
+                    int socPort = server.getPort();
+                    System.out.printf("Message from client[%d]: %s%n", socPort, recMsg);
 
                     DataOutputStream out = new DataOutputStream(server.getOutputStream());
                     out.writeUTF("Welcome you are now connected to"
                                 + server.getLocalSocketAddress()
                                 + "\nGoodbye!");
 
-                    // server.close();
+                    server.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                     break;
                 }
+            }
+        }
+    }
+
+    public static class socket_client {
+        public static void main(String[] args) {
+            String serverName = args[0];
+            int port = Integer.parseInt(args[1]);
+            String msg = args[2];
+
+            try {
+                Socket client = new Socket(serverName, port);
+                System.out.format("[Info] Connecting to %s on port %d %n",
+                                  serverName, port);
+                System.out.println("[Info] Connected to " + client.getRemoteSocketAddress());
+
+                // OutputStream toServer = client.getOutputStream();
+                DataOutputStream out = new DataOutputStream(client.getOutputStream());
+                // out.writeUTF("Hello from" + client.getLocalSocketAddress());
+                out.writeUTF(msg);
+
+                // InputStream fromServer = client.getInputStream();
+                DataInputStream in = new DataInputStream(client.getInputStream());
+                System.out.println("[Info] From Server: " + in.readUTF());
+
+                client.close();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
