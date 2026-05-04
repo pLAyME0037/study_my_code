@@ -28,7 +28,7 @@ class iostream {
         // readCharStream();
         // scanRead();
         // usingConsole();
-        sysOutFmt();
+        // sysOutFmt();
         // writeDataStream();
         // readDataStream();
         // writeObjStream();
@@ -158,27 +158,27 @@ class iostream {
     }
 
     static void sysOutFmt() {
-        // Left pad / Type conversion / new line
-        System.out.format("|%-30d| %n", (int)Math.pow(1900 - 1000, 10));
-        // def selection / show sign / 0 pad / padding / float num pad
-        System.out.format("%f, %1$+020.10f, %2s %n", Math.PI, "Math PI");
+        // show sign / Left pad / Type conversion / new line
+        System.out.printf("|%+-30d| %n", (int)Math.pow(1900 - 1000, 3));
+        // def selection / 0 pad / padding / float num pad
+        System.out.printf("%f, %1$+020.10f, %2s %n", Math.PI, "Math PI");
         // Scientific / hex / boolean
-        System.out.format("%e, %a, %b%n", Math.PI, Math.PI, true);
+        System.out.printf("%e, %a, %b%n", Math.PI, Math.PI, true);
         // Comma-separated thousands, parenthesized negatives
-        System.out.format("%,(.2f, %(d%n", -1234567.89, -42);
+        System.out.printf("%,(.2f, %(d%n", -1234567.89, -42);
         // String truncation (precision = max chars)
-        System.out.format("%.5s%n", "Hello, World!");
+        System.out.printf("%.5s%n", "Hello, World!");
         // Reuse previous arg with %<
-        System.out.format("%d in hex: %<x, in octal: %<o%n", 255);
+        System.out.printf("%d in hex: %<x, in octal: %<o%n", 255);
         // Date/time (%t flags)
-        System.out.format("%tF %<tT%n", System.currentTimeMillis());
+        System.out.printf("%tF %<tT%n", System.currentTimeMillis());
         // Locale-aware
-        System.out.format(Locale.CANADA, "%,.2f%n", 1234567.89);
+        System.out.printf(Locale.CANADA, "%,.2f%n", 101234567.89);
     }
 
     static final String dataFile = "./data_files/invoicedata";
     static final double[] prices = { 19.99, 9.99, 15.99, 3.99, 4.99 };
-    static final int[] units = { 12, 8, 13, 29, 50 };
+    static final int[] units     = { 12, 8, 13, 29, 50 };
     static final String[] descs = {
         "Java T-shirt",
         "Java Mug",
@@ -191,7 +191,7 @@ class iostream {
         try (DataOutputStream out = new DataOutputStream(
                                     new BufferedOutputStream(
                                     new FileOutputStream(dataFile)))) {
-            for (int i = 0; i < prices.length; ++i) {
+            for (int i = 0; i < units.length; ++i) {
                 out.writeDouble(prices[i]);
                 out.writeInt(units[i]);
                 out.writeUTF(descs[i]);
