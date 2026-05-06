@@ -8,29 +8,26 @@ import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.Duration;
 
 class Mp4Dnloder {
     public static void main(String[] args) {
-        VidDownloader("https://youtu.be/sVPYIRF9RCQ?si=3otIpNw99xX1wTQW");
+        docDownloader("https://flgr.sh/txtfssAWWtxt");
+        // docDownloader("https://raw.githubusercontent.com/pLAyME0037/APPDATAor.dotfile/refs/heads/main/bashrc/bashrc.sh");
+        // vidDownloader("https://youtu.be/sVPYIRF9RCQ?si=3otIpNw99xX1wTQW");
     }
 
-    public static void DocDownloader(String link) {
+    public static void docDownloader(String link) {
         try {
             URL url = new URL(link);
-            URLConnection conn = url.openConnection();
 
-            try (InputStream in = conn.getInputStream();
-                 FileOutputStream out = new FileOutputStream("./files/doc.txt")) {
+            Path targetPath = Path.of("./files/doc.txt");
 
-                byte[] buffer = new byte[4096];
-                int bytesRead;
-                while ((bytesRead = in.read(buffer)) != -1) {
-                    out.write(buffer, 0, bytesRead);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            Files.createDirectories(targetPath.getParent());
+
+            InputStream in = url.openStream();
+            Files.copy(in, targetPath, StandardCopyOption.REPLACE_EXISTING);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -39,7 +36,7 @@ class Mp4Dnloder {
         }
     }
 
-    public static void VidDownloader(String link) {
+    public static void vidDownloader(String link) {
         try {
             Path path = Paths.get("./files");
             Files.createDirectories(path);
