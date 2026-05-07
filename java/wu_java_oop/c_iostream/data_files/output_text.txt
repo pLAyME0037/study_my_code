@@ -1,4 +1,3 @@
-Message: Hello, World.
 a apple
 a 'phone',;
 a "pc"
