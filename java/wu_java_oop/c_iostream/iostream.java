@@ -23,7 +23,7 @@ class iostream {
     static FileOutputStream out = null;
 
     public static void main(String[] args) throws IOException {
-        // byteStream();
+        byteStream();
         // charStream();
         // readCharStream();
         // scanRead();
@@ -44,7 +44,7 @@ class iostream {
             // String message = "message: Hello, World.\n";
             // out.write(message.getBytes());
         } finally {
-            if (in != null) in.close();
+            // if (in != null) in.close();
             if (out != null) out.close();
             System.out.println("done");
         }
