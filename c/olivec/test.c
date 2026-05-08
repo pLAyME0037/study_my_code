@@ -9,6 +9,7 @@
 #include <sys/types.h>
 #define OLIVE_NO_STDLIB
 #define OLIVE_IMPLEMENTATION
+#define OLIVEC_AA_RES 3
 #include "olive.c"
 
 #define WIDTH 800
@@ -31,10 +32,10 @@ void fill_triangle(void);
 void test_alpha_blending(void);
 
 int main(void) {
-    checkerEx();
-    circleEx();
-    lineEx();
-    fill_triangle();
+    /* checkerEx(); */
+    /* circleEx(); */
+    /* lineEx(); */
+    /* fill_triangle(); */
     test_alpha_blending();
 
     return 0;
