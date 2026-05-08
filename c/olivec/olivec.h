@@ -20,12 +20,7 @@ void olivec_fill_rect(uint32_t *pixels, size_t pixels_width, size_t pixels_heigh
                       int x0, int y0, size_t w, size_t h,
                       uint32_t color);
 
-typedef struct {
-    uint32_t *pixels;
-    size_t width;
-    size_t height;
-    size_t stride;
-} Olivec_Canvas;
+typedef struct Olivec_Canvas Olivec_Canvas;
 
 OLIVECDEF void olivec_fill_circle(Olivec_Canvas oc,
                                   int cx, int cy, int r,
@@ -44,5 +39,4 @@ void olivec_sort_tri_points_by_y(int *x1, int *y1,
                                  int *x2, int *y2,
                                  int *x3, int *y3);
 void swap_int(int *a, int *b);
-
 

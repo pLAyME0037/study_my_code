@@ -8,6 +8,10 @@
 #include <stdbool.h>
 #include "olivec.h"
 
+#ifndef OLIVEC_AA_RES
+#define OLIVEC_AA_RES 3
+#endif /* ifndef OLIVEC_AA_RES */
+
 #define OLIVEC_SWAP(T, a, b) do { T t = a; a = b; b = t; } while (0)
 #define OLIVEC_LERPF(T, a, b) a + (b - a)*t
 #define OLIVEC_SIGN(T, x) ((T)((x) > 0) - (T)((x) < 0))
@@ -29,21 +33,29 @@ bool olivec_normalize_rect(int x, int y, int w, int h,
     if (*y1 > *y2) OLIVEC_SWAP(int, *y1, *y2);
 
     // call out invisible rectangle
-    if (*x1 >= (int) pixels_width) return false;
+    if (*x1 >= (int)pixels_width) return false;
     if (*x2 < 0) return false;
-    if (*y1 >= (int) pixels_height) return false;
+    if (*y1 >= (int)pixels_height) return false;
     if (*y2 < 0) return false;
 
     // clamp the rectangle boundaries
     if (*x1 < 0) *x1 = 0;
-    if (*x2 >= (int) pixels_width) *x2 = (int) pixels_width - 1;
+    if (*x2 >= (int)pixels_width) *x2 = (int)pixels_width - 1;
     if (*y1 < 0) *y1 = 0;
-    if (*y2 >= (int) pixels_width) *y2 = (int) pixels_height - 1;
+    if (*y2 >= (int)pixels_width) *y2 = (int)pixels_height - 1;
 
     return true;
 }
 
 #define OLIVEC_CANVAS_NULL ((Olivec_Canvas) {0})
+
+
+struct Olivec_Canvas {
+    uint32_t *pixels;
+    size_t width;
+    size_t height;
+    size_t stride;
+};
 
 Olivec_Canvas Olivec_make_canvas(uint32_t *pixels, size_t width, size_t height) {
 
@@ -152,8 +164,6 @@ OLIVECDEF void olivec_blend_color(uint32_t *c1, uint32_t c2) {
     *c1 = OLIVEC_RGBA(r1, g1, b1, a1);
 }
 
-#define OLIVEC_AA_RES 2
-#define AA_PAD (1./(OLIVEC_AA_RES + 1))
 
 /**
  * @param pixels A pointer to the memory buffer representing image
@@ -175,18 +185,23 @@ OLIVECDEF void olivec_fill_circle(Olivec_Canvas oc,
             int count = 0;
             for (int sox = 0; sox < OLIVEC_AA_RES; ++sox) {
                 for (int soy = 0; soy < OLIVEC_AA_RES; ++soy) {
-                    float sx = x + AA_PAD*(1 + sox);
-                    float sy = y + AA_PAD*(1 + soy);
+                    float pad = 1./(OLIVEC_AA_RES + 1);
+                    /* float sx = x + pad*(1 + sox); */
+                    /* float sy = y + pad*(1 + soy); */
+                    /* float dx = sx - (cx + 0.5); */
+                    /* float dy = sy - (cy + 0.5); */
 
-                    float dx = sx - (cx + 0.5);
-                    float dy = sy - (cy + 0.5);
+                    float dx = x + pad + pad*sox - cx + 0.5;
+                    float dy = y + pad + pad*soy - cy + 0.5;
+
                     if (dx*dx + dy*dy <= r*r) {
                         count += 1;
                     }
                 }
             }
-            uint32_t alpha = (float)count/(float)(OLIVEC_AA_RES*OLIVEC_AA_RES)*255;
-            uint32_t updated_color = (color&0x00FFFFFF)|alpha;
+            float t = (float)count/(float)(OLIVEC_AA_RES*OLIVEC_AA_RES);
+            uint32_t alpha = ((color&0xFF000000)>>(3*8))*t;
+            uint32_t updated_color = (color&0x00FFFFFF)|(alpha<<(3*8));
             olivec_blend_color(&OLIVEC_PIXEL(oc, x, y), updated_color);
         }
     }
