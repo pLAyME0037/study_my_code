@@ -17,7 +17,7 @@
 #define BACKGROUND_COLOR 0xFF202020
 #define FOREGROUND_COLOR 0x6495EDFF
 
-static uint32_t pixels[WIDTH*HEIGHT];
+/* static uint32_t pixels[WIDTH*HEIGHT]; */
 
 int main(void) {
     /* printf("%d\n", WIDTH - WIDTH/3); */
