@@ -22,6 +22,7 @@ void olivec_fill_rect(uint32_t *pixels, size_t pixels_width, size_t pixels_heigh
 
 typedef struct Olivec_Canvas Olivec_Canvas;
 
+OLIVECDEF void olivec_blend_color(uint32_t *c1, uint32_t c2);
 OLIVECDEF void olivec_fill_circle(Olivec_Canvas oc,
                                   int cx, int cy, int r,
                                   uint32_t color);

@@ -121,11 +121,45 @@ uint32_t olivec_mix_colors(uint32_t col1, uint32_t col2) {
     return pack_rgba32(comp1);
 }
 
-
 void olivec_fill(uint32_t *pixels, size_t width, size_t height, uint32_t color) {
 
     for (size_t i = 0; i < width*height; ++i) {
         pixels[i] = color;
+    }
+}
+
+/**
+ * @param pixels A pointer to the memory buffer representing image
+ * @param pixels_width The total number of horizontal pixels in image
+ * @param pixels_heigth	The total number of vertical pixels in image
+ * @param cx, cy Center X and Y coords where the circle's middle sits
+ * @param r Radius
+ * @param color hex color value to fill the circle
+ */
+OLIVECDEF void olivec_fill_circle(Olivec_Canvas oc,
+                                  int cx, int cy, int r,
+                                  uint32_t color) {
+    int x1, x2, y1, y2;
+    int r1 = r + OLIVEC_SIGN(int, r);
+    if (!olivec_normalize_rect(cx - r1, cy - r1, 2*r1, 2*r1, oc.width, oc.height, &x1, &x2, &y1, &y2)) return;
+
+    for (int y = y1; y <= y2; ++y) {
+        for (int x = x1; x <= x2; ++x) {
+            int count = 0;
+            for (int sox = 0; sox < OLIVEC_AA_RES; ++sox) {
+                for (int soy = 0; soy < OLIVEC_AA_RES; ++soy) {
+                    int res1 = (OLIVEC_AA_RES + 1);
+                    int dx = (x*res1*2 + 2 + sox*2 - cx*res1*2 - res1);
+                    int dy = (y*res1*2 + 2 + soy*2 - cy*res1*2 - res1);
+
+                    if (dx*dx + dy*dy <= res1*res1*r*r*2*2) { count += 1; }
+                }
+            }
+            /* float t = (float)count/(float)(OLIVEC_AA_RES*OLIVEC_AA_RES); */
+            uint32_t alpha = ((color&0xFF000000)>>(3*8))*count/OLIVEC_AA_RES/OLIVEC_AA_RES;
+            uint32_t updated_color = (color&0x00FFFFFF)|(alpha<<(3*8));
+            olivec_blend_color(&OLIVEC_PIXEL(oc, x, y), updated_color);
+        }
     }
 }
 
@@ -164,48 +198,6 @@ OLIVECDEF void olivec_blend_color(uint32_t *c1, uint32_t c2) {
     *c1 = OLIVEC_RGBA(r1, g1, b1, a1);
 }
 
-
-/**
- * @param pixels A pointer to the memory buffer representing image
- * @param pixels_width The total number of horizontal pixels in image
- * @param pixels_heigth	The total number of vertical pixels in image
- * @param cx, cy Center X and Y coords where the circle's middle sits
- * @param r Radius
- * @param color hex color value to fill the circle
- */
-OLIVECDEF void olivec_fill_circle(Olivec_Canvas oc,
-                                  int cx, int cy, int r,
-                                  uint32_t color) {
-    int x1, x2, y1, y2;
-    int r1 = r + OLIVEC_SIGN(int, r);
-    if (!olivec_normalize_rect(cx - r1, cy - r1, 2*r1, 2*r1, oc.width, oc.height, &x1, &x2, &y1, &y2)) return;
-
-    for (int y = y1; y <= y2; ++y) {
-        for (int x = x1; x <= x2; ++x) {
-            int count = 0;
-            for (int sox = 0; sox < OLIVEC_AA_RES; ++sox) {
-                for (int soy = 0; soy < OLIVEC_AA_RES; ++soy) {
-                    float pad = 1./(OLIVEC_AA_RES + 1);
-                    /* float sx = x + pad*(1 + sox); */
-                    /* float sy = y + pad*(1 + soy); */
-                    /* float dx = sx - (cx + 0.5); */
-                    /* float dy = sy - (cy + 0.5); */
-
-                    float dx = x + pad + pad*sox - cx + 0.5;
-                    float dy = y + pad + pad*soy - cy + 0.5;
-
-                    if (dx*dx + dy*dy <= r*r) {
-                        count += 1;
-                    }
-                }
-            }
-            float t = (float)count/(float)(OLIVEC_AA_RES*OLIVEC_AA_RES);
-            uint32_t alpha = ((color&0xFF000000)>>(3*8))*t;
-            uint32_t updated_color = (color&0x00FFFFFF)|(alpha<<(3*8));
-            olivec_blend_color(&OLIVEC_PIXEL(oc, x, y), updated_color);
-        }
-    }
-}
 
 #ifdef OLIVE_NO_STDLIB
 #include <stdio.h>
