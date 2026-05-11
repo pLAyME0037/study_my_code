@@ -42,7 +42,8 @@ int main(void) {
 }
 
 bool saveFile(const char *file_path) {
-    Errno err = olivec_save_to_ppm_file(pixels, WIDTH, HEIGHT, file_path);
+    Olivec_Canvas oc = Olivec_make_canvas(pixels, WIDTH, HEIGHT);
+    Errno err = olivec_save_to_ppm_file(oc, file_path);
     if (err) {
         fprintf(stderr, "ERROR: could not save file %s: %s\n", file_path, strerror(errno));
         return false;
@@ -51,45 +52,24 @@ bool saveFile(const char *file_path) {
 }
 
 void lineEx(void) {
-    olivec_fill(pixels, WIDTH, HEIGHT, BACKGROUND_COLOR);
+    Olivec_Canvas oc = Olivec_make_canvas(pixels, WIDTH, HEIGHT);
+    olivec_fill(oc, BACKGROUND_COLOR);
 
-    olivec_draw_line(pixels, WIDTH, HEIGHT,
-                     0, 0, WIDTH, HEIGHT,
-                     FOREGROUND_COLOR);
-
-    olivec_draw_line(pixels, WIDTH, HEIGHT,
-                     0, 0, WIDTH/4, HEIGHT,
-                     FOREGROUND_COLOR);
-
-    olivec_draw_line(pixels, WIDTH, HEIGHT,
-                     WIDTH, 0, 0, HEIGHT,
-                     FOREGROUND_COLOR);
-
-    olivec_draw_line(pixels, WIDTH, HEIGHT,
-                     WIDTH/4, 0, 0, HEIGHT,
-                     FOREGROUND_COLOR);
-
-    olivec_draw_line(pixels, WIDTH, HEIGHT,
-                     WIDTH, 0, WIDTH/4*3, HEIGHT,
-                     FOREGROUND_COLOR);
-
-    olivec_draw_line(pixels, WIDTH, HEIGHT,
-                     WIDTH/4*3, 0, WIDTH, HEIGHT,
-                     FOREGROUND_COLOR);
-
-    olivec_draw_line(pixels, WIDTH, HEIGHT,
-                     0, HEIGHT/2, WIDTH, HEIGHT/2,
-                     0xFF20FF20);
-
-    olivec_draw_line(pixels, WIDTH, HEIGHT,
-                     WIDTH/2, 0, WIDTH/2, HEIGHT,
-                     0xFFFF3030);
+    olivec_draw_line(oc, 0, 0, WIDTH, HEIGHT, FOREGROUND_COLOR);
+    olivec_draw_line(oc, 0, 0, WIDTH/4, HEIGHT, FOREGROUND_COLOR);
+    olivec_draw_line(oc, WIDTH, 0, 0, HEIGHT, FOREGROUND_COLOR);
+    olivec_draw_line(oc, WIDTH/4, 0, 0, HEIGHT, FOREGROUND_COLOR);
+    olivec_draw_line(oc, WIDTH, 0, WIDTH/4*3, HEIGHT, FOREGROUND_COLOR);
+    olivec_draw_line(oc, WIDTH/4*3, 0, WIDTH, HEIGHT, FOREGROUND_COLOR);
+    olivec_draw_line(oc, 0, HEIGHT/2, WIDTH, HEIGHT/2, 0xFF20FF20);
+    olivec_draw_line(oc, WIDTH/2, 0, WIDTH/2, HEIGHT, 0xFFFF3030);
 
     saveFile("sample_output/line_example.ppm");
 }
 
 void checkerEx(void) {
-    olivec_fill(pixels, WIDTH, HEIGHT, BACKGROUND_COLOR);
+    Olivec_Canvas oc = Olivec_make_canvas(pixels, WIDTH, HEIGHT);
+    olivec_fill(oc, BACKGROUND_COLOR);
 
     for (int x = 0; x < COLS; ++x) {
         for (int y = 0; y < ROWS; ++y) {
@@ -97,9 +77,7 @@ void checkerEx(void) {
             if ((x + y) % 2 == 0) {
                 color = 0xFF0000FF;
             }
-            olivec_fill_rect(pixels, WIDTH, HEIGHT,
-                             x*CELL_WIDTH, y*CELL_HEIGHT, CELL_WIDTH, CELL_HEIGHT,
-                             color);
+            olivec_fill_rect(oc, x*CELL_WIDTH, y*CELL_HEIGHT, CELL_WIDTH, CELL_HEIGHT, color);
         }
     }
 
@@ -107,8 +85,8 @@ void checkerEx(void) {
 }
 
 void circleEx(void) {
-    Olivec_Canvas canvas = Olivec_make_canvas(pixels, WIDTH, HEIGHT);
-    olivec_fill(pixels, WIDTH, HEIGHT, BACKGROUND_COLOR);
+    Olivec_Canvas oc = Olivec_make_canvas(pixels, WIDTH, HEIGHT);
+    olivec_fill(oc, BACKGROUND_COLOR);
 
     for (int x = 0; x < COLS; ++x) {
         for (int y = 0; y < ROWS; ++y) {
@@ -121,7 +99,7 @@ void circleEx(void) {
             int cx = x*CELL_WIDTH + CELL_WIDTH/2;
             int cy = y*CELL_HEIGHT + CELL_HEIGHT/2;
             int r = radius/8 + (radius/2 - radius/8)*(int)(t*255)/255;
-            olivec_fill_circle(canvas, cx, cy, r, FOREGROUND_COLOR);
+            olivec_fill_circle(oc, cx, cy, r, FOREGROUND_COLOR);
         }
     }
 
@@ -129,32 +107,33 @@ void circleEx(void) {
 }
 
 void fill_triangle(void) {
-    olivec_fill(pixels, WIDTH, HEIGHT, BACKGROUND_COLOR);
+    Olivec_Canvas oc = Olivec_make_canvas(pixels, WIDTH, HEIGHT);
+    olivec_fill(oc, BACKGROUND_COLOR);
 
     {
         int x1 = WIDTH/2,   y1 = HEIGHT/8;
         int x2 = WIDTH/8,   y2 = HEIGHT/2;
         int x3 = WIDTH*7/8, y3 = HEIGHT*7/8;
-        olivec_draw_triangle(pixels, WIDTH, HEIGHT, x1, y1, x2, y2, x3, y3, YELLOW_COLOR);
+        olivec_draw_triangle(oc, x1, y1, x2, y2, x3, y3, YELLOW_COLOR);
     }
 
     {
         int x1 = WIDTH/2,   y1 = HEIGHT/8;
         int x2 = WIDTH*2/8,   y2 = HEIGHT/2;
         int x3 = WIDTH*6/8, y3 = HEIGHT/2;
-        olivec_draw_triangle(pixels, WIDTH, HEIGHT, x1, y1, x2, y2, x3, y3, BLUE_COLOR);
+        olivec_draw_triangle(oc, x1, y1, x2, y2, x3, y3, BLUE_COLOR);
     }
 
     saveFile("sample_output/test_triangle.ppm");
 }
 
 void test_alpha_blending(void) {
-    Olivec_Canvas canvas = Olivec_make_canvas(pixels, WIDTH, HEIGHT);
-    olivec_fill(pixels, WIDTH, HEIGHT, BACKGROUND_COLOR);
-    olivec_fill_rect(pixels, WIDTH, HEIGHT, 0, 0, WIDTH*3/4, HEIGHT*3/4, RED_COLOR);
-    olivec_fill_rect(pixels, WIDTH, HEIGHT, WIDTH/4, HEIGHT/4, WIDTH*3/4, HEIGHT*3/4, 0x5500FF00);
-    olivec_fill_circle(canvas, WIDTH/2, HEIGHT/2, WIDTH/4, 0x55AA2020);
-    olivec_draw_triangle(pixels, WIDTH, HEIGHT, 0, HEIGHT, WIDTH, HEIGHT, WIDTH/2, 0, 0x9920AAAA);
+    Olivec_Canvas oc = Olivec_make_canvas(pixels, WIDTH, HEIGHT);
+    olivec_fill(oc, BACKGROUND_COLOR);
+    olivec_fill_rect(oc, 0, 0, WIDTH*3/4, HEIGHT*3/4, RED_COLOR);
+    olivec_fill_rect(oc, WIDTH/4, HEIGHT/4, WIDTH*3/4, HEIGHT*3/4, 0x5500FF00);
+    olivec_fill_circle(oc, WIDTH/2, HEIGHT/2, WIDTH/4, 0x55AA2020);
+    olivec_draw_triangle(oc, 0, HEIGHT, WIDTH, HEIGHT, WIDTH/2, 0, 0x9920AAAA);
 
     saveFile("sample_output/alpha_blending.png");
 }
