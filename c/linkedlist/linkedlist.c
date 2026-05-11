@@ -37,6 +37,22 @@ Node *rmHead(Node *head) {
     return newH;
 }
 
+Node *rmTail(Node *head) {
+    if (head == NULL) return NULL;
+    if (head->next == NULL) {
+        free(head);
+        return NULL;
+    }
+
+    Node *curr = head;
+    while (curr->next->next != NULL) { curr = curr->next; }
+
+    free(curr->next);
+    curr->next = NULL;
+
+    return head;
+}
+
 void printList(Node *head) {
     Node *curr = head;
 
@@ -48,24 +64,3 @@ void printList(Node *head) {
     printf("}\n");
 }
 
-int main() {
-    Node *head = NULL;
-    int val[] = {1, 2, 3, 4, 5};
-
-    for (size_t i = 0; i < sizeof(val)/sizeof(val[0]); ++i) {
-       head = addTail(head, val[i]);
-    }
-    head = addHead(head, 9);
-    head = addHead(head, 8);
-    head = addHead(head, 7);
-
-    printList(head);
-
-    printf("\n----------------\n");
-    head = rmHead(head);
-    head = rmHead(head);
-
-    printList(head);
-
-    return 0;
-}
