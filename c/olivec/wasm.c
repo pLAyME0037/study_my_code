@@ -26,7 +26,8 @@ void rotate_point(int *x, int *y) {
 uint32_t *render(float dt) {
     angle += 0.9f * PI * dt;
 
-    olivec_fill(pixels, WIDTH, HEIGHT, TERCOISE_COLOR);
+    Olivec_Canvas oc = Olivec_make_canvas(pixels, WIDTH, HEIGHT);
+    olivec_fill(oc, TERCOISE_COLOR);
     {
         int x1 = WIDTH/2,     y1 = HEIGHT/8;
         int x2 = WIDTH*2/8,   y2 = HEIGHT/3;
@@ -36,9 +37,7 @@ uint32_t *render(float dt) {
         rotate_point(&x2, &y2);
         rotate_point(&x3, &y3);
 
-        olivec_draw_triangle(pixels, WIDTH, HEIGHT,
-                             x1, y1, x2, y2, x3, y3,
-                             GREEN_COLOR);
+        olivec_draw_triangle(oc, x1, y1, x2, y2, x3, y3, GREEN_COLOR);
     }
     return pixels;
 }

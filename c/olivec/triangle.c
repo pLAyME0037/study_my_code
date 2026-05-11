@@ -1,3 +1,7 @@
+#include <SDL3/SDL_pixels.h>
+#include <SDL3/SDL_render.h>
+#include <SDL3/SDL_timer.h>
+#include <stdint.h>
 #define OLIVE_NO_STDLIB
 #define OLIVE_IMPLEMENTATION
 #include "olive.c"
@@ -5,13 +9,15 @@
 #define WIDTH 800
 #define HEIGHT 600
 #define PI 3.1415926535897932384626433
-#define CIRCLE_RADIUS 100 
+#define CIRCLE_RADIUS 100
 #define CIRCLE_COLOR 0x88AA2020
 
 static uint32_t pixels[WIDTH*HEIGHT];
 static float triangleAngle = 0;
-static int circle_x = WIDTH/2;
-static int circle_y = HEIGHT/2;
+/* static int circle_x = WIDTH/2; */
+/* static int circle_y = HEIGHT/2; */
+static int circle_offset_x = 150;
+static int circle_offset_y = 0;
 
 float sqrtf(float x);
 float atan2f(float y, float x);
@@ -30,7 +36,8 @@ void rotate_point(int *x, int *y) {
 uint32_t *render(float dt) {
     triangleAngle += 0.9f * PI * dt;
 
-    olivec_fill(pixels, WIDTH, HEIGHT, TERCOISE_COLOR);
+    Olivec_Canvas oc = Olivec_make_canvas(pixels, WIDTH, HEIGHT);
+    olivec_fill(oc, TERCOISE_COLOR);
     {
         int x1 = WIDTH/2,     y1 = HEIGHT/8;
         int x2 = WIDTH*2/8,   y2 = HEIGHT/3;
@@ -40,21 +47,57 @@ uint32_t *render(float dt) {
         rotate_point(&x2, &y2);
         rotate_point(&x3, &y3);
 
-        olivec_draw_triangle(pixels, WIDTH, HEIGHT,
-                             x1, y1, x2, y2, x3, y3,
-                             GREEN_COLOR);
+        olivec_draw_triangle(oc, x1, y1, x2, y2, x3, y3, GREEN_COLOR);
     }
     {
-        olivec_fill_circle(pixels, WIDTH, HEIGHT, circle_x, circle_y, CIRCLE_RADIUS, CIRCLE_COLOR);
+        int cx = WIDTH/2 + circle_offset_x;
+        int cy = HEIGHT/2 + circle_offset_y;
+
+        rotate_point(&cx, &cy);
+
+        olivec_fill_circle(oc, cx, cy, CIRCLE_RADIUS, CIRCLE_COLOR);
     }
     return pixels;
 }
 
-#ifdef SDL_PLATFORM
-#include <stdio.h>
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 
-#endif /* ifdef SDL_PLATFORM */
+int main() {
+    SDL_Init(SDL_INIT_VIDEO);
 
-int main(int argc, char **argv) {
+    SDL_Window *window = NULL;
+    SDL_Renderer *renderer = NULL;
+
+    SDL_CreateWindowAndRenderer("Hello, SDL3", WIDTH, HEIGHT, 0, &window, &renderer);
+
+    SDL_Texture *texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, WIDTH, HEIGHT);
+
+    uint64_t prev = SDL_GetTicks();
+    bool quit = false;
+    while (!quit) {
+        uint64_t now = SDL_GetTicks();
+        float dt = (now - prev)/1000.0f;
+        prev = now;
+
+        SDL_Event event;
+        while (SDL_PollEvent(&event)) {
+            if (event.type == SDL_EVENT_QUIT) { quit = true; }
+        }
+
+        uint32_t *pixels = render(dt);
+        SDL_UpdateTexture(texture, NULL, pixels, WIDTH*sizeof(uint32_t));
+        SDL_RenderTexture(renderer, texture, NULL, NULL);
+        SDL_RenderPresent(renderer);
+
+        /* SDL_SetRenderDrawColor(renderer, 20, 40, 100, 255); */
+        /* SDL_RenderClear(renderer); */
+    }
+
+    SDL_DestroyTexture(texture);
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
+
+    return 0;
 }
+

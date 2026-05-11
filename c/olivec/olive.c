@@ -49,7 +49,6 @@ bool olivec_normalize_rect(int x, int y, int w, int h,
 
 #define OLIVEC_CANVAS_NULL ((Olivec_Canvas) {0})
 
-
 struct Olivec_Canvas {
     uint32_t *pixels;
     size_t width;
@@ -121,57 +120,11 @@ uint32_t olivec_mix_colors(uint32_t col1, uint32_t col2) {
     return pack_rgba32(comp1);
 }
 
-void olivec_fill(uint32_t *pixels, size_t width, size_t height, uint32_t color) {
+void olivec_fill(Olivec_Canvas oc, uint32_t color) {
 
-    for (size_t i = 0; i < width*height; ++i) {
-        pixels[i] = color;
+    for (size_t i = 0; i < oc.width*oc.height; ++i) {
+        oc.pixels[i] = color;
     }
-}
-
-/**
- * @param pixels A pointer to the memory buffer representing image
- * @param pixels_width The total number of horizontal pixels in image
- * @param pixels_heigth	The total number of vertical pixels in image
- * @param cx, cy Center X and Y coords where the circle's middle sits
- * @param r Radius
- * @param color hex color value to fill the circle
- */
-OLIVECDEF void olivec_fill_circle(Olivec_Canvas oc,
-                                  int cx, int cy, int r,
-                                  uint32_t color) {
-    int x1, x2, y1, y2;
-    int r1 = r + OLIVEC_SIGN(int, r);
-    if (!olivec_normalize_rect(cx - r1, cy - r1, 2*r1, 2*r1, oc.width, oc.height, &x1, &x2, &y1, &y2)) return;
-
-    for (int y = y1; y <= y2; ++y) {
-        for (int x = x1; x <= x2; ++x) {
-            int count = 0;
-            for (int sox = 0; sox < OLIVEC_AA_RES; ++sox) {
-                for (int soy = 0; soy < OLIVEC_AA_RES; ++soy) {
-                    int res1 = (OLIVEC_AA_RES + 1);
-                    int dx = (x*res1*2 + 2 + sox*2 - cx*res1*2 - res1);
-                    int dy = (y*res1*2 + 2 + soy*2 - cy*res1*2 - res1);
-
-                    if (dx*dx + dy*dy <= res1*res1*r*r*2*2) { count += 1; }
-                }
-            }
-            /* float t = (float)count/(float)(OLIVEC_AA_RES*OLIVEC_AA_RES); */
-            uint32_t alpha = ((color&0xFF000000)>>(3*8))*count/OLIVEC_AA_RES/OLIVEC_AA_RES;
-            uint32_t updated_color = (color&0x00FFFFFF)|(alpha<<(3*8));
-            olivec_blend_color(&OLIVEC_PIXEL(oc, x, y), updated_color);
-        }
-    }
-}
-
-#endif /* ifdef OLIVE_C_ */
-
-#ifdef OLIVE_IMPLEMENTATION
-#undef OLIVE_IMPLEMENTATION
-
-void swap_int(int *a, int *b) {
-    int t = *a;
-    *a = *b;
-    *b = t;
 }
 
 #define OLIVEC_RED(color)   (((color)&0x000000FF)>>(8*0))
@@ -197,13 +150,59 @@ OLIVECDEF void olivec_blend_color(uint32_t *c1, uint32_t c2) {
 
     *c1 = OLIVEC_RGBA(r1, g1, b1, a1);
 }
+#endif /* ifdef OLIVE_C_ */
 
+#ifdef OLIVE_IMPLEMENTATION
+#undef OLIVE_IMPLEMENTATION
+
+void swap_int(int *a, int *b) {
+    int t = *a;
+    *a = *b;
+    *b = t;
+}
+
+/**
+ * @param pixels A pointer to the memory buffer representing image
+ * @param pixels_width The total number of horizontal pixels in image
+ * @param pixels_heigth	The total number of vertical pixels in image
+ * @param cx, cy Center X and Y coords where the circle's middle sits
+ * @param r Radius
+ * @param color hex color value to fill the circle
+ */
+OLIVECDEF void olivec_fill_circle(Olivec_Canvas oc,
+                                  int cx, int cy, int r,
+                                  uint32_t color) {
+    int x1, x2, y1, y2;
+    int r1 = r + OLIVEC_SIGN(int, r);
+    if (!olivec_normalize_rect(cx - r1, cy - r1, 2*r1, 2*r1, 
+                               oc.width, oc.height, 
+                               &x1, &x2, &y1, &y2)) return;
+
+    for (int y = y1; y <= y2; ++y) {
+        for (int x = x1; x <= x2; ++x) {
+            int count = 0;
+            for (int sox = 0; sox < OLIVEC_AA_RES; ++sox) {
+                for (int soy = 0; soy < OLIVEC_AA_RES; ++soy) {
+                    int res1 = (OLIVEC_AA_RES + 1);
+                    int dx = (x*res1*2 + 2 + sox*2 - cx*res1*2 - res1);
+                    int dy = (y*res1*2 + 2 + soy*2 - cy*res1*2 - res1);
+
+                    if (dx*dx + dy*dy <= res1*res1*r*r*2*2) { count += 1; }
+                }
+            }
+            /* float t = (float)count/(float)(OLIVEC_AA_RES*OLIVEC_AA_RES); */
+            uint32_t alpha = ((color&0xFF000000)>>(3*8))*count/OLIVEC_AA_RES/OLIVEC_AA_RES;
+            uint32_t updated_color = (color&0x00FFFFFF)|(alpha<<(3*8));
+            olivec_blend_color(&OLIVEC_PIXEL(oc, x, y), updated_color);
+        }
+    }
+}
 
 #ifdef OLIVE_NO_STDLIB
 #include <stdio.h>
 #include <errno.h>
 
-Errno olivec_save_to_ppm_file(uint32_t *pixels, size_t width, size_t height, const char *file_path) {
+Errno olivec_save_to_ppm_file(Olivec_Canvas oc, const char *file_path) {
 
     int result = 0;
     FILE *f = NULL;
@@ -212,12 +211,12 @@ Errno olivec_save_to_ppm_file(uint32_t *pixels, size_t width, size_t height, con
         f = fopen(file_path, "wb");
         if (f == NULL) { RETURN_DEFER(errno); }
 
-        fprintf(f, "P6\n%zu %zu 255\n", width, height);
+        fprintf(f, "P6\n%zu %zu 255\n", oc.width, oc.height);
         if (ferror(f)) { RETURN_DEFER(errno); }
 
-        for (size_t i = 0; i < width*height; ++i) {
+        for (size_t i = 0; i < oc.width*oc.height; ++i) {
             // 0xAABBGGRR
-            uint32_t pixel = pixels[i];
+            uint32_t pixel = oc.pixels[i];
             uint8_t bytes[3] = {
                 (pixel>>(8*0))&0xFF,
                 (pixel>>(8*1))&0xFF,
@@ -234,23 +233,23 @@ defer:
 }
 #endif /* ifdef OLIVE_NO_STDLIB */
 
-void olivec_fill_rect(uint32_t *pixels, size_t pixels_width, size_t pixels_height,
+void olivec_fill_rect(Olivec_Canvas oc,
                       int x0, int y0, size_t w, size_t h,
                       uint32_t color) {
     for (int dy = 0; dy < (int) h; ++dy) {
         int y = y0 + dy;
-        if (0 <= y && y < (int) pixels_height) {
+        if (0 <= y && y < (int) oc.height) {
             for (int dx = 0; dx < (int) w; ++dx) {
                 int x = x0 + dx;
-                if (0 <= x && x < (int) pixels_width) {
-                    pixels[y*pixels_width + x] = olivec_mix_colors(pixels[y*pixels_width + x], color);
+                if (0 <= x && x < (int) oc.width) {
+                    oc.pixels[y*oc.width + x] = olivec_mix_colors(oc.pixels[y*oc.width + x], color);
                 }
             }
         }
     }
 }
 
-void olivec_draw_line(uint32_t *pixels, size_t pixels_width, size_t pixels_height,
+void olivec_draw_line(Olivec_Canvas oc,
                       int x1, int y1, int x2, int y2,
                       uint32_t color) {
     int dx = x2 - x1;
@@ -261,24 +260,24 @@ void olivec_draw_line(uint32_t *pixels, size_t pixels_width, size_t pixels_heigh
 
         if (x1 > x2) swap_int(&x1, &x2);
         for (int x = x1; x <= x2; ++x) {
-            if (0 <= x && x <= (int) pixels_width) {
+            if (0 <= x && x <= (int) oc.width) {
                 int sy1 = dy*x/dx + c;
                 int sy2 = dy*(x + 1)/dx + c;
                 if (sy1 > sy2) swap_int(&sy1, &sy2);
                 for (int y = sy1; y <= sy2; ++y) {
-                    if (0 <= y && y < (int) pixels_height) {
-                        pixels[y*pixels_width + x] = color;
+                    if (0 <= y && y < (int) oc.height) {
+                        oc.pixels[y*oc.width + x] = color;
                     }
                 }
             }
         }
     } else {
         int x = x1;
-        if (0 <= x && x < (int) pixels_width) {
+        if (0 <= x && x < (int) oc.width) {
             if (y1 > y2) swap_int(&y1, &y2);
             for (int y = y1; y <= y2; ++y) {
-                if (0 <= y && y < (int) pixels_height) {
-                    pixels[y*pixels_width + x] = color;
+                if (0 <= y && y < (int) oc.height) {
+                    oc.pixels[y*oc.width + x] = color;
                 }
             }
         }
@@ -306,7 +305,7 @@ void olivec_sort_tri_points_by_y(int *x1, int *y1,
     /* } */
 }
 
-void olivec_draw_triangle(uint32_t *pixels, size_t width, size_t height,
+void olivec_draw_triangle(Olivec_Canvas oc,
                           int x1, int y1,
                           int x2, int y2,
                           int x3, int y3,
@@ -322,26 +321,26 @@ void olivec_draw_triangle(uint32_t *pixels, size_t width, size_t height,
     int dy23 = y3 - y2;
 
     for (int y = y1; y <= y2; ++y) {
-        if (0 <= y && (size_t) y < height) {
+        if (0 <= y && (size_t) y < oc.height) {
             // (y -c)/k -x
             int s1 = dy12 != 0 ? (y - y1)*dx12/dy12 + x1 : x1;
             int s2 = dy13 != 0 ? (y - y1)*dx13/dy13 + x1 : x1;
             if (s1 > s2) OLIVEC_SWAP(int, s1, s2);
             for (int x = s1; x <= s2; ++x) {
-                if (0 <= x && (size_t) x < width) {
-                    pixels[y*width + x] = olivec_mix_colors(pixels[y*width + x], color);
+                if (0 <= x && (size_t) x < oc.width) {
+                    oc.pixels[y*oc.width + x] = olivec_mix_colors(oc.pixels[y*oc.width + x], color);
                 }
             }
         }
     }
     for (int y = y2; y <= y3; ++y) {
-        if (0 <= y && (size_t) y < height) {
+        if (0 <= y && (size_t) y < oc.height) {
             int s1 = dy23 != 0 ? (y - y2)*dx23/dy23 + x2 : x2;
             int s2 = dy13 != 0 ? (y - y1)*dx13/dy13 + x1 : x1;
             if (s1 > s2) OLIVEC_SWAP(int, s1, s2);
             for (int x = s1; x <= s2; ++x) {
-                if (0 <= x && (size_t) x < width) {
-                    pixels[y*width + x] = olivec_mix_colors(pixels[y*width + x], color);
+                if (0 <= x && (size_t) x < oc.width) {
+                    oc.pixels[y*oc.width + x] = olivec_mix_colors(oc.pixels[y*oc.width + x], color);
                 }
             }
         }
