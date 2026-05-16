@@ -26,7 +26,18 @@ float sinf(float x);
 #define GRID_COUNT 10
 #define GRID_PAD 0.5/GRID_COUNT
 #define GRID_SIZE ((GRID_COUNT - 1)*GRID_PAD)
-#define Z_START 0.5
+#define Z_START 0.34
+
+uint32_t circle_colors[] = {
+    RED_COLOR,
+    GREEN_COLOR,
+    BLUE_COLOR,
+    YELLOW_COLOR,
+    0xFFFF00FF,
+    0xFF00FFFF,
+    0xFF0000FF,
+};
+#define CIRCLE_COLORS_COUNT (sizeof(circle_colors)/sizeof(circle_colors[0]))
 
 uint32_t get_width() { return WIDTH; }
 uint32_t get_height() { return HEIGHT; }
@@ -63,7 +74,13 @@ uint32_t *render(float dt) {
 
                 x /= z;
                 y /= z;
-                olivec_fill_circle(oc, (x + 1)/2*WIDTH, (y + 1)/2*HEIGHT, CIRCLE_RADIUS, CIRCLE_COLOR);
+
+                uint32_t r = ix*255/GRID_COUNT;
+                uint32_t g = iy*255/GRID_COUNT;
+                uint32_t b = iz*255/GRID_COUNT;
+                uint32_t colors = 0xFF000000 | (r<<0*8) | (g<<1*8) | (b<<2*8);
+                /* uint32_t colors = circle_colors[(ix + iy + iz)%CIRCLE_COLORS_COUNT]; */
+                olivec_fill_circle(oc, (x + 1)/2*WIDTH, (y + 1)/2*HEIGHT, CIRCLE_RADIUS, colors);
             }
         }
     }
