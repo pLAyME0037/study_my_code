@@ -1,9 +1,9 @@
-class f_studAttr {
+class _6_studAttr {
     public String name = null;
     public int    age  = 0;
 
     public static void main(String[] args) {
-        f_studAttr stud = new f_studAttr();
+        _6_studAttr stud = new _6_studAttr();
         stud.display("Mean", 22);
         stud.display("Jea", 20);
         stud.display("bo", 40);

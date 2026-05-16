@@ -13,7 +13,7 @@ import java.time.Duration;
 
 class Mp4Dnloder {
     public static void main(String[] args) {
-        docDownloader("https://flgr.sh/txtfssAWWtxt");
+        docDownloader("https://raw.githubusercontent.com/pLAyME0037/pLAyME/refs/heads/main/readme.md");
         // docDownloader("https://raw.githubusercontent.com/pLAyME0037/APPDATAor.dotfile/refs/heads/main/bashrc/bashrc.sh");
         // vidDownloader("https://youtu.be/sVPYIRF9RCQ?si=3otIpNw99xX1wTQW");
     }
