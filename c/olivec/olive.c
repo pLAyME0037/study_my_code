@@ -185,8 +185,8 @@ OLIVECDEF void olivec_fill_circle(Olivec_Canvas oc,
                                   uint32_t color) {
     int x1, x2, y1, y2;
     int r1 = r + OLIVEC_SIGN(int, r);
-    if (!olivec_normalize_rect(cx - r1, cy - r1, 2*r1, 2*r1, 
-                               oc.width, oc.height, 
+    if (!olivec_normalize_rect(cx - r1, cy - r1, 2*r1, 2*r1,
+                               oc.width, oc.height,
                                &x1, &x2, &y1, &y2)) return;
 
     for (int y = y1; y <= y2; ++y) {
@@ -214,6 +214,7 @@ OLIVECDEF void olivec_fill_circle(Olivec_Canvas oc,
 #include <errno.h>
 
 Errno olivec_save_to_ppm_file(Olivec_Canvas oc, const char *file_path) {
+
 
     int result = 0;
     FILE *f = NULL;

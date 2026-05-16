@@ -1,3 +1,4 @@
+#ifdef SDL_PLATFORM
 #include <SDL3/SDL_error.h>
 #include <SDL3/SDL_pixels.h>
 #include <SDL3/SDL_rect.h>
@@ -5,9 +6,9 @@
 #include <SDL3/SDL_timer.h>
 #include <SDL3/SDL_video.h>
 #include <math.h>
+#endif /* ifdef SDL_PLATFORM */
 #include <stddef.h>
 #include <stdint.h>
-#define OLIVE_NO_STDLIB
 #define OLIVE_IMPLEMENTATION
 #include "olive.c"
 
@@ -16,16 +17,19 @@ float atan2f(float y, float x);
 float cosf(float x);
 float sinf(float x);
 
-#define WIDTH 800
-#define HEIGHT 600
+#define RES_FACTOR 6
+#define WIDTH 240*RES_FACTOR
+#define HEIGHT 135*RES_FACTOR
 #define PI 3.1415926535897932384626433
 #define CIRCLE_RADIUS 6
-#define CIRCLE_COLOR 0x88AA2020
+#define CIRCLE_COLOR 0xFFAA2020
 #define GRID_COUNT 10
 #define GRID_PAD 0.5/GRID_COUNT
 #define GRID_SIZE ((GRID_COUNT - 1)*GRID_PAD)
 #define Z_START 0.5
 
+uint32_t get_width() { return WIDTH; }
+uint32_t get_height() { return HEIGHT; }
 static uint32_t pixels[WIDTH*HEIGHT];
 static float angle = 0;
 
