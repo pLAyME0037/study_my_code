@@ -1,6 +1,4 @@
 const app = document.getElementById("app")
-app.width = 800;
-app.height = 600;
 let ctx = app.getContext("2d");
 let w = null;
 
@@ -17,7 +15,7 @@ function make_enviroment(...envs) {
     });
 }
 
-WebAssembly.instantiateStreaming(fetch("./wasm.wasm"), {
+WebAssembly.instantiateStreaming(fetch("bin/ddd.wasm"), {
     "env": make_enviroment({
         "atan2f": Math.atan2,
         "cosf": Math.cos,
@@ -25,6 +23,8 @@ WebAssembly.instantiateStreaming(fetch("./wasm.wasm"), {
     })
 }).then(w0 => {
     w = w0;
+    app.width = w.instance.exports.get_width();
+    app.height = w.instance.exports.get_height();
 
     let prev = null;
     function first(timestamp) {
