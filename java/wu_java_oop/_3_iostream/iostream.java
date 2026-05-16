@@ -43,9 +43,9 @@ class iostream {
             while ((c = in.read()) != -1) { out.write(c); }
             // String message = "message: Hello, World.\n";
             // out.write(message.getBytes());
-        } finally {
-            // if (in != null) in.close();
+            if (in != null) in.close();
             if (out != null) out.close();
+        } finally {
             System.out.println("done");
         }
     }
@@ -271,5 +271,4 @@ class iostream {
             e.printStackTrace();
         }
     }
-
 }

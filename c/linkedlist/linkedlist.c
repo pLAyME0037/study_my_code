@@ -58,7 +58,8 @@ void printList(Node *head) {
 
     printf("{\n");
     while (curr != NULL) {
-        printf("    [%p | %d | %p], \n", (void *)curr, curr->value, (void *)curr->next);
+        printf("    ");
+        printf("[%p | %d | %p], \n", (void *)curr, curr->value, (void *)curr->next);
         curr = curr->next;
     }
     printf("}\n");

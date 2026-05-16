@@ -1,4 +1,12 @@
-public class a_hello_world {
+public class _1_hello_world {
+
+    public static void main(String[] args) {
+        System.out.println("Hello, World! = 1");
+        System.out.println("Hello, World! = 2");
+
+        arrayPrint(new String[] {"Aa", "Bb", "Cc"});
+    }
+
     public static void arrayPrint(String[] name) {
         System.out.print("[");
         for (int i = 0; i < name.length; ++i) {
@@ -8,12 +16,6 @@ public class a_hello_world {
             }
         }
         System.out.print("]");
-    }
-    public static void main(String[] args) {
-        System.out.println("Hello, World! = 1");
-        System.out.println("Hello, World! = 2");
-
-        arrayPrint(new String[] {"Aa", "Bb", "Cc"});
     }
 }
 

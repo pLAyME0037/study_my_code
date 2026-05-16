@@ -1,4 +1,4 @@
-class d_static {
+class _4_static {
     public static int counter = 0;
     public static void counter() { counter++; }
 
@@ -12,7 +12,7 @@ class d_static {
         while (counter < 12) { counter(); }
         System.out.println("number: " + counter);
 
-        d_static.outer_class display_nested_method = new d_static.outer_class();
+        _4_static.outer_class display_nested_method = new _4_static.outer_class();
         display_nested_method.display();
     }
 
@@ -25,8 +25,8 @@ class d_static {
 
 class two {
     public static void main(String[] args) {
-        while (d_static.counter < 5) { d_static.counter(); }
+        while (_4_static.counter < 5) { _4_static.counter(); }
         System.out.println("------------------------------");
-        System.out.println("class two: " + d_static.counter);
+        System.out.println("class two: " + _4_static.counter);
     }
 }

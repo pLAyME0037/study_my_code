@@ -1,4 +1,4 @@
-class b_multi_class {
+class _2_multi_class {
     public static void main(String[] args) {
         System.out.println("Hello, World");
 

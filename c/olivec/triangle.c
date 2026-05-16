@@ -14,9 +14,9 @@
 
 static uint32_t pixels[WIDTH*HEIGHT];
 static float triangleAngle = 0;
-/* static int circle_x = WIDTH/2; */
-/* static int circle_y = HEIGHT/2; */
-static int circle_offset_x = 150;
+static int circle_x = WIDTH/2;
+static int circle_y = HEIGHT/2;
+static int circle_offset_x = 180;
 static int circle_offset_y = 0;
 
 float sqrtf(float x);
@@ -50,12 +50,20 @@ uint32_t *render(float dt) {
         olivec_draw_triangle(oc, x1, y1, x2, y2, x3, y3, GREEN_COLOR);
     }
     {
-        int cx = WIDTH/2 + circle_offset_x;
-        int cy = HEIGHT/2 + circle_offset_y;
+        int cx = circle_x + circle_offset_x;
+        int cy = circle_y + circle_offset_y;
 
         rotate_point(&cx, &cy);
 
         olivec_fill_circle(oc, cx, cy, CIRCLE_RADIUS, CIRCLE_COLOR);
+    }
+    {
+        int cx = circle_x + circle_offset_x/2;
+        int cy = circle_y + circle_offset_y;
+
+        rotate_point(&cx, &cy);
+
+        olivec_fill_circle(oc, cx, cy, CIRCLE_RADIUS, 0xAAFF12FF);
     }
     return pixels;
 }
