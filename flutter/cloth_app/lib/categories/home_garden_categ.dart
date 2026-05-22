@@ -23,7 +23,7 @@ class HomeGardenCategory extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const CategHeaderLabel(
-                    headerLabel: 'homeandgarden',
+                    headerLabel: 'home & garden',
                   ),
                   SizedBox(
                     height: size.height * 0.68,
@@ -32,7 +32,7 @@ class HomeGardenCategory extends StatelessWidget {
                       crossAxisCount: 3,
                       children: List.generate(homeandgarden.length, (index) {
                         return SubcategModel(
-                          mainCategName: 'homeandgarden',
+                          mainCategName: 'home & garden',
                           subCategName: homeandgarden[index],
                           assetName: 'images/homegarden/home$index.jpg',
                           assetLabel: homeandgarden[index],
@@ -49,7 +49,7 @@ class HomeGardenCategory extends StatelessWidget {
               right: 0,
               child: SliderBar(
                 size: size,
-                sliderLabel: 'homeandgarden',
+                sliderLabel: 'home & garden',
               ))
         ],
       ),

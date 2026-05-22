@@ -1,14 +1,18 @@
+import 'package:cloth_app/main_screen/cart.dart';
+import 'package:cloth_app/main_screen/visit_store.dart';
 import 'package:cloth_app/models/product_model.dart';
 import 'package:cloth_app/provider/cart_provider.dart';
 import 'package:cloth_app/provider/wish_provider.dart';
+import 'package:cloth_app/widgets/AppbarWidgets.dart';
+import 'package:cloth_app/widgets/YellowButton.dart';
+import 'package:cloth_app/widgets/snackbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart' hide Badge;
+import 'package:flutter/material.dart';
 import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_tile.dart';
 import 'package:provider/provider.dart';
 import 'package:collection/collection.dart';
-import 'package:badges/badges.dart';
 import 'full_screen_view.dart';
 
 
@@ -24,7 +28,7 @@ class ProductDetailsScreen extends StatefulWidget {
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   late final Stream<QuerySnapshot> _prodcutsStream = FirebaseFirestore.instance
-      .collection('proList')
+      .collection('products')
       .where('maincateg', isEqualTo: widget.proList['maincateg'])
       .where('subcateg', isEqualTo: widget.proList['subcateg'])
       .snapshots();
@@ -311,7 +315,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => const CartScreen(
-                                          back: AppBarBackButton(),
+                                          back: AppbarBackButton(),
                                         )));
                           },
 
@@ -319,12 +323,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
 
                           icon: Badge(
-                              showBadge: context.read<Cart>().getItems.isEmpty
-                                  ? false
-                                  : true,
-                              padding: const EdgeInsets.all(2),
-                              badgeColor: Colors.yellow,
-                              badgeContent: Text(
+                              isLabelVisible: context.read<Cart>().getItems.isNotEmpty,
+                              label: Text(
                                 context
                                     .watch<Cart>()
                                     .getItems

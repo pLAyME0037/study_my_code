@@ -1,8 +1,11 @@
+import 'package:cloth_app/dashboard_component/edit_business.dart';
 import 'package:cloth_app/dashboard_component/manage_product.dart';
 import 'package:cloth_app/dashboard_component/suppier_order.dart';
 import 'package:cloth_app/dashboard_component/suppier_static.dart';
 import 'package:cloth_app/dashboard_component/supplier_balance.dart';
 import 'package:cloth_app/main_screen/visit_store.dart';
+import 'package:cloth_app/widgets/AppbarWidgets.dart';
+import 'package:cloth_app/widgets/alert_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -42,7 +45,7 @@ class DashboardScreen extends StatelessWidget {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
-        title: const AppBarTitle(
+        title: const AppbarWidgets(
           title: 'Dashboard',
         ),
         actions: [

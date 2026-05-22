@@ -83,6 +83,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                 curve: Curves.easeIn
                             );
                             setState(() {
+                                for (var e in items) { e.isSelected = false; }
                                 items[index].isSelected = true;
                             });
                         },

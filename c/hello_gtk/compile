@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+set -e
+
+CFLAGS=$(pkg-config --cflags gtk4)
+LIBS=$(pkg-config --libs gtk4)
+DIR=$(pwd)
+
+cat > compile_commands.json <<- EOF
+[
+  {
+    "directory": "$DIR",
+    "command": "gcc $CFLAGS -o bin/hello_world_gtk hello_world_gtk.c $LIBS",
+    "file": "hello_world_gtk.c"
+  },
+  {
+    "directory": "$DIR",
+    "command": "gcc $CFLAGS -o bin/drawing_area drawing_area.c $LIBS",
+    "file": "drawing_area.c"
+  }
+]
+EOF

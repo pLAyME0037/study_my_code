@@ -1,3 +1,4 @@
+import 'package:cloth_app/widgets/AppbarWidgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -55,7 +56,7 @@ class _VisitStoreState extends State<VisitStore> {
                 'images/inapp/coverimage.jpg',
                 fit: BoxFit.cover,
               ),
-              leading: const YellowBackButton(),
+              leading: const AppbarBackButton(),
               title: Row(
                 children: [
                   Container(
@@ -187,7 +188,7 @@ class _VisitStoreState extends State<VisitStore> {
             ),
             floatingActionButton: FloatingActionButton(
               backgroundColor: Colors.green,
-              child: const Icon(
+              child: FaIcon(
                 FontAwesomeIcons.whatsapp,
                 color: Colors.white,
                 size: 40,

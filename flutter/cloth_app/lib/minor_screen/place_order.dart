@@ -1,6 +1,8 @@
-import 'package:cloth_app/minor_screens/payment_screen.dart';
+import 'package:cloth_app/minor_screen/payment_screen.dart';
 import 'package:cloth_app/provider/cart_provider.dart';
+import 'package:cloth_app/widgets/AppbarWidgets.dart';
 import 'package:cloth_app/widgets/YellowButton.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -49,8 +51,8 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                   appBar: AppBar(
                     elevation: 0,
                     backgroundColor: Colors.grey.shade200,
-                    leading: const AppBarBackButton(),
-                    title: const AppBarTitle(
+                    leading: const AppbarBackButton(),
+                    title: const AppbarWidgets(
                       title: 'Place Order',
                     ),
                   ),

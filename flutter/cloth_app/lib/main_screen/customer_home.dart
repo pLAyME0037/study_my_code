@@ -1,5 +1,7 @@
+import 'package:cloth_app/main_screen/cart.dart';
 import 'package:cloth_app/main_screen/category.dart';
 import 'package:cloth_app/main_screen/home.dart';
+import 'package:cloth_app/main_screen/stores.dart';
 import 'package:flutter/material.dart';
 
 class CustomerHomeScreen extends StatefulWidget {
@@ -14,8 +16,8 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
     final _page = const [
         HomeScreen(),
         CategoryScreen(),
-        Text("hello12wythgtyghgeashkggfTUY7U8JIFNBJHBGNVMRUKGHDJIHJWEG"),
-        Text("hellofnrejlfbefregregregbnehjghhebhfbbvgfwwfqcdfwgdcwgfqdcgffcdfge"),
+        StoresScreen(),
+        CartScreen(),
     ];
 
     @override
@@ -23,17 +25,17 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
       return Scaffold (
         body: _page[_index],
         bottomNavigationBar: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
           currentIndex: _index,
-            onTap: (i) => setState(() => _index = i),
+          onTap: (i) => setState(() => _index = i),
           items: [
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: "home"), 
-            BottomNavigationBarItem(icon: Icon(Icons.search), label: "Categlory"),
-            BottomNavigationBarItem(icon: Icon(Icons.shop), label: "Story"),
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"), 
+            BottomNavigationBarItem(icon: Icon(Icons.search), label: "Category"),
+            BottomNavigationBarItem(icon: Icon(Icons.shop), label: "Stores"),
             BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: "Cart"),
           ],
           selectedItemColor: Colors.black,
           unselectedItemColor: Colors.red)
       );
     }
-    
 }

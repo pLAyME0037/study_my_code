@@ -105,3 +105,16 @@ List<String> women = [
   'hoodie',
   'suit',
 ];
+
+List<String> maincateg = [
+  'select category',
+  'men',
+  'women',
+  'electronics',
+  'accessories',
+  'shoes',
+  'home & garden',
+  'beauty',
+  'kids',
+  'bags',
+];

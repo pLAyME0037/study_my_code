@@ -1,57 +1,62 @@
-import 'package:cloth_app/widgets/CateWidgets.dart';
+import 'package:cloth_app/widgets/AppbarWidgets.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../utilities/categ_list.dart';
+import 'package:cloth_app/models/cust_order_model.dart';
 
-class BagsCategory extends StatelessWidget {
-  const BagsCategory({Key? key}) : super(key: key);
+class CustomerOrders extends StatefulWidget {
+  const CustomerOrders({Key? key}) : super(key: key);
 
   @override
+  _CustomerOrdersState createState() => _CustomerOrdersState();
+}
+
+class _CustomerOrdersState extends State<CustomerOrders> {
+  @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
-    return Padding(
-      padding: const EdgeInsets.all(5.0),
-      child: Stack(
-        children: [
-          Positioned(
-            bottom: 0,
-            left: 0,
-            child: SizedBox(
-              height: size.height * 0.8,
-              width: size.width * 0.75,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const CategHeaderLabel(
-                    headerLabel: 'Bags',
-                  ),
-                  SizedBox(
-                    height: size.height * 0.68,
-                    child: GridView.count(
-                      mainAxisSpacing: 70,
-                      crossAxisCount: 3,
-                      children: List.generate(bags.length, (index) {
-                        return SubcategModel(
-                          mainCategName: 'bags',
-                          subCategName: bags[index],
-                          assetName: 'images/bags/bags$index.jpg',
-                          assetLabel: bags[index],
-                        );
-                      }),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: 0,
-            right: 0,
-            child: SliderBar(
-              size: size,
-              sliderLabel: 'bags',
-            )
-          )
-        ],
+    CollectionReference orders =
+        FirebaseFirestore.instance.collection('orders');
+    return Scaffold(
+      backgroundColor: Colors.grey.shade200,
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.white,
+        leading: const AppbarBackButton(),
+        title: const AppbarWidgets(title: 'My Orders'),
+      ),
+      body: StreamBuilder<QuerySnapshot>(
+        stream: orders
+            .where('cid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+            .snapshots(),
+        builder: (BuildContext context,
+            AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.hasError) {
+            return const Text('Something went wrong');
+          }
+
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          if (snapshot.data!.docs.isEmpty) {
+            return const Center(
+                child: Text(
+              'No orders yet!',
+              style: TextStyle(fontSize: 26),
+            ));
+          }
+
+          return ListView.builder(
+            itemCount: snapshot.data!.docs.length,
+            itemBuilder: (context, index) {
+              return CustomerOrderModel(
+                order: snapshot.data!.docs[index],
+              );
+            },
+          );
+        },
       ),
     );
   }

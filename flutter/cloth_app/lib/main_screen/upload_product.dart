@@ -10,6 +10,7 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:path/path.dart' as path;
 import 'package:uuid/uuid.dart';
 import '../utilities/categ_list.dart';
+import '../widgets/snackbar.dart';
 
 class UploadProductScreen extends StatefulWidget {
   const UploadProductScreen({Key? key}) : super(key: key);
@@ -71,7 +72,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
   }
 
   void selectedMainCateg(String? value) {
-    if (value == 'select category') {
+    if (value == null || value == 'select category') {
       subCategList = [];
     } else if (value == 'men') {
       subCategList = men;
@@ -94,7 +95,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
     }
     print(value);
     setState(() {
-      mainCategValue = value!;
+      mainCategValue = value ?? 'select category';
       subCategValue = 'subcategory';
     });
   }
@@ -226,8 +227,10 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                                         value: value,
                                       );
                                     }).toList(),
-                                    onChanged: (String? value) {
-                                      selectedMainCateg(value);
+                                onChanged: (String? value) {
+                                  if (value != null) {
+                                    selectedMainCateg(value);
+                                  }
                                     }),
                               ],
                             ),
@@ -255,7 +258,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                                     onChanged: (String? value) {
                                       print(value);
                                       setState(() {
-                                        subCategValue = value!;
+                                        subCategValue = value ?? 'subcategory';
                                       });
                                     })
                               ],
@@ -313,7 +316,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                                   return null;
                                 },
                                 onSaved: (value) {
-                                  discount = int.parse(value!);
+                                  discount = value!.isEmpty ? 0 : int.parse(value);
                                 },
                                 keyboardType:
                                     const TextInputType.numberWithOptions(
@@ -475,6 +478,6 @@ extension PriceValidator on String {
 
 extension DiscountValidator on String {
   bool isValidDiscount() {
-    return RegExp(r'^([0-9]*)$').hasMatch(this);
+    return RegExp(r'^([0-9]+)$').hasMatch(this);
   }
 }

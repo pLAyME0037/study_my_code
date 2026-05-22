@@ -1,3 +1,4 @@
+import 'package:cloth_app/widgets/AppbarWidgets.dart';
 import 'package:flutter/material.dart';
 
 class FullScreenView extends StatefulWidget {
@@ -19,7 +20,7 @@ class _FullScreenViewState extends State<FullScreenView> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
-        leading: const AppBarBackButton(),
+        leading: const AppbarBackButton(),
       ),
       body: SafeArea(
         child: Column(
