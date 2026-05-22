@@ -2,32 +2,26 @@ import 'package:cloth_app/provider/product_class.dart';
 import 'package:flutter/material.dart';
 
 class Wish extends ChangeNotifier {
+
   final List<Product> _list = [];
-  List<Product> get getWishItems {
-    return _list;
-  }
+  List<Product> get getWishItems { return _list; }
+  int? get count { return _list.length; }
 
-  int? get count {
-    return _list.length;
-  }
+  Future<void> addWishItem(String name,
+                           double price,
+                           int    qty,
+                           int    qntty,
+                           List   imagesUrl,
+                           String documentId,
+                           String suppId) async {
 
-  Future<void> addWishItem(
-    String name,
-    double price,
-    int qty,
-    int qntty,
-    List imagesUrl,
-    String documentId,
-    String suppId,
-  ) async {
-    final product = Product(
-        name: name,
-        price: price,
-        qty: qty,
-        qntty: qntty,
-        imagesUrl: imagesUrl,
-        documentId: documentId,
-        suppId: suppId);
+    final product = Product(name      : name,
+                            price     : price,
+                            qty       : qty,
+                            qntty     : qntty,
+                            imagesUrl : imagesUrl,
+                            documentId: documentId,
+                            suppId    : suppId);
     _list.add(product);
     notifyListeners();
   }

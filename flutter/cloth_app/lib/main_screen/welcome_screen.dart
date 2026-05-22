@@ -203,7 +203,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                 padding: const EdgeInsets.symmetric(vertical: 25),
                 child: Container(
                   decoration:
-                      BoxDecoration(color: Colors.white38.withOpacity(0.3)),
+                      BoxDecoration(color: Colors.white.withOpacity(0.3)),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [

@@ -36,9 +36,9 @@ class _BagsGalleryScreenState extends State<BagsGalleryScreen> {
         if (snapshot.data!.docs.isEmpty) {
           return const Center(
               child: Text(
-            'This category \n\n has no items yet !',
-            textAlign: TextAlign.center,
-            style: TextStyle(
+                'This category \n\n has no items yet !',
+                textAlign: TextAlign.center,
+                style: TextStyle(
                 fontSize: 26,
                 color: Colors.blueGrey,
                 fontWeight: FontWeight.bold,

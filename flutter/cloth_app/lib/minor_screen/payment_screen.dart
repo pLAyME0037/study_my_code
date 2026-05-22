@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'package:cloth_app/provider/cart_provider.dart';
+import 'package:cloth_app/widgets/AppbarWidgets.dart';
 import 'package:cloth_app/widgets/YellowButton.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -22,10 +23,15 @@ class _PaymentScreenState extends State<PaymentScreen> {
   late String orderId;
   CollectionReference customers =
       FirebaseFirestore.instance.collection('customers');
+  ProgressDialog? _progress;
 
   void showProgress() {
-    ProgressDialog progress = ProgressDialog(context: context);
-    progress.show(max: 100, msg: 'please wait ..', progressBgColor: Colors.red);
+    _progress = ProgressDialog(context: context);
+    _progress!.show(max: 100, msg: 'please wait ..', progressBgColor: Colors.red);
+  }
+
+  void closeProgress() {
+    _progress?.close();
   }
 
   @override
@@ -61,8 +67,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   appBar: AppBar(
                     elevation: 0,
                     backgroundColor: Colors.grey.shade200,
-                    leading: const AppBarBackButton(),
-                    title: const AppBarTitle(
+                    leading: const AppbarBackButton(),
+                    title: const AppbarWidgets(
                       title: 'Payment',
                     ),
                   ),
@@ -169,17 +175,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                   title:
                                       const Text('Pay via visa / Master Card'),
                                   subtitle: Row(
-                                    children: const [
-                                      Icon(Icons.payment, color: Colors.blue),
-                                      Padding(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 15),
-                                        child: Icon(
-                                            FontAwesomeIcons.ccMastercard,
-                                            color: Colors.blue),
-                                      ),
-                                      Icon(FontAwesomeIcons.ccVisa,
-                                          color: Colors.blue)
+                                    children: [
+                                      FaIcon(FontAwesomeIcons.paypal, color: Colors.blue),
+                                      const SizedBox(width: 15),
+                                      FaIcon(FontAwesomeIcons.ccPaypal, color: Colors.blue),
                                     ],
                                   ),
                                 ),
@@ -193,16 +192,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                   },
                                   title: const Text('Pay via Paypal'),
                                   subtitle: Row(
-                                    children: const [
-                                      Icon(
-                                        FontAwesomeIcons.paypal,
-                                        color: Colors.blue,
-                                      ),
-                                      SizedBox(width: 15),
-                                      Icon(
-                                        FontAwesomeIcons.ccPaypal,
-                                        color: Colors.blue,
-                                      ),
+                                    children: [
+                                      FaIcon(FontAwesomeIcons.paypal, color: Colors.blue),
+                                      const SizedBox(width: 15),
+                                      FaIcon(FontAwesomeIcons.ccPaypal, color: Colors.blue),
                                     ],
                                   ),
                                 ),
@@ -317,6 +310,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                                     context
                                                         .read<Cart>()
                                                         .clearCart();
+                                                    closeProgress();
                                                     Navigator.popUntil(
                                                         context,
                                                         ModalRoute.withName(

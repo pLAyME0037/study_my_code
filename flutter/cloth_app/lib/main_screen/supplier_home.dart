@@ -42,6 +42,14 @@ class _SupplierHomeScreenState extends State<SupplierHomeScreen> {
             );
           }
 
+          if (snapshot.hasError || !snapshot.hasData) {
+            return const Material(
+              child: Center(
+                child: Text('Something went wrong'),
+              ),
+            );
+          }
+
           return Scaffold(
             body: _tabs[_selectedIndex],
             bottomNavigationBar: BottomNavigationBar(
@@ -65,10 +73,8 @@ class _SupplierHomeScreenState extends State<SupplierHomeScreen> {
                 ),
                 BottomNavigationBarItem(
                   icon: Badge(
-                      showBadge: snapshot.data!.docs.isEmpty ? false : true,
-                      padding: const EdgeInsets.all(2),
-                      badgeColor: Colors.yellow,
-                      badgeContent: Text(
+                      isLabelVisible: snapshot.data!.docs.isNotEmpty,
+                      label: Text(
                         snapshot.data!.docs.length.toString(),
                         style: const TextStyle(
                             fontSize: 16, fontWeight: FontWeight.w600),

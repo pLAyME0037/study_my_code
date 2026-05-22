@@ -1,6 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:cloth_app/widgets/AppbarWidgets.dart';
+import 'package:cloth_app/widgets/alert_dialog.dart';
+import 'package:cloth_app/customer_screen/customer_order.dart';
+import 'package:cloth_app/customer_screen/wishlist.dart';
 import 'cart.dart';
 
 
@@ -36,7 +40,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         if (snapshot.connectionState == ConnectionState.done) {
           Map<String, dynamic> data =
               snapshot.data!.data() as Map<String, dynamic>;
-          return /* Text("Full Name: ${data['full_name']} ${data['last_name']}"); */
 
               Scaffold(
             backgroundColor: Colors.grey.shade300,
@@ -328,8 +331,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 }
-
-class AppbarBackButton {}
 
 class YellowDivider extends StatelessWidget {
   const YellowDivider({

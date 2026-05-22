@@ -4,7 +4,7 @@ import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_tile.dart';
 
 import '../models/product_model.dart';
-import '../widgets/appbar_widgets.dart';
+import '../widgets/AppbarWidgets.dart';
 
 class SubCategProducts extends StatefulWidget {
   final String maincategName;
@@ -30,8 +30,8 @@ class _SubCategProductsState extends State<SubCategProducts> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
-        leading: const AppBarBackButton(),
-        title: AppBarTitle(title: widget.subcategName),
+        leading: const AppbarBackButton(),
+        title: AppbarWidgets(title: widget.subcategName),
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: _prodcutsStream,

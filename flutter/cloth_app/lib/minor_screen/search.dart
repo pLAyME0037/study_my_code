@@ -1,4 +1,4 @@
-import 'package:cloth_app/minor_screens/product_details.dart';
+import 'package:cloth_app/minor_screen/product_details.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -73,7 +73,8 @@ class _SearchScreenState extends State<SearchScreen> {
                 }
 
                 final result = snapshot.data!.docs.where(
-                  (e) => e['proname'.toLowerCase()]
+                  (e) => (e['proname']?.toString() ?? '')
+                      .toLowerCase()
                       .contains(searchInput.toLowerCase()),
                 );
 

@@ -17,11 +17,7 @@ class Product {
     required this.suppId,
   });
 
-  void increase() {
-    qty++;
-  }
+  void increase() { qty++; }
 
-  void decrease() {
-    qty--;
-  }
+  void decrease() { if (qty > 0) qty--; }
 }

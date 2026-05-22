@@ -1,6 +1,8 @@
 import 'package:cloth_app/minor_screen/place_order.dart';
 import 'package:cloth_app/models/cart_model.dart';
 import 'package:cloth_app/provider/cart_provider.dart';
+import 'package:cloth_app/widgets/AppbarWidgets.dart';
+import 'package:cloth_app/widgets/alert_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -24,7 +26,7 @@ class _CartScreenState extends State<CartScreen> {
             elevation: 0,
             backgroundColor: Colors.white,
             leading: widget.back,
-            title: const AppBarTitle(title: 'Cart'),
+            title: const AppbarWidgets(title: 'Cart'),
             actions: [
               context.watch<Cart>().getItems.isEmpty
                   ? const SizedBox()

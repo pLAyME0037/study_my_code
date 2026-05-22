@@ -1,4 +1,5 @@
 import 'package:cloth_app/main_screen/visit_store.dart';
+import 'package:cloth_app/widgets/AppbarWidgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +18,7 @@ class _StoresScreenState extends State<StoresScreen> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
-        title: const AppBarTitle(
+        title: const AppbarWidgets(
           title: 'Stores',
         ),
       ),
@@ -28,6 +29,12 @@ class _StoresScreenState extends State<StoresScreen> {
               FirebaseFirestore.instance.collection('suppliers').snapshots(),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            if (snapshot.hasError) {
+              return const Center(child: Text('Something went wrong'));
+            }
             if (snapshot.hasData) {
               return GridView.builder(
                   itemCount: snapshot.data!.docs.length,

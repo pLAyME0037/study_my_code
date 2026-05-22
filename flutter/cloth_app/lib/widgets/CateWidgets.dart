@@ -1,4 +1,4 @@
-import 'package:cloth_app/search_screen/SubCateProds.dart';
+import 'package:cloth_app/minor_screen/subcateg_products.dart';
 import 'package:flutter/material.dart';
 
 class SliderBar extends StatelessWidget {
@@ -72,9 +72,9 @@ class SubcategModel extends StatelessWidget {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => SubcategProducts (
-                   mainCategName: mainCategName,
-                   subCategName: subCategName,
+                builder: (context) => SubCategProducts (
+                   maincategName: mainCategName,
+                   subcategName: subCategName,
         )));
       },
       child: Column(

@@ -46,13 +46,9 @@ class _CustomerRegisterState extends State<CustomerRegister> {
           maxHeight: 300,
           maxWidth: 300,
           imageQuality: 95);
-      setState(() {
-        _imageFile = pickedImage;
-      });
+      setState(() { _imageFile = pickedImage; });
     } catch (e) {
-      setState(() {
-        _pickedImageError = e;
-      });
+      setState(() { _pickedImageError = e; });
       print(_pickedImageError);
     }
   }
@@ -64,13 +60,9 @@ class _CustomerRegisterState extends State<CustomerRegister> {
           maxHeight: 300,
           maxWidth: 300,
           imageQuality: 95);
-      setState(() {
-        _imageFile = pickedImage;
-      });
+      setState(() { _imageFile = pickedImage; });
     } catch (e) {
-      setState(() {
-        _pickedImageError = e;
-      });
+      setState(() { _pickedImageError = e; });
       print(_pickedImageError);
     }
   }

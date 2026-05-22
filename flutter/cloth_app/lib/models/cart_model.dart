@@ -136,7 +136,7 @@ class CartModel extends StatelessWidget {
                                       onPressed: () {
                                         cart.reduceByOne(product);
                                       },
-                                      icon: const Icon(
+                                      icon: FaIcon(
                                         FontAwesomeIcons.minus,
                                         size: 18,
                                       )),
@@ -156,7 +156,7 @@ class CartModel extends StatelessWidget {
                                       : () {
                                           cart.increment(product);
                                         },
-                                  icon: const Icon(
+                                  icon: FaIcon(
                                     FontAwesomeIcons.plus,
                                     size: 18,
                                   ))
