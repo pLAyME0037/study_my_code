@@ -1,6 +1,7 @@
 #include <stddef.h>
 #include <stdint.h>
-#define OLIVE_IMPLEMENTATION
+#define OLIVEC_NO_STDLIB
+#define OLIVEC_IMPLEMENTATION
 #include "olive.c"
 
 #define WIDTH 800

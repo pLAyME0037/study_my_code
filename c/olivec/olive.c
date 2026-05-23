@@ -3,19 +3,33 @@
 #ifndef OLIVE_C_
 #define OLIVE_C_
 
+#ifndef OLIVEC_NO_STDLIB
+#include <assert.h>
+#include <string.h>
+#else
+#ifndef assert
+#define assert(expr) ((void)0)
+#endif
+static size_t olivec_strlen(const char *s) {
+    const char *p = s;
+    while (*p) ++p;
+    return (size_t)(p - s);
+}
+#define strlen olivec_strlen
+#endif /* ifndef OLIVEC_NO_STDLIB */
 #include <stddef.h>
 #include <stdint.h>
 #include <stdbool.h>
 #include "olivec.h"
 
-#define GREEN_COLOR    0xFF00FF00
-#define RED_COLOR      0xFFFF0000
-#define SKYBLUE_COLOR  0xFF00FFFF
-#define BLUE_COLOR     0xFF2020AA
-#define YELLOW_COLOR   0xFFFFFF00
-#define GRAY_COLOR     0xFF808080
-#define TERCOISE_COLOR 0xFF008080
-#define PURPLE_COLOR   0xFFFF12FF
+#define GREEN_COLOR      0xFF00FF00
+#define RED_COLOR        0xFFFF0000
+#define SKYBLUE_COLOR    0xFF00FFFF
+#define BLUE_COLOR       0xFF2020AA
+#define YELLOW_COLOR     0xFFFFFF00
+#define GRAY_COLOR       0xFF808080
+#define TERCOISE_COLOR   0xFF008080
+#define PURPLE_COLOR     0xFFFF12FF
 #define BACKGROUND_COLOR 0xFF202020
 #define FOREGROUND_COLOR 0x6495EDFF
 
@@ -30,6 +44,35 @@
 #define UNREACHABLE()
 #define RETURN_DEFER(value) do { result = (value); goto defer; } while (0)
 #define OLIVEC_PIXEL(oc, x, y) (oc).pixels[(y)*(oc).stride + (x)]
+
+typedef struct {
+    size_t width;
+    size_t height;
+    const char *glyphs;
+} Olivec_Font;
+
+#define DEFAULT_FONT_WIDTH 3
+#define DEFAULT_FONT_HEIGHT 4
+static char default_font_glyphs[128][DEFAULT_FONT_HEIGHT][DEFAULT_FONT_WIDTH] = {
+    ['a'] = {
+        {0, 1, 0},
+        {1, 0, 1},
+        {1, 1, 1},
+        {1, 0, 1},
+    },
+    /* ['b'] = { */
+    /*     {1, 0, 0}, */
+    /*     {1, 1, 1}, */
+    /*     {1, 0, 1}, */
+    /*     {1, 1, 1}, */
+    /* }, */
+};
+
+static Olivec_Font default_font = {
+    .glyphs = &default_font_glyphs[0][0][0],
+    .width  = DEFAULT_FONT_WIDTH,
+    .height = DEFAULT_FONT_HEIGHT,
+};
 
 bool olivec_normalize_rect(int x, int y, int w, int h,
                            size_t pixels_width, size_t pixels_height,
@@ -161,10 +204,35 @@ OLIVECDEF void olivec_blend_color(uint32_t *c1, uint32_t c2) {
 
     *c1 = OLIVEC_RGBA(r1, g1, b1, a1);
 }
+
+OLIVECDEF void olivec_text(Olivec_Canvas oc, const char *text,
+                           int text_pos_x, int text_pos_y, Olivec_Font font, size_t size,
+                           uint32_t color) {
+    size_t text_len = strlen(text);
+    for (size_t i = 0; i < text_len; ++i) {
+        int glyph_pos_x = text_pos_x + i*font.width;
+        int glyph_pos_y = text_pos_y + i*font.height;
+        assert(size == 1);
+        const char *glyph = &font.glyphs[text[i]*sizeof(char)*font.width*font.height];
+
+        for (int delta_x = 0; (size_t)delta_x < font.width; ++delta_x) {
+            for (int delta_y = 0; (size_t)delta_y < font.height; ++delta_y) {
+                int pixel_x = glyph_pos_x + delta_x;
+                int pixel_y = glyph_pos_y + delta_y;
+                if (pixel_x >= 0 && pixel_x < oc.width && pixel_y >= 0 && pixel_y < oc.height) {
+                    if (glyph[delta_y*font.width + delta_x]) {
+                        olivec_blend_color(&OLIVEC_PIXEL(oc, pixel_x, pixel_y), color);
+                    }
+                }
+            }
+        }
+    }
+}
+
 #endif /* ifdef OLIVE_C_ */
 
-#ifdef OLIVE_IMPLEMENTATION
-#undef OLIVE_IMPLEMENTATION
+#ifdef OLIVEC_IMPLEMENTATION
+#undef OLIVEC_IMPLEMENTATION
 
 void swap_int(int *a, int *b) {
     int t = *a;
@@ -209,7 +277,7 @@ OLIVECDEF void olivec_fill_circle(Olivec_Canvas oc,
     }
 }
 
-#ifdef OLIVE_NO_STDLIB
+#ifndef OLIVEC_NO_STDLIB
 #include <stdio.h>
 #include <errno.h>
 
@@ -243,7 +311,7 @@ defer:
     if (f) fclose(f);
     return result;
 }
-#endif /* ifdef OLIVE_NO_STDLIB */
+#endif /* ifndef OLIVEC_NO_STDLIB */
 
 void olivec_fill_rect(Olivec_Canvas oc,
                       int x0, int y0, size_t w, size_t h,

@@ -9,7 +9,8 @@
 #endif /* ifdef SDL_PLATFORM */
 #include <stddef.h>
 #include <stdint.h>
-#define OLIVE_IMPLEMENTATION
+#define OLIVEC_NO_STDLIB
+#define OLIVEC_IMPLEMENTATION
 #include "olive.c"
 
 float sqrtf(float x);

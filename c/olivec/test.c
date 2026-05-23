@@ -7,8 +7,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <sys/types.h>
-#define OLIVE_NO_STDLIB
-#define OLIVE_IMPLEMENTATION
+#define OLIVEC_IMPLEMENTATION
 #define OLIVEC_AA_RES 3
 #include "olive.c"
 
