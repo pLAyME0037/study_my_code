@@ -2,8 +2,8 @@
 #include <SDL3/SDL_render.h>
 #include <SDL3/SDL_timer.h>
 #include <stdint.h>
-#define OLIVE_NO_STDLIB
-#define OLIVE_IMPLEMENTATION
+#define OLIVEC_NO_STDLIB
+#define OLIVEC_IMPLEMENTATION
 #include "olive.c"
 
 #define WIDTH 800
