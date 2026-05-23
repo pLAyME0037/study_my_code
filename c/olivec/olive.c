@@ -51,21 +51,191 @@ typedef struct {
     const char *glyphs;
 } Olivec_Font;
 
-#define DEFAULT_FONT_WIDTH 3
-#define DEFAULT_FONT_HEIGHT 4
+#define DEFAULT_FONT_WIDTH 4
+#define DEFAULT_FONT_HEIGHT 5
 static char default_font_glyphs[128][DEFAULT_FONT_HEIGHT][DEFAULT_FONT_WIDTH] = {
     ['a'] = {
-        {0, 1, 0},
-        {1, 0, 1},
-        {1, 1, 1},
-        {1, 0, 1},
+        {0, 1, 1, 0},
+        {0, 0, 0, 1},
+        {0, 1, 1, 1},
+        {1, 0, 0, 1},
+        {0, 1, 1, 1},
     },
-    /* ['b'] = { */
-    /*     {1, 0, 0}, */
-    /*     {1, 1, 1}, */
-    /*     {1, 0, 1}, */
-    /*     {1, 1, 1}, */
-    /* }, */
+    ['b'] = {
+        {1, 0, 0, 0},
+        {1, 0, 0, 0},
+        {1, 1, 1, 0},
+        {1, 0, 0, 1},
+        {1, 1, 1, 0},
+    },
+    ['c'] = {
+        {0, 1, 1, 0},
+        {1, 0, 0, 1},
+        {1, 0, 0, 0},
+        {1, 0, 0, 1},
+        {0, 1, 1, 0},
+    },
+    ['d'] = {
+        {0, 0, 0, 1},
+        {0, 0, 0, 1},
+        {0, 1, 1, 1},
+        {0, 1, 0, 1},
+        {0, 1, 1, 1},
+    },
+    ['e'] = {
+        {0, 1, 1, 0},
+        {1, 0, 0, 1},
+        {1, 1, 1, 1},
+        {1, 0, 0, 0},
+        {0, 1, 1, 1},
+    },
+    ['f'] = {
+        {1, 1, 1, 0},
+        {1, 0, 0, 0},
+        {1, 1, 1, 0},
+        {1, 0, 0, 0},
+        {1, 0, 0, 0},
+    },
+    ['g'] = {
+        {0, 0, 1, 1},
+        {0, 1, 0, 1},
+        {0, 1, 1, 1},
+        {0, 0, 0, 1},
+        {0, 1, 1, 0},
+    },
+    ['h'] = {
+        {1, 0, 0, 0},
+        {1, 0, 0, 0},
+        {1, 1, 1, 0},
+        {1, 0, 1, 0},
+        {1, 0, 1, 0},
+    },
+    ['i'] = {
+        {0, 1, 0, 0},
+        {0, 0, 0, 0},
+        {0, 1, 0, 0},
+        {0, 1, 0, 0},
+        {0, 1, 1, 0},
+    },
+    ['j'] = {
+        {0, 0, 1, 0},
+        {0, 0, 0, 0},
+        {0, 0, 1, 0},
+        {1, 0, 1, 0},
+        {0, 1, 0, 0},
+    },
+    ['k'] = {
+        {1, 0, 0, 0},
+        {1, 0, 1, 0},
+        {1, 1, 0, 0},
+        {1, 0, 1, 0},
+        {1, 0, 1, 0},
+    },
+    ['l'] = {
+        {1, 1, 0, 0},
+        {0, 1, 0, 0},
+        {0, 1, 0, 0},
+        {0, 1, 0, 0},
+        {0, 1, 1, 0},
+    },
+    ['m'] = {
+        {0, 0, 0, 0},
+        {1, 0, 1, 0},
+        {1, 1, 1, 0},
+        {1, 0, 1, 0},
+        {1, 0, 1, 0},
+    },
+    ['n'] = {
+        {0, 0, 0, 0},
+        {0, 1, 1, 0},
+        {1, 0, 1, 0},
+        {1, 0, 1, 0},
+        {1, 0, 1, 0},
+    },
+    ['o'] = {
+        {0, 0, 0, 0},
+        {0, 1, 1, 0},
+        {1, 0, 0, 1},
+        {1, 0, 0, 1},
+        {0, 1, 1, 0},
+    },
+    ['p'] = {
+        {1, 1, 1, 0},
+        {1, 0, 0, 1},
+        {1, 1, 1, 0},
+        {1, 0, 0, 0},
+        {1, 0, 0, 0},
+    },
+    ['q'] = {
+        {0, 1, 1, 0},
+        {1, 0, 1, 0},
+        {0, 1, 1, 0},
+        {0, 0, 1, 0},
+        {0, 0, 1, 0},
+    },
+    ['r'] = {
+        {1, 0, 1, 0},
+        {0, 1, 0, 1},
+        {0, 1, 0, 0},
+        {0, 1, 0, 0},
+        {1, 1, 1, 0},
+    },
+    ['s'] = {
+        {0, 1, 1, 0},
+        {1, 0, 0, 0},
+        {0, 1, 0, 0},
+        {0, 0, 1, 0},
+        {1, 1, 0, 0},
+    },
+    ['t'] = {
+        {0, 1, 0, 0},
+        {1, 1, 1, 0},
+        {0, 1, 0, 0},
+        {0, 1, 0, 0},
+        {0, 1, 1, 0},
+    },
+    ['u'] = {
+        {0, 0, 0, 0},
+        {1, 0, 1, 0},
+        {1, 0, 1, 0},
+        {1, 0, 1, 0},
+        {0, 1, 1, 0},
+    },
+    ['v'] = {
+        {0, 0, 0, 0},
+        {1, 0, 1, 0},
+        {1, 0, 1, 0},
+        {1, 0, 1, 0},
+        {0, 1, 0, 0},
+    },
+    ['w'] = {
+        {0, 0, 0, 0},
+        {1, 0, 0, 1},
+        {1, 0, 1, 1},
+        {1, 0, 1, 1},
+        {0, 1, 0, 1},
+    },
+    ['x'] = {
+        {0, 0, 0, 0},
+        {1, 0, 1, 0},
+        {0, 1, 0, 0},
+        {0, 1, 0, 0},
+        {1, 0, 1, 0},
+    },
+    ['y'] = {
+        {1, 0, 1, 0},
+        {1, 0, 1, 0},
+        {0, 1, 1, 0},
+        {0, 0, 1, 0},
+        {0, 1, 1, 0},
+    },
+    ['z'] = {
+        {0, 0, 0, 0},
+        {1, 1, 1, 0},
+        {0, 0, 1, 0},
+        {0, 1, 0, 0},
+        {1, 1, 1, 0},
+    },
 };
 
 static Olivec_Font default_font = {
@@ -206,22 +376,21 @@ OLIVECDEF void olivec_blend_color(uint32_t *c1, uint32_t c2) {
 }
 
 OLIVECDEF void olivec_text(Olivec_Canvas oc, const char *text,
-                           int text_pos_x, int text_pos_y, Olivec_Font font, size_t size,
+                           int text_pos_x, int text_pos_y, Olivec_Font font, size_t glyph_size,
                            uint32_t color) {
     size_t text_len = strlen(text);
     for (size_t i = 0; i < text_len; ++i) {
-        int glyph_pos_x = text_pos_x + i*font.width;
-        int glyph_pos_y = text_pos_y + i*font.height;
-        assert(size == 1);
+        int glyph_pos_x = text_pos_x + i*font.width*glyph_size;
+        int glyph_pos_y = text_pos_y;
         const char *glyph = &font.glyphs[text[i]*sizeof(char)*font.width*font.height];
 
         for (int delta_x = 0; (size_t)delta_x < font.width; ++delta_x) {
             for (int delta_y = 0; (size_t)delta_y < font.height; ++delta_y) {
-                int pixel_x = glyph_pos_x + delta_x;
-                int pixel_y = glyph_pos_y + delta_y;
-                if (pixel_x >= 0 && pixel_x < oc.width && pixel_y >= 0 && pixel_y < oc.height) {
+                int pixel_x = glyph_pos_x + delta_x*glyph_size;
+                int pixel_y = glyph_pos_y + delta_y*glyph_size;
+                if (pixel_x >= 0 && pixel_x < (int)oc.width && pixel_y >= 0 && pixel_y < (int)oc.height) {
                     if (glyph[delta_y*font.width + delta_x]) {
-                        olivec_blend_color(&OLIVEC_PIXEL(oc, pixel_x, pixel_y), color);
+                        olivec_fill_rect(oc, pixel_x, pixel_y, glyph_size, glyph_size, color);
                     }
                 }
             }

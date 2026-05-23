@@ -20,7 +20,7 @@ int main(void) {
     Olivec_Canvas oc = Olivec_make_canvas(pixels, WIDTH, HEIGHT);
     olivec_fill(oc, BACKGROUND_COLOR);
     olivec_text(oc, "the quick brown fox jumbs over the lazy dog",
-                0, 0, default_font, 1,
+                0, 0, default_font, 4,
                 FOREGROUND_COLOR);
 
     const char *file_path = "./sample_output/text.png";

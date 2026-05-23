@@ -86,6 +86,11 @@ uint32_t *render(float dt) {
         }
     }
 
+    size_t size = 16;
+    olivec_text(oc, "lol",
+                50, HEIGHT - 50 - default_font.height*size, default_font, size,
+                FOREGROUND_COLOR);
+
     return pixels;
 }
 
