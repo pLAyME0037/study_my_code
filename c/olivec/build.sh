@@ -18,5 +18,5 @@ wasm-ld -m wasm32 --no-entry --export-all --allow-undefined -o bin/ddd.wasm bin/
 feh ./sample_output/text.png
 # feh ./sample_output/alpha_blending.png
 # ./bin/triangle
-./bin/ddd
+# ./bin/ddd
 # python -m http.server 3333
