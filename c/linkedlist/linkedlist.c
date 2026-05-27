@@ -55,6 +55,7 @@ Node *rmTail(Node *head) {
 
 void printList(Node *head) {
     Node *curr = head;
+    printf("size of node: %zu", sizeof(Node));
 
     printf("{\n");
     while (curr != NULL) {
