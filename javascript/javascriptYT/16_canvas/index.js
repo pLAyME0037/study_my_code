@@ -4,12 +4,126 @@ class V2 {
         this.y = y;
     }
 
+    render(context) {
+    }
+
     add(that) {
         return new V2(this.x + that.x, this.y + that.y);
     }
 
+    sub(that) {
+        return new V2(this.x - that.x, this.y - that.y);
+    }
+
     scale(scaler) {
         return new V2(this.x*scaler, this.y*scaler);
+    }
+
+    length() {
+        return Math.sqrt(this.x * this.x, this.y * this.y);
+    }
+}
+
+class TutorialPopUp {
+    constructor(text = "Blank") {
+        this.alpha = 0.0;
+        this.deltaAlpha = 0.0;
+        this.text = text;
+    }
+
+    update(deltaTime) {
+        this.alpha += this.deltaAlpha * deltaTime;
+
+        if (this.deltaAlpha < 0.0 && this.alpha <= 0.0) {
+            this.deltaAlpha = 0.0;
+            this.alpha = 0.0;
+        } else if (this.deltaAlpha > 0.0 && this.alpha >= 1.0) {
+            this.deltaAlpha = 0.0;
+            this.alpha = 1.0;
+        }
+    }
+
+    render(context) {
+        const width  = context.canvas.width;
+        const height = context.canvas.height;
+
+        context.fillStyle = `rgba(255, 255, 255, ${this.alpha})`;
+        // context.font = "2rem CaskaydiaMono Nerd Font Mono";
+        context.font = "1rem LexendMega-Regular";
+        // context.center = true;
+        context.textAlign = "center";
+        context.fillText(this.text, width/2, height/2);
+    }
+
+    fadeIn() {
+        this.deltaAlpha = 1.0;
+        this.alpha = 0.0;
+    }
+     
+    fadeOut() {
+        this.deltaAlpha = -1.0;
+        this.alpha = 1.0;
+    }
+}
+
+const radius = 30;
+const speed = 500;
+const directionMap = {
+    "KeyW": new V2(0, -1.0),
+    "KeyS": new V2(0, 1.0),
+    "KeyA": new V2(-1.0, 0),
+    "KeyD": new V2(1.0, 0),
+}
+
+let color = "red";
+
+class Game {
+    constructor() {
+        this.pos = new V2(radius + 10, radius + 10);
+        this.pressedKeys = new Set();
+        this.popUp = new TutorialPopUp("Use WASD to move around.");
+        this.popUp.fadeIn();
+        this.playerLearnedToMove = false;
+    }
+
+    update(deltaTime) {
+        let velocity = new V2(0, 0);
+
+        for (let key of this.pressedKeys) {
+            if (key in directionMap) {
+                velocity = velocity.add(directionMap[key].scale(speed));
+            }
+        }
+
+        if (!this.playerLearnedToMove && velocity.length() > 0.0) {
+            this.playerLearnedToMove = true;
+            this.popUp.fadeOut();
+        }
+
+        this.pos = this.pos.add(velocity.scale(deltaTime));
+        this.popUp.update(deltaTime);
+    }
+
+    render(context) {
+        const width  = context.canvas.width;
+        const height = context.canvas.height;
+
+        if (this.pos.x + radius >= width)  { this.pos.x = width - radius - 2; }
+        if (this.pos.x - radius <= 0)      { this.pos.x = radius + 2; }
+        if (this.pos.y + radius >= height) { this.pos.y = height - radius - 2; }
+        if (this.pos.y - radius <= 0)      { this.pos.y = radius + 2; }
+
+        context.clearRect(0, 0, width, height);
+        fillCircle(context, this.pos, radius, color);
+        this.popUp.render(context);
+    }
+
+    keyDown(event) {
+        this.pressedKeys.add(event.code);
+    }
+
+    keyUp(event) {
+        this.pressedKeys.delete(event.code);
     }
 }
 
@@ -23,53 +137,26 @@ function fillCircle(context, center, radius, color = "green") {
 (() => {
     const canvas = document.getElementById("render");
     const context = canvas.getContext("2d");
-    const width  = window.innerWidth;
-    const height = window.innerHeight;
-    canvas.width = width;
-    canvas.height = height;
-    const radius = 60;
-    const speed = 300;
+    const game = new Game();
 
     let start;
-    // let x = radius + 10;
-    // let y = radius + 10;
-    // let delta_w = 300;
-    // let delta_h = 300;
-    let color = "red";
-    let pos = new V2(radius + 10, radius + 10);
-    let veloscity = new V2(0, 0);
-
-    let directionMap = {
-        "KeyW": new V2(0, -speed),
-        "KeyS": new V2(0, speed),
-        "KeyA": new V2(-speed, 0),
-        "KeyD": new V2(speed, 0),
-    }
 
     function step(timestamp) {
         if (start === undefined) {
             start = timestamp;
         }
-        const deltaTime= (timestamp - start)*0.001;
+        const deltaTime = (timestamp - start)*0.001;
         start = timestamp;
 
-        const width  = window.innerWidth;
-        const height = window.innerHeight;
-        canvas.width = width;
-        canvas.height = height;
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
 
-        pos = pos.add(veloscity.scale(deltaTime));
-        if (pos.x + radius >= width) pos.x = pos.x - 2;
-        if (pos.x - radius <= 0) pos.x = pos.x + 2;
-        if (pos.y + radius >= width) pos.y = pos.y - 2;
-        if (pos.y - radius <= 0) pos.y = pos.y + 2;
+        game.update(deltaTime);
+        game.render(context);
 
         // x += delta_w * deltaTime;
         // y += delta_h * deltaTime;
-
-        context.clearRect(0, 0, width, height);
-        fillCircle(context, pos, radius, color);
-
+        
         window.requestAnimationFrame(step);
     }
     window.requestAnimationFrame(step);
@@ -83,20 +170,17 @@ function fillCircle(context, center, radius, color = "green") {
     title.textContent = num;
 
     document.addEventListener("keydown", (event) => {
-        // console.log(event);
-        if (event.code in directionMap) {
-            veloscity = directionMap[event.code];
-        }
+        game.keyDown(event);
 
         switch (event.code) {
         case "KeyB": color = "blue";   break;
         case "KeyO": color = "orange"; break;
         case "KeyG": color = "green";  break;
-        default: color = "red";
+        default:;
         }
     });
 
-    document.addEventListener("keyup", () => {
-        veloscity = new V2(0 ,0);
+    document.addEventListener("keyup", (event) => {
+        game.keyUp(event);
     });
 })();
