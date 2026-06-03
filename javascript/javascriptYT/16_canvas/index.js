@@ -22,6 +22,11 @@ class V2 {
     length() {
         return Math.sqrt(this.x * this.x, this.y * this.y);
     }
+
+    normalize() {
+        const n = this.length();
+        return new V2(this.x/n, this.y/n);
+    }
 }
 
 class TutorialPopUp {
@@ -66,8 +71,27 @@ class TutorialPopUp {
     }
 }
 
+class Bullet {
+    constructor(pos, vel) {
+        this.pos = pos;
+        this.vel = vel;
+    }
+
+    update(deltaTime) {
+        this.pos = this.pos.add(this.vel.scale(deltaTime));
+    }
+
+    render(context) {
+        fillCircle(context, this.pos, BULLET_RADIUS, color);
+    }
+}
+
 const radius = 30;
 const speed = 500;
+const BULLET_SPEED = 1000;
+const BULLET_RADIUS = 30;
+const BULLET_LIFETIME = 5.0;
+
 const directionMap = {
     "KeyW": new V2(0, -1.0),
     "KeyS": new V2(0, 1.0),
@@ -79,11 +103,13 @@ let color = "red";
 
 class Game {
     constructor() {
-        this.pos = new V2(radius + 10, radius + 10);
+        this.playerPos = new V2(radius + 10, radius + 10);
+        this.mousePos = new V2(0, 0);
         this.pressedKeys = new Set();
         this.popUp = new TutorialPopUp("Use WASD to move around.");
         this.popUp.fadeIn();
         this.playerLearnedToMove = false;
+        this.bullets = new Set();
     }
 
     update(deltaTime) {
@@ -100,22 +126,30 @@ class Game {
             this.popUp.fadeOut();
         }
 
-        this.pos = this.pos.add(velocity.scale(deltaTime));
+        this.playerPos = this.playerPos.add(velocity.scale(deltaTime));
         this.popUp.update(deltaTime);
+
+        for (let bullet of this.bullets) {
+            bullet.update(deltaTime);
+        }
     }
 
     render(context) {
         const width  = context.canvas.width;
         const height = context.canvas.height;
 
-        if (this.pos.x + radius >= width)  { this.pos.x = width - radius - 2; }
-        if (this.pos.x - radius <= 0)      { this.pos.x = radius + 2; }
-        if (this.pos.y + radius >= height) { this.pos.y = height - radius - 2; }
-        if (this.pos.y - radius <= 0)      { this.pos.y = radius + 2; }
+        if (this.playerPos.x + radius >= width)  { this.playerPos.x = width - radius - 2; }
+        if (this.playerPos.x - radius <= 0)      { this.playerPos.x = radius + 2; }
+        if (this.playerPos.y + radius >= height) { this.playerPos.y = height - radius - 2; }
+        if (this.playerPos.y - radius <= 0)      { this.playerPos.y = radius + 2; }
 
         context.clearRect(0, 0, width, height);
-        fillCircle(context, this.pos, radius, color);
+        fillCircle(context, this.playerPos, radius, color);
         this.popUp.render(context);
+
+        for (let bullet of this.bullets) {
+            bullet.render(context);
+        }
     }
 
     keyDown(event) {
@@ -124,6 +158,18 @@ class Game {
 
     keyUp(event) {
         this.pressedKeys.delete(event.code);
+    }
+
+    mouseMove(event) {
+    }
+
+    mouseDown(event) {
+        const mousePos = new V2(event.screenX, event.screenY);
+        const bulletVel = mousePos.sub(this.playerPos)
+                                  .normalize()
+                                  .scale(BULLET_SPEED);
+
+        this.bullets.add(new Bullet(this.playerPos, bulletVel));
     }
 }
 
@@ -182,5 +228,13 @@ function fillCircle(context, center, radius, color = "green") {
 
     document.addEventListener("keyup", (event) => {
         game.keyUp(event);
+    });
+
+    document.addEventListener("mousemove", (event) => {
+        game.mouseMove(event);
+    });
+
+    document.addEventListener("mousedown", (event) => {
+        game.mouseDown(event);
     });
 })();
