@@ -75,10 +75,12 @@ class Bullet {
     constructor(pos, vel) {
         this.pos = pos;
         this.vel = vel;
+        this.lifetime = BULLET_LIFETIME;
     }
 
     update(deltaTime) {
         this.pos = this.pos.add(this.vel.scale(deltaTime));
+        this.lifetime -= deltaTime;
     }
 
     render(context) {
@@ -109,7 +111,7 @@ class Game {
         this.popUp = new TutorialPopUp("Use WASD to move around.");
         this.popUp.fadeIn();
         this.playerLearnedToMove = false;
-        this.bullets = new Set();
+        this.bullets = [];
     }
 
     update(deltaTime) {
@@ -132,6 +134,8 @@ class Game {
         for (let bullet of this.bullets) {
             bullet.update(deltaTime);
         }
+
+        this.bullets = this.bullets.filter((bullet) => bullet.lifetime > 0.0);
     }
 
     render(context) {
@@ -164,12 +168,12 @@ class Game {
     }
 
     mouseDown(event) {
-        const mousePos = new V2(event.screenX, event.screenY);
+        const mousePos = new V2(event.offsetX, event.offsetY);
         const bulletVel = mousePos.sub(this.playerPos)
                                   .normalize()
                                   .scale(BULLET_SPEED);
 
-        this.bullets.add(new Bullet(this.playerPos, bulletVel));
+        this.bullets.push(new Bullet(this.playerPos, bulletVel));
     }
 }
 
