@@ -38,9 +38,16 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
 
-    Navigator.pushReplacement(
+    Navigator.push(
       context,
       MaterialPageRoute(builder: (_) => const CalculatorScreen()),
+    );
+  }
+
+  void _goToSignup() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const SignupScreen()),
     );
   }
 
@@ -67,10 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(height: 16),
             ElevatedButton(onPressed: _login, child: const Text('Login')),
             TextButton(
-              onPressed: () => Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (_) => const SignupScreen()),
-              ),
+              onPressed: _goToSignup,
               child: const Text('No account? Sign Up'),
             ),
           ],
