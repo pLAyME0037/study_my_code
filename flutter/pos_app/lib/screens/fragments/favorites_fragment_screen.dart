@@ -6,7 +6,7 @@ import 'package:pos_app/models/favorite.dart';
 import 'package:pos_app/controllers/current_user.dart';
 import 'package:pos_app/screens/items/item_details_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:pos_app/utils/show_toast.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
@@ -43,12 +43,12 @@ class FavoritesFragmentScreen extends StatelessWidget
       }
       else
       {
-        Fluttertoast.showToast(msg: "Status Code is not 200");
+        showToast("Status Code is not 200");
       }
     }
     catch(errorMsg)
     {
-      Fluttertoast.showToast(msg: "Error:: " + errorMsg.toString());
+      showToast("Error:: " + errorMsg.toString());
     }
 
     return favoriteListOfCurrentUser;
@@ -231,7 +231,7 @@ class FavoritesFragmentScreen extends StatelessWidget
                             height: 130,
                             width: 130,
                             fit: BoxFit.cover,
-                            placeholder: const AssetImage("images/place_holder.png"),
+                            placeholder: const AssetImage("assets/images/place_holder.png"),
                             image: NetworkImage(
                               eachFavoriteItemRecord.image!,
                             ),

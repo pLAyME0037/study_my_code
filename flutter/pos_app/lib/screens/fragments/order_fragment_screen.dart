@@ -5,7 +5,7 @@ import 'package:pos_app/models/order.dart';
 import 'package:pos_app/screens/order/order_details.dart';
 import 'package:pos_app/controllers/current_user.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:pos_app/utils/show_toast.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
@@ -44,12 +44,12 @@ class OrderFragmentScreen extends StatelessWidget
       }
       else
       {
-        Fluttertoast.showToast(msg: "Status Code is not 200");
+        showToast("Status Code is not 200");
       }
     }
     catch(errorMsg)
     {
-      Fluttertoast.showToast(msg: "Error:: " + errorMsg.toString());
+      showToast("Error:: " + errorMsg.toString());
     }
 
     return ordersListOfCurrentUser;
@@ -73,7 +73,7 @@ class OrderFragmentScreen extends StatelessWidget
                 Column(
                   children: [
                     Image.asset(
-                      "images/orders_icon.png",
+                      "assets/images/orders_icon.png",
                       width: 140,
                     ),
                     const Text(
@@ -96,7 +96,7 @@ class OrderFragmentScreen extends StatelessWidget
                     child: Column(
                       children: [
                         Image.asset(
-                          "images/history_icon.png",
+                          "assets/images/history_icon.png",
                           width: 45,
                         ),
                         const Text(

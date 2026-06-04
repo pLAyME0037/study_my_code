@@ -7,7 +7,7 @@ import 'package:pos_app/models/clothes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:pos_app/utils/show_toast.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
@@ -40,7 +40,7 @@ class HomeFragmentScreen extends StatelessWidget
       }
       else
       {
-        Fluttertoast.showToast(msg: "Error, status code is not 200");
+        showToast("Error, status code is not 200");
       }
     }
     catch(errorMsg)
@@ -74,7 +74,7 @@ class HomeFragmentScreen extends StatelessWidget
       }
       else
       {
-        Fluttertoast.showToast(msg: "Error, status code is not 200");
+        showToast("Error, status code is not 200");
       }
     }
     catch(errorMsg)
@@ -254,7 +254,7 @@ class HomeFragmentScreen extends StatelessWidget
                             height: 150,
                             width: 200,
                             fit: BoxFit.cover,
-                            placeholder: const AssetImage("images/place_holder.png"),
+                            placeholder: const AssetImage("assets/images/place_holder.png"),
                             image: NetworkImage(
                               eachClothItemData.image!,
                             ),
@@ -482,7 +482,7 @@ class HomeFragmentScreen extends StatelessWidget
                             height: 130,
                             width: 130,
                             fit: BoxFit.cover,
-                            placeholder: const AssetImage("images/place_holder.png"),
+                            placeholder: const AssetImage("assets/images/place_holder.png"),
                             image: NetworkImage(
                               eachClothItemRecord.image!,
                             ),

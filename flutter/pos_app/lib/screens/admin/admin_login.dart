@@ -4,7 +4,7 @@ import 'package:pos_app/screens/admin/admin_upload_items.dart';
 import 'package:pos_app/api_connection/api_connection.dart';
 import 'package:pos_app/screens/authentication/login_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:pos_app/utils/show_toast.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
@@ -38,18 +38,18 @@ class _AdminLoginScreenState extends State<AdminLoginScreen>
       if(res.statusCode == 200) {
         var resBodyOfLogin = jsonDecode(res.body);
         if(resBodyOfLogin['success'] == true) {
-          Fluttertoast.showToast(msg: "Dear Admin, you are logged-in Successfully.");
+          showToast("Dear Admin, you are logged-in Successfully.");
 
           Future.delayed(const Duration(milliseconds: 2000), () {
             Get.to(AdminUploadItemsScreen());
           });
         }
         else {
-          Fluttertoast.showToast(msg: "Incorrect Credentials.\nPlease write correct password or email and Try Again.");
+          showToast("Incorrect Credentials.\nPlease write correct password or email and Try Again.");
         }
       }
       else {
-        Fluttertoast.showToast(msg: "Status is not 200");
+        showToast("Status is not 200");
       }
     }
     catch(errorMsg) {
@@ -78,7 +78,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen>
                     width: MediaQuery.of(context).size.width,
                     height: 285,
                     child: Image.asset(
-                      "images/admin.jpg",
+                      "assets/images/admin.jpg",
                     ),
                   ),
 

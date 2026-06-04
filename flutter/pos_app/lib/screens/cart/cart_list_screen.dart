@@ -8,7 +8,7 @@ import 'package:pos_app/screens/items/item_details_screen.dart';
 import 'package:pos_app/screens/order/order_now_screen.dart';
 import 'package:pos_app/controllers/current_user.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:pos_app/utils/show_toast.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
@@ -55,19 +55,19 @@ class _CartListScreenState extends State<CartListScreen>
         }
         else
         {
-          Fluttertoast.showToast(msg: "your Cart List is Empty.");
+          showToast("your Cart List is Empty.");
         }
 
         cartListController.setList(cartListOfCurrentUser);
       }
       else
       {
-        Fluttertoast.showToast(msg: "Status Code is not 200");
+        showToast("Status Code is not 200");
       }
     }
     catch(errorMsg)
     {
-      Fluttertoast.showToast(msg: "Error:: " + errorMsg.toString());
+      showToast("Error:: " + errorMsg.toString());
     }
     calculateTotalAmount();
   }
@@ -113,14 +113,14 @@ class _CartListScreenState extends State<CartListScreen>
       }
       else
       {
-        Fluttertoast.showToast(msg: "Error, Status Code is not 200");
+        showToast("Error, Status Code is not 200");
       }
     }
     catch(errorMessage)
     {
       print("Error: " + errorMessage.toString());
 
-      Fluttertoast.showToast(msg: "Error: " + errorMessage.toString());
+      showToast("Error: " + errorMessage.toString());
     }
   }
 
@@ -148,14 +148,14 @@ class _CartListScreenState extends State<CartListScreen>
       }
       else
       {
-        Fluttertoast.showToast(msg: "Error, Status Code is not 200");
+        showToast("Error, Status Code is not 200");
       }
     }
     catch(errorMessage)
     {
       print("Error: " + errorMessage.toString());
 
-      Fluttertoast.showToast(msg: "Error: " + errorMessage.toString());
+      showToast("Error: " + errorMessage.toString());
     }
   }
 
@@ -508,7 +508,7 @@ class _CartListScreenState extends State<CartListScreen>
                                         height: 185,
                                         width: 150,
                                         fit: BoxFit.cover,
-                                        placeholder: const AssetImage("images/place_holder.png"),
+                                        placeholder: const AssetImage("assets/images/place_holder.png"),
                                         image: NetworkImage(
                                           cartModel.image!,
                                         ),

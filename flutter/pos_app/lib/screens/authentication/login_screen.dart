@@ -7,7 +7,7 @@ import 'package:pos_app/screens/fragments/dashboard_of_fragments.dart';
 import 'package:pos_app/models/user.dart';
 import 'package:pos_app/models/user_preferences.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:pos_app/utils/show_toast.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
@@ -47,7 +47,7 @@ class _LoginScreenState extends State<LoginScreen>
         var resBodyOfLogin = jsonDecode(res.body);
         if(resBodyOfLogin['success'] == true)
         {
-          Fluttertoast.showToast(msg: "you are logged-in Successfully.");
+          showToast("you are logged-in Successfully.");
 
           User userInfo = User.fromJson(resBodyOfLogin["userData"]);
 
@@ -60,12 +60,12 @@ class _LoginScreenState extends State<LoginScreen>
         }
         else
         {
-          Fluttertoast.showToast(msg: "Incorrect Credentials.\nPlease write correct password or email and Try Again.");
+          showToast("Incorrect Credentials.\nPlease write correct password or email and Try Again.");
         }
       }
       else
       {
-        Fluttertoast.showToast(msg: "Status is not 200");
+        showToast("Status is not 200");
       }
     }
     catch(errorMsg)
@@ -95,7 +95,7 @@ class _LoginScreenState extends State<LoginScreen>
                     width: MediaQuery.of(context).size.width,
                     height: 285,
                     child: Image.asset(
-                      "images/login.jpg",
+                      "assets/images/login.jpg",
                     ),
                   ),
 
