@@ -61,7 +61,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
     final user = _auth.currentUser!;
     setState(() {
       _result =
-          'name: ${user.username}\r\npower total : ${kw.toStringAsFixed(0)}\r\npayment : ${payment.toStringAsFixed(0)} \Riel';
+          'name: ${user.username}\r\npower total : ${kw.toStringAsFixed(0)}\r\npayment : ${payment.toStringAsFixed(0)} Riel';
     });
   }
 
