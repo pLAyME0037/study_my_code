@@ -27,6 +27,10 @@ class V2 {
         const n = this.length();
         return new V2(this.x/n, this.y/n);
     }
+
+    dist(that) {
+        return this.sub(that).length();
+    }
 }
 
 let playerColor = "#f36ba3";
@@ -210,6 +214,15 @@ class Game {
 
         this.playerPos = this.playerPos.add(velocity.scale(deltaTime));
         this.tutorial.update(deltaTime);
+
+        for (let bullet of this.bullets) {
+            for (let enermy of this.enermies) {
+                if (enermy.pos.dist(bullet.pos) <= BULLET_RADIUS + ENERMY_RADIUS) {
+                    enermy.isDead = true;
+                    bullet.lifetime = 0.0;
+                }
+            }
+        }
 
         for (let bullet of this.bullets) {
             bullet.update(deltaTime);
