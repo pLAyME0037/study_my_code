@@ -4,7 +4,7 @@ import 'package:pos_app/api_connection/api_connection.dart';
 import 'package:pos_app/screens/authentication/login_screen.dart';
 import 'package:pos_app/models/user.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:pos_app/utils/show_toast.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
@@ -44,7 +44,7 @@ class _SignUpScreenState extends State<SignUpScreen>
 
         if(resBodyOfValidateEmail['emailFound'] == true)
         {
-          Fluttertoast.showToast(msg: "Email is already in someone else use. Try another email.");
+          showToast("Email is already in someone else use. Try another email.");
         }
         else
         {
@@ -53,13 +53,13 @@ class _SignUpScreenState extends State<SignUpScreen>
       }
       else
       {
-        Fluttertoast.showToast(msg: "Status is not 200");
+        showToast("Status is not 200");
       }
     }
     catch(e)
     {
       print(e.toString());
-      Fluttertoast.showToast(msg: e.toString());
+      showToast(e.toString());
     }
   }
 
@@ -84,7 +84,7 @@ class _SignUpScreenState extends State<SignUpScreen>
         var resBodyOfSignUp = jsonDecode(res.body);
         if(resBodyOfSignUp['success'] == true)
         {
-          Fluttertoast.showToast(msg: "Congratulations, you are SignUp Successfully.");
+          showToast("Congratulations, you are SignUp Successfully.");
 
           setState(() {
             nameController.clear();
@@ -94,18 +94,18 @@ class _SignUpScreenState extends State<SignUpScreen>
         }
         else
         {
-          Fluttertoast.showToast(msg: "Error Occurred, Try Again.");
+          showToast("Error Occurred, Try Again.");
         }
       }
       else
       {
-        Fluttertoast.showToast(msg: "Status is not 200");
+        showToast("Status is not 200");
       }
     }
     catch(e)
     {
       print(e.toString());
-      Fluttertoast.showToast(msg: e.toString());
+      showToast(e.toString());
     }
   }
 
@@ -130,7 +130,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                     width: MediaQuery.of(context).size.width,
                     height: 285,
                     child: Image.asset(
-                      "images/register.jpg",
+                      "assets/images/register.jpg",
                     ),
                   ),
 

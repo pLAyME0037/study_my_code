@@ -221,7 +221,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
               FadeInImage(
                 width: MediaQuery.of(context).size.width * 0.8,
                 fit: BoxFit.fitWidth,
-                placeholder: const AssetImage("images/place_holder.png"),
+                placeholder: const AssetImage("assets/images/place_holder.png"),
                 image: NetworkImage(
                   API.hostImages + widget.clickedOrderInfo!.image!,
                 ),
@@ -305,7 +305,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                   height: 150,
                   width: 130,
                   fit: BoxFit.cover,
-                  placeholder: const AssetImage("images/place_holder.png"),
+                  placeholder: const AssetImage("assets/images/place_holder.png"),
                   image: NetworkImage(
                     itemInfo["image"],
                   ),

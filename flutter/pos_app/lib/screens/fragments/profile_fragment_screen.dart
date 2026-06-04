@@ -101,7 +101,7 @@ class ProfileFragmentScreen extends StatelessWidget
 
         Center(
           child: Image.asset(
-            "images/man.png",
+            "assets/images/man.png",
             width: 240,
           ),
         ),

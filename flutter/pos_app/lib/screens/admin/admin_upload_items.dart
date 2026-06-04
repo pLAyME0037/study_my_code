@@ -5,7 +5,7 @@ import 'package:pos_app/screens/admin/admin_get_all_orders.dart';
 import 'package:pos_app/api_connection/api_connection.dart';
 import 'package:pos_app/screens/authentication/login_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:pos_app/utils/show_toast.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
@@ -263,7 +263,7 @@ class _AdminUploadItemsScreenState extends State<AdminUploadItemsScreen>
         var resBodyOfUploadItem = jsonDecode(response.body);
 
         if(resBodyOfUploadItem['success'] == true) {
-          Fluttertoast.showToast(msg: "New item uploaded successfully");
+          showToast("New item uploaded successfully");
 
           setState(() {
             pickedImageXFile=null;
@@ -279,11 +279,11 @@ class _AdminUploadItemsScreenState extends State<AdminUploadItemsScreen>
           Get.to(AdminUploadItemsScreen());
         }
         else {
-          Fluttertoast.showToast(msg: "Item not uploaded. Error, Try Again.");
+          showToast("Item not uploaded. Error, Try Again.");
         }
       }
       else {
-        Fluttertoast.showToast(msg: "Status is not 200");
+        showToast("Status is not 200");
       }
     }
     catch(errorMsg) {
@@ -336,7 +336,7 @@ class _AdminUploadItemsScreenState extends State<AdminUploadItemsScreen>
           TextButton(
             onPressed: ()
             {
-              Fluttertoast.showToast(msg: "Uploading now...");
+              showToast("Uploading now...");
 
               uploadItemImage();
             },
@@ -718,7 +718,7 @@ class _AdminUploadItemsScreenState extends State<AdminUploadItemsScreen>
                               {
                                 if(formKey.currentState!.validate())
                                 {
-                                  Fluttertoast.showToast(msg: "Uploading now...");
+                                  showToast("Uploading now...");
 
                                   uploadItemImage();
                                 }

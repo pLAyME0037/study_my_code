@@ -1,7 +1,7 @@
 import 'package:pos_app/controllers/order_now_controller.dart';
 import 'package:pos_app/screens/order/order_confirmation.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:pos_app/utils/show_toast.dart';
 import 'package:get/get.dart';
 
 
@@ -301,7 +301,7 @@ class OrderNowScreen extends StatelessWidget
                   }
                   else
                   {
-                    Fluttertoast.showToast(msg: "Please complete the form.");
+                    showToast("Please complete the form.");
                   }
                 },
                 borderRadius: BorderRadius.circular(30),
@@ -385,7 +385,7 @@ class OrderNowScreen extends StatelessWidget
                   height: 150,
                   width: 130,
                   fit: BoxFit.cover,
-                  placeholder: const AssetImage("images/place_holder.png"),
+                  placeholder: const AssetImage("assets/images/place_holder.png"),
                   image: NetworkImage(
                     eachSelectedItem["image"],
                   ),

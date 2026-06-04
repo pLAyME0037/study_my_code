@@ -7,7 +7,7 @@ import 'package:pos_app/models/clothes.dart';
 import 'package:pos_app/controllers/current_user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:pos_app/utils/show_toast.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
@@ -49,16 +49,16 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen>
         var resBodyOfAddCart = jsonDecode(res.body);
         if(resBodyOfAddCart['success'] == true)
         {
-          Fluttertoast.showToast(msg: "item saved to Cart Successfully.");
+          showToast("item saved to Cart Successfully.");
         }
         else
         {
-          Fluttertoast.showToast(msg: "Error Occur. Item not saved to Cart and Try Again.");
+          showToast("Error Occur. Item not saved to Cart and Try Again.");
         }
       }
       else
       {
-        Fluttertoast.showToast(msg: "Status is not 200");
+        showToast("Status is not 200");
       }
     }
     catch(errorMsg)
@@ -93,7 +93,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen>
       }
       else
       {
-        Fluttertoast.showToast(msg: "Status is not 200");
+        showToast("Status is not 200");
       }
     }
     catch(errorMsg)
@@ -119,18 +119,18 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen>
         var resBodyOfAddFavorite = jsonDecode(res.body);
         if(resBodyOfAddFavorite['success'] == true)
         {
-          Fluttertoast.showToast(msg: "item saved to your Favorite List Successfully.");
+          showToast("item saved to your Favorite List Successfully.");
 
           validateFavoriteList();
         }
         else
         {
-          Fluttertoast.showToast(msg: "Item not saved to your Favorite List.");
+          showToast("Item not saved to your Favorite List.");
         }
       }
       else
       {
-        Fluttertoast.showToast(msg: "Status is not 200");
+        showToast("Status is not 200");
       }
     }
     catch(errorMsg)
@@ -156,18 +156,18 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen>
         var resBodyOfDeleteFavorite = jsonDecode(res.body);
         if(resBodyOfDeleteFavorite['success'] == true)
         {
-          Fluttertoast.showToast(msg: "item Deleted from your Favorite List.");
+          showToast("item Deleted from your Favorite List.");
 
           validateFavoriteList();
         }
         else
         {
-          Fluttertoast.showToast(msg: "item NOT Deleted from your Favorite List.");
+          showToast("item NOT Deleted from your Favorite List.");
         }
       }
       else
       {
-        Fluttertoast.showToast(msg: "Status is not 200");
+        showToast("Status is not 200");
       }
     }
     catch(errorMsg)
@@ -196,7 +196,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen>
             height: MediaQuery.of(context).size.height * 0.5,
             width: MediaQuery.of(context).size.width,
             fit: BoxFit.cover,
-            placeholder: const AssetImage("images/place_holder.png"),
+            placeholder: const AssetImage("assets/images/place_holder.png"),
             image: NetworkImage(
               widget.itemInfo!.image!,
             ),
@@ -426,7 +426,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen>
                           }
                           else
                           {
-                            Fluttertoast.showToast(msg: "Quantity must be 1 or greater than 1");
+                            showToast("Quantity must be 1 or greater than 1");
                           }
                         },
                         icon: const Icon(Icons.remove_circle_outline, color: Colors.white,),

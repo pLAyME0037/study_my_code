@@ -6,7 +6,7 @@ import 'package:pos_app/screens/fragments/dashboard_of_fragments.dart';
 import 'package:pos_app/models/order.dart';
 import 'package:pos_app/controllers/current_user.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:pos_app/utils/show_toast.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
@@ -108,13 +108,13 @@ class OrderConfirmationScreen extends StatelessWidget
         }
         else
         {
-          Fluttertoast.showToast(msg: "Error:: \nyour new order do NOT placed.");
+          showToast("Error:: \nyour new order do NOT placed.");
         }
       }
     }
     catch(erroeMsg)
     {
-      Fluttertoast.showToast(msg: "Error: " + erroeMsg.toString());
+      showToast("Error: " + erroeMsg.toString());
     }
   }
 
@@ -136,21 +136,21 @@ class OrderConfirmationScreen extends StatelessWidget
 
         if(responseBodyFromDeleteCart["success"] == true)
         {
-          Fluttertoast.showToast(msg: "your new order has been placed Successfully.");
+          showToast("your new order has been placed Successfully.");
 
           Get.to(DashboardOfFragments());
         }
       }
       else
       {
-        Fluttertoast.showToast(msg: "Error, Status Code is not 200");
+        showToast("Error, Status Code is not 200");
       }
     }
     catch(errorMessage)
     {
       print("Error: " + errorMessage.toString());
 
-      Fluttertoast.showToast(msg: "Error: " + errorMessage.toString());
+      showToast("Error: " + errorMessage.toString());
     }
   }
 
@@ -165,7 +165,7 @@ class OrderConfirmationScreen extends StatelessWidget
           children: [
 
             Image.asset(
-              "images/transaction.png",
+              "assets/images/transaction.png",
               width: 160,
             ),
 
@@ -239,7 +239,7 @@ class OrderConfirmationScreen extends StatelessWidget
                   }
                   else
                   {
-                    Fluttertoast.showToast(msg: "Please attach the transaction proof / screenshot.");
+                    showToast("Please attach the transaction proof / screenshot.");
                   }
                 },
                 borderRadius: BorderRadius.circular(30),

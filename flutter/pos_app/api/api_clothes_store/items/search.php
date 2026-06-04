@@ -8,11 +8,9 @@ $sqlQuery = "SELECT * FROM items_table WHERE name LIKE '%$typedKeyWords%'";
 
 $resultOfQuery = $connectNow->query($sqlQuery);
 
-if($resultOfQuery->num_rows > 0) 
-{
+if($resultOfQuery->num_rows > 0) {
     $foundItemsRecord = array();
-    while($rowFound = $resultOfQuery->fetch_assoc())
-    {
+    while($rowFound = $resultOfQuery->fetch_assoc()) {
         $foundItemsRecord[] = $rowFound;
     }
 
@@ -22,8 +20,6 @@ if($resultOfQuery->num_rows > 0)
             "itemsFoundData"=>$foundItemsRecord,
         )
     );
-}
-else 
-{
+} else {
     echo json_encode(array("success"=>false));
 }
