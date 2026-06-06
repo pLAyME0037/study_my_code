@@ -169,7 +169,8 @@ class Partical {
     }
 
     render(context) {
-        fillCircle(context, this.pos, this.radius, particalColor);
+        const alpha = this.lifetime/PARTICAL_LIFETIME;
+        fillCircle(context, this.pos, this.radius, `rgba(205, 214, 244, ${alpha})`);
     }
 
     update(deltaTime) {
@@ -241,7 +242,8 @@ class Game {
         this.bullets = [];
         this.enermies = [];
         this.particals = [];
-        this.enermySpawnCooldown = 0.0;
+        this.enermySpawnRate = ENERMY_SPAWN_COOLDOWN;
+        this.enermySpawnCooldown = this.enermySpawnRate;
     }
 
     update(deltaTime) {
@@ -292,7 +294,8 @@ class Game {
             this.enermySpawnCooldown -= deltaTime;
             if (this.enermySpawnCooldown <= 0.0) {
                 this.spawnEnermy();
-                this.enermySpawnCooldown = ENERMY_SPAWN_COOLDOWN;
+                this.enermySpawnCooldown = this.enermySpawnRate;
+                this.enermySpawnRate = Math.max(0.01, this.enermySpawnRate - 0.01);
             }
         }
     }
