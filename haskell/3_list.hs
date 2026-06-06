@@ -5,7 +5,7 @@ list [a, b] = "List with two elements: " ++ show a ++ ", " ++ show b
 list _ = "List with many elements."
 
 sumList :: [Int] -> Int
-jumList [] = 0
+sumList [] = 0
 sumList (x:xs) = x + sumList xs
 
 main = do
