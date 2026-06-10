@@ -29,7 +29,7 @@ class iostream {
         // scanRead();
         // usingConsole();
         // sysOutFmt();
-        // writeDataStream();
+        writeDataStream();
         // readDataStream();
         // writeObjStream();
         // readObjStream();
