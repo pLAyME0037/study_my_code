@@ -5,20 +5,22 @@ import java.io.IOException;
 
 class ReadWriteData {
     public static void main(String[] args) throws IOException {
-        writeMsg("Hello, World 123");
+        writeMsg("Hello, World 123\n");
+        writeMsg("----------------\n");
+        writeMsg("this is new line\n");
         readMsg();
     }
 
     public static void readMsg() throws IOException {
-        BufferedReader br = null;
+        FileReader fr = null;
 
         try {
-            br = new BufferedReader(new FileReader("./output_text.txt"));
+            fr = new FileReader("./output_text.txt");
 
-            String i;
-            while((i = br.readLine()) != null) System.out.println(i);
+            int c;
+            while((c = fr.read()) != -1) System.out.print((char)c);
         } finally {
-            if (br != null) br.close();
+            if (fr != null) fr.close();
         }
     }
 
@@ -26,9 +28,9 @@ class ReadWriteData {
         FileWriter fw = null;
 
         try {
-            fw = new FileWriter("./output_text.txt");
+            fw = new FileWriter("./output_text.txt", true);
 
-            fw.write(message);
+            fw.append(message);
         } finally {
             if (fw != null) fw.close();
         }

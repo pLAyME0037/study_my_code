@@ -11,7 +11,7 @@ print()
 #loop through string
 for i in a:
     print (i)
-print()  
+print()
 #string length
 print (len(a[1]), "\n")
 
