@@ -155,11 +155,13 @@ Generator *generator_create(void (*f)(void*), void *arg) {
 }
 
 int main() {
+    generator_init();
     Generator *g = generator_create(fibonacci, (void*)(1000*1000));
     printf("%ld\n", (long)generator_next(g));
-    /* printf("%ld\n", (long)generator_next(g)); */
-    /* printf("%ld\n", (long)generator_next(g)); */
-    /* printf("%ld\n", (long)generator_next(g)); */
+    printf("%ld\n", (long)generator_next(g));
+    printf("%ld\n", (long)generator_next(g));
+    printf("%ld\n", (long)generator_next(g));
 
     return 0;
 }
+
