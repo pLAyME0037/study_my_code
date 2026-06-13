@@ -115,20 +115,10 @@ void generator_return(void *arg, void *rsp) {
     generator_restore_context_with_return(da_lasted(&generator_stack)->rsp, arg);
 }
 
-void fibonacci(void *arg) {
-    long max = (long)arg;
-    long a = 0;
-    long b = 1;
-    while (a < max) {
-        generator_yield((void*)a);
-        long c = a + b;
-        a = b;
-        b = c;
-    }
-}
-
 void generator__finish_current(void) {
-    TODO("generator__finish_current");
+    da_lasted(&generator_stack)->is_dead = true;
+    generator_stack.count -= 1;
+    generator_restore_context_with_return(da_lasted(&generator_stack)->rsp, NULL);
 }
 
 Generator *generator_create(void (*f)(void*), void *arg) {
@@ -154,13 +144,45 @@ Generator *generator_create(void (*f)(void*), void *arg) {
     return g;
 }
 
+Generator *generator_destory(Generator *g) {
+    munmap(g->stack_base, GENERATOR_STACK_CAPACITY);
+    free(g);
+}
+
+#define foreach(it, g) for (void* it = generator_next(g); !g->is_dead; it = generator_next(g))
+
+void forever(void *arg) {
+    while (true) generator_yield(arg);
+}
+
+void fibonacci(void *arg) {
+    long max = (long)arg;
+    long a = 0;
+    long b = 1;
+    while (a < max) {
+        long result = a;
+
+        // Generator *g = generator_create(forever, (void*)a);
+        //
+        // result += (long)generator_next(g);
+        // result += (long)generator_next(g);
+        // result += (long)generator_next(g);
+
+        generator_yield((void*)result);
+
+        long c = a + b;
+        a = b;
+        b = c;
+    }
+}
+
 int main() {
     generator_init();
     Generator *g = generator_create(fibonacci, (void*)(1000*1000));
-    printf("%ld\n", (long)generator_next(g));
-    printf("%ld\n", (long)generator_next(g));
-    printf("%ld\n", (long)generator_next(g));
-    printf("%ld\n", (long)generator_next(g));
+    foreach (value, g) {
+        printf("%ld\n", (long)value);
+    }
+    generator_destory(g);
 
     return 0;
 }
