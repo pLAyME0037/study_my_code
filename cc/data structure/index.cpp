@@ -2,7 +2,7 @@
 
 using namespace std;
 
-int main(){
+int main() {
 
     int array[] = {3, 1, 2};
     int n = 3;

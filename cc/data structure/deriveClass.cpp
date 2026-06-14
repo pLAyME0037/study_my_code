@@ -1,7 +1,6 @@
 #include <iostream>
 
-class toyota
-{
+class toyota {
 private:
 	std::string car_name;
 	std::string color;
@@ -9,8 +8,7 @@ private:
 	int price;
 
 public:
-	void toyotas(std::string car_n, std::string col, std::string sp, int pri)
-	{
+	void toyotas(std::string car_n, std::string col, std::string sp, int pri) {
 		car_name = car_n;
 		color = col;
 		speed = sp;
@@ -24,16 +22,14 @@ public:
 	}
 	int prices;
 };
-class phone
-{
+class phone {
 private:
 	std::string name;
 	std::string color;
 	int price;
 
 public:
-	void phones(std::string n, std::string col, int pri)
-	{
+	void phones(std::string n, std::string col, int pri) {
 		name = n;
 		color = col;
 		price = pri;
@@ -44,8 +40,8 @@ public:
 		std::cout << "+++++++++++++" << "\n\n";
 	}
 };
-int main()
-{
+
+int main() {
 
 	toyota typeToyota;
 	typeToyota.toyotas("rav4", "red", "240km/h", 400000);

@@ -5,8 +5,7 @@
 
 using namespace std;
 
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
 	// int n;
 	// cin >> n;
 	// int arr[n];
@@ -39,8 +38,7 @@ int main(int argc, char **argv)
 	int n;
 	// Get the initial size of the array
 	std::cout << "Enter the size of the array: ";
-	while (!(std::cin >> n) || n <= 0)
-	{
+	while (!(std::cin >> n) || n <= 0) {
 		std::cout << "Invalid input. Please enter a positive integer for the size: ";
 		std::cin.clear();																	  // Clear error flags
 		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
@@ -48,58 +46,47 @@ int main(int argc, char **argv)
 	// Declare a vector of size n
 	std::vector<int> arr(n);
 	// Populate the vector with user input
-	for (int i = 0; i < n; ++i)
-	{
+	for (int i = 0; i < n; ++i) {
 		std::cout << "arr[" << i << "]: ";
-		while (!(std::cin >> arr[i]))
-		{
+		while (!(std::cin >> arr[i])) {
 			std::cout << "Invalid input. Please enter an integer for arr[" << i << "]: ";
-			std::cin.clear();																	  // Clear error flags
+			std::cin.clear(); // Clear error flags
 			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
 		}
 	}
 	std::cout << "\n";
 	// Display the elements of the vector
 	std::cout << "Current elements in the array:\n";
-	for (int i = 0; i < arr.size(); ++i)
-	{
+	for (int i = 0; i < arr.size(); ++i) {
 		std::cout << "arr[" << i << "]: " << arr[i] << std::endl;
 	}
 	std::cout << "\n";
 	// Loop to continuously add new elements
 	int newElement;
 	char choice;
-	do
-	{
+	do {
 		std::cout << "Enter a new element to add (or 'q' to quit): ";
 		// Attempt to read an integer
-		if (std::cin >> newElement)
-		{
+		if (std::cin >> newElement) {
 			arr.push_back(newElement); // Add the new element to the end of the vector
 			// Display all elements including the newly added one
 			std::cout << "Elements after adding new element:\n";
-			for (int i = 0; i < arr.size(); ++i)
-			{
+			for (int i = 0; i < arr.size(); ++i) {
 				std::cout << "arr[" << i << "]: " << arr[i] << std::endl;
 			}
 			std::cout << "\n";
 			std::cout << "Do you want to add another element? (y/n): ";
 			std::cin >> choice;
 			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Clear buffer
-		}
-		else
-		{
+		} else {
 			// If input was not an integer, check if it's 'q' to quit
 			std::cin.clear(); // Clear error flags
 			std::string temp_input;
 			std::cin >> temp_input;
-			if (temp_input == "q" || temp_input == "Q")
-			{
+			if (temp_input == "q" || temp_input == "Q") {
 				choice = 'n'; // Set choice to 'n' to exit the loop
 				std::cout << "Exiting input loop.\n";
-			}
-			else
-			{
+			} else {
 				std::cout << "Invalid input. Please enter an integer or 'q' to quit.\n";
 				// Don't clear buffer here as std::cin >> temp_input already consumed it.
 				choice = 'y'; // Continue the loop if it was just invalid input (not 'q')

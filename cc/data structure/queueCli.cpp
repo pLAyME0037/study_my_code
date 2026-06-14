@@ -2,8 +2,7 @@
 #include <queue>  
 #include <string> 
 
-int main()
-{
+int main() {
    std::queue<std::string> names;
    std::string name, input = "";      
 

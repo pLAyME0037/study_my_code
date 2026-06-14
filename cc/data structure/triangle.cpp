@@ -6,18 +6,21 @@ public:
    int height;
 
 };
+
 class area: public triangle {
 public:
    void getArea() {
       std::cout << "Area of triangle: " << (width * height) / 2 << std::endl;
    }
 };
+
 class dimension: public triangle {
 public:
    void getDimension() {
       std::cout << "Dimension: " << width * height * 2 << std::endl;
    }
 };
+
 int main() {
    area a;
    a.width = 100;
