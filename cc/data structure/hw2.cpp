@@ -1,8 +1,7 @@
 #include <iostream>
 #include <queue>
 
-int main()
-{
+int main() {
    std::queue<std::string> empName;
 
    empName.push("Jame");
@@ -20,21 +19,16 @@ int main()
    bool isFound = false;
    std::string search_for = "Cena"; // <-----------[Input Search]
 
-   while (!tempQueue.empty())
-   {
-      if (tempQueue.front() == search_for)
-      {
+   while (!tempQueue.empty()) {
+      if (tempQueue.front() == search_for) {
          isFound = true;
          break;
       }
       tempQueue.pop();
    }
-   if (isFound = true)
-   {
+   if (isFound == true) {
       std::cout << "Search: found [" << search_for << "]\n";
-   }
-   else
-   {
+   } else {
       std::cout << "Search: Not Found [" << search_for << "] Input different Search \n";
    }
 // ==================
@@ -42,8 +36,7 @@ int main()
    std::cout << "Last Employee: " << empName.front() << "\n";
 // ==================
    int i = 1;
-   while (!empName.empty())
-   {
+   while (!empName.empty()) {
       std::cout << "Name ( " << i++ << " ) " << empName.front() << "\n";
       empName.pop();
    }

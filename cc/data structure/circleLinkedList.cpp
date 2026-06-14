@@ -1,6 +1,5 @@
 #include <iostream>
-class Node
-{
+class Node {
 public:
    int data;
    Node *next;
@@ -8,8 +7,7 @@ public:
    Node(int value) : data(value), next(nullptr) {}
 };
 
-class CircularLinkedList
-{
+class CircularLinkedList {
 private:
    Node *head;
 
@@ -17,14 +15,11 @@ public:
    CircularLinkedList() : head(nullptr) {}
 
    // Destructor to free memory
-   ~CircularLinkedList()
-   {
-      if (head == nullptr)
-         return;
+   ~CircularLinkedList() {
+      if (head == nullptr) return;
 
       Node *current = head->next;
-      while (current != head)
-      {
+      while (current != head) {
          Node *temp = current;
          current = current->next;
          delete temp;
@@ -33,16 +28,12 @@ public:
    }
 
    // Insert a node at the end of the circular linked list
-   void insert(int value)
-   {
+   void insert(int value) {
       Node *newNode = new Node(value);
-      if (head == nullptr)
-      {
+      if (head == nullptr) {
          head = newNode;
          head->next = head; // Point to itself for a single node
-      }
-      else
-      {
+      } else {
          Node *current = head;
          while (current->next != head)
          {
@@ -54,18 +45,15 @@ public:
    }
 
    // Display the circular linked list
-   void display() const
-   {
-      if (head == nullptr)
-      {
+   void display() const {
+      if (head == nullptr) {
          std::cout << "List is empty." << std::endl;
          return;
       }
 
       Node *current = head;
       std::cout << "Circular List: ";
-      do
-      {
+      do {
          std::cout << current->data << " ";
          current = current->next;
       } while (current != head);
@@ -73,44 +61,33 @@ public:
    }
 
    // Search for an element
-   bool search(int value) const
-   {
-      if (head == nullptr)
-         return false;
+   bool search(int value) const {
+      if (head == nullptr) return false;
 
       Node *current = head;
-      do
-      {
-         if (current->data == value)
-            return true;
+      do {
+         if (current->data == value) return true;
          current = current->next;
       } while (current != head);
       return false;
    }
 
    // Remove a node by value
-   bool remove(int value)
-   {
-      if (head == nullptr)
-         return false;
+   bool remove(int value) {
+      if (head == nullptr) return false;
          
       Node *current = head;
       Node *prev = nullptr;
 
       // Case 1: Removing the head node
-      if (head->data == value)
-      {
-         if (head->next == head)
-         { // Only one node in the list
+      if (head->data == value) {
+         if (head->next == head) { // Only one node in the list
             delete head;
             head = nullptr;
-         }
-         else
-         { // More than one node
+         } else { // More than one node
             // Find the last node
             Node *last = head;
-            while (last->next != head)
-            {
+            while (last->next != head) {
                last = last->next;
             }
             last->next = head->next; // Last node points to the new head
@@ -124,10 +101,8 @@ public:
       // Case 2: Removing a node other than the head
       prev = head;
       current = head->next;
-      while (current != head)
-      {
-         if (current->data == value)
-         {
+      while (current != head) {
+         if (current->data == value) {
             prev->next = current->next;
             delete current;
             return true;
@@ -140,8 +115,7 @@ public:
    }
 };
 
-int main()
-{
+int main() {
    CircularLinkedList cll;
 
    cll.insert(10);

@@ -43,8 +43,7 @@ public:
       std::cout << "Not found: " << value << std::endl;
    }
 
-   void printList() const
-   {
+   void printList() const {
       Node *current = head;
       std::cout << "[ ";
       while (current != nullptr)

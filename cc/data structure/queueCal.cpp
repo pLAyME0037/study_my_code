@@ -1,8 +1,7 @@
 #include <iostream>
 #include <queue>
 
-int main()
-{
+int main() {
    std::queue<int> num1;
 
    num1.push(3);

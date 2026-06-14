@@ -1,7 +1,6 @@
 #include <iostream>
 
-class car
-{
+class car {
 private:
    /* data */
 public:
@@ -9,11 +8,9 @@ public:
    int year;
 };
 
-class toyota : public car
-{
+class toyota : public car {
 public:
-   void toyotas(std::string typ, std::string col, std::string speeds, int years)
-   {
+   void toyotas(std::string typ, std::string col, std::string speeds, int years) {
       type = typ;
       color = col;
       speed = speeds;
@@ -27,8 +24,7 @@ public:
    }
 };
 
-int main()
-{
+int main() {
 
    toyota type;
 

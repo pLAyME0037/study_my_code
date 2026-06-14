@@ -1,25 +1,20 @@
 #include <iostream>
 using namespace std;
 
-struct Node
-{
+struct Node {
    int data;
    Node *next;
-   Node(int value)
-   {
+   Node(int value) {
       data = value;
       next = 0;
    }
 };
 
 // Function to insert a node at a specific position in a circular linked list
-Node *insertAtPosition(Node *last, int data, int pos)
-{
-   if (last == 0)
-   {
+Node *insertAtPosition(Node *last, int data, int pos) {
+   if (last == 0) {
       // If the list is empty
-      if (pos != 1)
-      {
+      if (pos != 1) {
          cout << "Invalid position!" << endl;
          return last;
       }
@@ -36,8 +31,7 @@ Node *insertAtPosition(Node *last, int data, int pos)
    // curr will point to head initially
    Node *curr = last->next;
 
-   if (pos == 1)
-   {
+   if (pos == 1) {
       // Insert at the beginning
       newNode->next = curr;
       last->next = newNode;
@@ -45,13 +39,11 @@ Node *insertAtPosition(Node *last, int data, int pos)
    }
 
    // Traverse the list to find the insertion point
-   for (int i = 1; i < pos - 1; ++i)
-   {
+   for (int i = 1; i < pos - 1; ++i) {
       curr = curr->next;
 
       // If position is out of bounds
-      if (curr == last->next)
-      {
+      if (curr == last->next) {
          cout << "Invalid position!" << endl;
          return last;
       }
@@ -61,32 +53,25 @@ Node *insertAtPosition(Node *last, int data, int pos)
    curr->next = newNode;
 
    // Update last if the new node is inserted at the end
-   if (curr == last)
-      last = newNode;
+   if (curr == last) last = newNode;
 
    return last;
 }
 
-void printList(Node *last)
-{
-   if (last == NULL)
-      return;
+void printList(Node *last) {
+   if (last == NULL) return;
 
    Node *head = last->next;
-   while (true)
-   {
+   while (true) {
       cout << head->data << " ";
       head = head->next;
-      if (head == last->next)
-         break;
+      if (head == last->next) break;
    }
    cout << endl;
 }
 // Function to delete a node
-Node *deleteNode(Node *last, int key)
-{
-   if (last == NULL)
-   {
+Node *deleteNode(Node *last, int key) {
+   if (last == NULL) {
       cout << "List is empty." << endl;
       return NULL;
    }
@@ -95,20 +80,16 @@ Node *deleteNode(Node *last, int key)
    Node *prev = last;
 
    // If the node to be deleted is the only node in the list
-   if (temp == last && temp->data == key)
-   {
+   if (temp == last && temp->data == key) {
       delete temp;
       return NULL;
    }
 
    // Traverse the list to find the node to be deleted
-   do
-   {
-      if (temp->data == key)
-      {
+   do {
+      if (temp->data == key) {
          prev->next = temp->next;
-         if (temp == last)
-         {
+         if (temp == last) {
             last = prev;
          }
          delete temp;
@@ -122,8 +103,7 @@ Node *deleteNode(Node *last, int key)
    return last;
 }
 
-int main()
-{
+int main() {
 
    // Create circular linked list: 2, 3, 4
    Node *first = new Node(2);

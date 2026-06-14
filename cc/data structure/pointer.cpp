@@ -1,7 +1,6 @@
 #include <iostream>
 
-int main()
-{
+int main() {
    int a = 5, b = 10;
    int *pa = &a, *pb = &b;
    int sum = *pa + *pb;
