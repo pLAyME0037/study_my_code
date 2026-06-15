@@ -29,12 +29,13 @@ class iostream {
         // scanRead();
         // usingConsole();
         // sysOutFmt();
-        writeDataStream();
+        // writeDataStream();
         // readDataStream();
         // writeObjStream();
         // readObjStream();
     }
 
+    static void foo() {}
     public static void byteStream() throws IOException {
         try {
             in = new FileInputStream("./data_files/wallpaper1.jpg");

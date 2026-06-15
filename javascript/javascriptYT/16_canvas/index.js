@@ -1,3 +1,35 @@
+'strict mode';
+
+class Color {
+    constructor(r, g, b, a) {
+        this.r = r;
+        this.g = g;
+        this.b = b;
+        this.a = a;
+    }
+
+    toRgba() {
+        return `rgba(${this.r * 255}, ${this.g * 255}, ${this.b * 255}, ${this.a})`;
+    }
+
+    withAlpha(a) {
+        return new Color(this.r, this.g, this.b, a);
+    }
+
+    static hex(hexcolor) {
+        let matches = hexcolor.match(/#([0-9a-z]{2})([0-9a-z]{2})([0-9a-z]{2})/i);
+        if (matches) {
+            let [, r, g, b] = matches;
+            return new Color(parseInt(r, 16)/255.0,
+                             parseInt(g, 16)/255.0,
+                             parseInt(b, 16)/255.0,
+                             1.0);
+        } else {
+            throw `could not parse ${hexcolor} as color`;
+        }
+    }
+}
+
 class V2 {
     constructor(x, y) {
         this.x = x;
@@ -37,8 +69,8 @@ function polarV2(mag, dirtory) {
     return new V2(Math.cos(dirtory) * mag, Math.sin(dirtory) * mag);
 }
 
-let playerColor = "#f36ba3";
-let enermyColor = "#cdd6f4";
+let playerColor = Color.hex("#f36ba3");
+let enermyColor = Color.hex("#cdd6f4");
 let particalColor = enermyColor;
 
 const PLAYER_RADIUS = 30;
@@ -170,7 +202,7 @@ class Partical {
 
     render(context) {
         const alpha = this.lifetime/PARTICAL_LIFETIME;
-        fillCircle(context, this.pos, this.radius, `rgba(205, 214, 244, ${alpha})`);
+        fillCircle(context, this.pos, this.radius, enermyColor.withAlpha(alpha));
     }
 
     update(deltaTime) {
@@ -233,23 +265,21 @@ function renderEntities(context, entities) {
 }
 
 class Game {
-    constructor() {
-        this.playerPos = new V2(PLAYER_RADIUS + 10, PLAYER_RADIUS + 10);
-        this.mousePos = new V2(0, 0);
-        this.pressedKeys = new Set();
-        this.tutorial = new Tutorial();
-        this.playerLearnedToMove = false;
-        this.bullets = [];
-        this.enermies = [];
-        this.particals = [];
-        this.enermySpawnRate = ENERMY_SPAWN_COOLDOWN;
-        this.enermySpawnCooldown = this.enermySpawnRate;
-    }
+    playerPos = new V2(PLAYER_RADIUS + 10, PLAYER_RADIUS + 10);
+    mousePos = new V2(0, 0);
+    pressedKeys = new Set();
+    tutorial = new Tutorial();
+    playerLearnedToMove = false;
+    bullets = [];
+    enermies = [];
+    particals = [];
+    enermySpawnRate = ENERMY_SPAWN_COOLDOWN;
+    enermySpawnCooldown = this.enermySpawnRate;
+    paused = false;
 
     update(deltaTime) {
         let velocity = new V2(0, 0);
         let moved = false;
-
         for (let key of this.pressedKeys) {
             if (key in directionMap) {
                 velocity = velocity.add(directionMap[key].scale(PLAYER_SPEED));
@@ -324,7 +354,18 @@ class Game {
         this.enermies.push(new Enermy(this.playerPos.add(polarV2(ENERMY_SPAWN_DISTANCE, direction))));
     }
 
+    paused() {
+        return;
+    }
+
+    toggleGamePause() {
+        debugger;
+    }
+
     keyDown(event) {
+        if (event.code === "Space") {
+            this.toggleGamePause();
+        }
         this.pressedKeys.add(event.code);
     }
 
@@ -338,25 +379,27 @@ class Game {
     mouseDown(event) {
         this.tutorial.playerShot();
         const mousePos = new V2(event.offsetX, event.offsetY);
-        const bulletVel = mousePos.sub(this.playerPos)
-                                  .normalize()
-                                  .scale(BULLET_SPEED);
+        const bulletDir = mousePos.sub(this.playerPos)
+                                  .normalize();
+        const bulletVel = bulletDir.scale(BULLET_SPEED);
+        const bulletPos = this.playerPos.add(bulletDir.scale(PLAYER_RADIUS + BULLET_RADIUS));
 
-        this.bullets.push(new Bullet(this.playerPos, bulletVel));
+        this.bullets.push(new Bullet(bulletPos, bulletVel));
     }
 }
 
-function fillCircle(context, center, radius, color = "green") {
+function fillCircle(context, center, radius, color) {
     context.beginPath();
     context.arc(center.x, center.y, radius, 0, 2*Math.PI, false);
-    context.fillStyle = color;
+    context.fillStyle = color.toRgba();
     context.fill();
 }
+
+const game = new Game();
 
 (() => {
     const canvas = document.getElementById("render");
     const context = canvas.getContext("2d");
-    const game = new Game();
 
     let start;
 
@@ -392,9 +435,9 @@ function fillCircle(context, center, radius, color = "green") {
         game.keyDown(event);
 
         switch (event.code) {
-        case "KeyB": playerColor = "#89b4fa";   break;
-        case "KeyO": playerColor = "#fab387"; break;
-        case "KeyG": playerColor = "#a6e3a1";  break;
+        case "KeyB": playerColor = Color.hex("#89b4fa"); break;
+        case "KeyO": playerColor = Color.hex("#fab387"); break;
+        case "KeyG": playerColor = Color.hex("#a6e3a1"); break;
         default:;
         }
     });
