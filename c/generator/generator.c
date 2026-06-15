@@ -164,7 +164,7 @@ void fibonacci(void *arg) {
 
         // Generator *g = generator_create(forever, (void*)a);
         //
-        // result += (long)generator_next(g);
+    // result += (long)generator_next(g);
         // result += (long)generator_next(g);
         // result += (long)generator_next(g);
 
