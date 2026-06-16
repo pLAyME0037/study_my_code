@@ -16,6 +16,11 @@ class Color {
         return new Color(this.r, this.g, this.b, a);
     }
 
+    greyScale() {
+        let x = Math.max(this.r, this.g, this.b);
+        return new Color(x, x, x, this.a);
+    }
+
     static hex(hexcolor) {
         let matches = hexcolor.match(/#([0-9a-z]{2})([0-9a-z]{2})([0-9a-z]{2})/i);
         if (matches) {
@@ -34,9 +39,6 @@ class V2 {
     constructor(x, y) {
         this.x = x;
         this.y = y;
-    }
-
-    render(context) {
     }
 
     add(that) {
@@ -218,7 +220,8 @@ function particalBuster(partical, center) {
             center,
             polarV2(Math.random() * PARTICAL_MAG, Math.random() * 2 * Math.PI),
             Math.random() * PARTICAL_LIFETIME,
-            Math.random() * PARTICAL_RADIUS + 10.0));
+            Math.random() * PARTICAL_RADIUS + 10.0)
+        );
     }
 }
 
@@ -280,6 +283,9 @@ class Game {
     update(deltaTime) {
         let velocity = new V2(0, 0);
         let moved = false;
+
+        if (this.paused) return;
+
         for (let key of this.pressedKeys) {
             if (key in directionMap) {
                 velocity = velocity.add(directionMap[key].scale(PLAYER_SPEED));
@@ -320,13 +326,12 @@ class Game {
         }
         this.particals = this.particals.filter((partical) => partical.lifetime > 0.0);
 
-        if (this.tutorial.state === TutorialState.Finish) {
-            this.enermySpawnCooldown -= deltaTime;
-            if (this.enermySpawnCooldown <= 0.0) {
-                this.spawnEnermy();
-                this.enermySpawnCooldown = this.enermySpawnRate;
-                this.enermySpawnRate = Math.max(0.01, this.enermySpawnRate - 0.01);
-            }
+        if (this.tutorial.state !== TutorialState.Finish) return;
+        this.enermySpawnCooldown -= deltaTime;
+        if (this.enermySpawnCooldown <= 0.0) {
+            this.spawnEnermy();
+            this.enermySpawnCooldown = this.enermySpawnRate;
+            this.enermySpawnRate = Math.max(0.01, this.enermySpawnRate - 0.01);
         }
     }
 
@@ -354,12 +359,13 @@ class Game {
         this.enermies.push(new Enermy(this.playerPos.add(polarV2(ENERMY_SPAWN_DISTANCE, direction))));
     }
 
-    paused() {
-        return;
-    }
-
     toggleGamePause() {
-        debugger;
+        this.paused = !this.paused;
+        if (this.paused) {
+            globalFillCircleFilter = greyScaleFilter;
+        } else {
+            globalFillCircleFilter = idFilter;
+        }
     }
 
     keyDown(event) {
@@ -388,10 +394,20 @@ class Game {
     }
 }
 
+function greyScaleFilter(color) {
+    return color.greyScale();
+}
+
+function idFilter(color) {
+    return color;
+}
+
+let globalFillCircleFilter = idFilter;
+
 function fillCircle(context, center, radius, color) {
     context.beginPath();
     context.arc(center.x, center.y, radius, 0, 2*Math.PI, false);
-    context.fillStyle = color.toRgba();
+    context.fillStyle = globalFillCircleFilter(color).toRgba();
     context.fill();
 }
 
