@@ -16,6 +16,10 @@ class Color {
         return new Color(this.r, this.g, this.b, a);
     }
 
+    invert() {
+        return new Color(1.0 - this.r, 1.0 - this.g, 1.0 - this.b, this.a);
+    }
+
     greyScale() {
         let x = Math.min(this.r, this.g, this.b);
         return new Color(x, x, x, this.a);
@@ -75,20 +79,23 @@ let playerColor = Color.hex("#f36ba3");
 let enermyColor = Color.hex("#cdd6f4");
 let particalColor = enermyColor;
 
-const PLAYER_RADIUS = 30;
-const PLAYER_SPEED = 500;
-const BULLET_SPEED = 1000;
-const BULLET_RADIUS = 30;
-const BULLET_LIFETIME = 5.0;
-const TUTORIAL_POPUP_SPEED = 1.6;
-const ENERMY_SPEED = PLAYER_SPEED/2;
-const ENERMY_RADIUS = PLAYER_RADIUS;
-const PARTICAL_COUNT = 50.0;
-const PARTICAL_RADIUS = 10.0;
-const PARTICAL_MAG = BULLET_SPEED;
-const PARTICAL_LIFETIME = 1.0;
+const PLAYER_MAX_HEALTH     = 100/2;
+const HEALTH_BAR_HEIGHT     = 25;
+const PLAYER_RADIUS         = 30;
+const PLAYER_SPEED          = 500;
+const BULLET_SPEED          = 1000;
+const BULLET_RADIUS         = 30;
+const BULLET_LIFETIME       = 5.0;
+const TUTORIAL_POPUP_SPEED  = 1.6;
+const ENERMY_SPEED          = PLAYER_SPEED/2;
+const ENERMY_RADIUS         = PLAYER_RADIUS;
+const PARTICAL_COUNT        = 50.0;
+const PARTICAL_RADIUS       = 10.0;
+const PARTICAL_MAG          = BULLET_SPEED;
+const PARTICAL_LIFETIME     = 1.0;
 const ENERMY_SPAWN_COOLDOWN = 2.0;
 const ENERMY_SPAWN_DISTANCE = 1600.0;
+const ENERMY_HIT_POINT      = PLAYER_MAX_HEALTH/5;
 
 const directionMap = {
     "KeyW": new V2(0, -1.0),
@@ -108,6 +115,38 @@ const TutorialMessages = Object.freeze([
     "Left Mouse Click to Shoot",
     "",
 ]);
+
+function greyScaleFilter(color) {
+    return color.greyScale();
+}
+
+function idFilter(color) {
+    return color;
+}
+
+let globalFillFilter = idFilter;
+
+function fillCircle(context, center, radius, color) {
+    context.beginPath();
+    context.arc(center.x, center.y, radius, 0, 2*Math.PI, false);
+    context.fillStyle = globalFillFilter(color).toRgba();
+    context.fill();
+}
+
+function fillRect(context, x, y, w, h, color) {
+    context.fillStyle = globalFillFilter(color).toRgba();
+    context.fillRect(x, y, w, h);
+}
+
+function renderMessage(context, color, size, align, msg) {
+    const width  = context.canvas.width;
+    const height = context.canvas.height;
+
+    context.fillStyle = `${color}`;
+    context.font = `${size}px LexendMega-Regular`;
+    context.textAlign = `${align}`;
+    context.fillText(msg, width/2, height/2);
+}
 
 class TutorialPopUp {
     constructor(text = "Blank") {
@@ -218,7 +257,15 @@ function particalBuster(partical, center) {
     }
 }
 
+function renderEntities(context, entities) {
+    for (let entity of entities) {
+        entity.render(context);
+    }
+}
+
 class Player {
+    health = PLAYER_MAX_HEALTH;
+
     constructor(pos) {
         this.pos = pos;
     }
@@ -240,6 +287,10 @@ class Player {
                               .scale(PLAYER_RADIUS + BULLET_RADIUS));
 
         return new Bullet(bulletPos, bulletVel);
+    }
+
+    damage(hitPoint) {
+        this.health = Math.max(this.health - hitPoint, 0.0);
     }
 }
 
@@ -279,12 +330,6 @@ class Bullet {
     }
 }
 
-function renderEntities(context, entities) {
-    for (let entity of entities) {
-        entity.render(context);
-    }
-}
-
 class Game {
     player = new Player(new V2(PLAYER_RADIUS + 10, PLAYER_RADIUS + 10));
     mousePos = new V2(0, 0);
@@ -317,13 +362,21 @@ class Game {
 
         this.tutorial.update(deltaTime);
 
-        for (let bullet of this.bullets) {
-            for (let enermy of this.enermies) {
-                if (!enermy.isDead 
-                    && enermy.pos.dist(bullet.pos) <= BULLET_RADIUS + ENERMY_RADIUS) {
+        for (let enermy of this.enermies) {
+            if (!enermy.isDead) {
+                for (let bullet of this.bullets) {
+                    if (enermy.pos.dist(bullet.pos) <= BULLET_RADIUS + ENERMY_RADIUS) {
+                        bullet.lifetime = 0.0;
+                        enermy.isDead = true;
+                        particalBuster(this.particals, enermy.pos);
+                    }
+                }
+            }
 
+            if (!enermy.isDead) {
+                if (enermy.pos.dist(this.player.pos) <= PLAYER_RADIUS + ENERMY_RADIUS) {
+                    this.player.damage(ENERMY_HIT_POINT);
                     enermy.isDead = true;
-                    bullet.lifetime = 0.0;
                     particalBuster(this.particals, enermy.pos);
                 }
             }
@@ -374,6 +427,8 @@ class Game {
         } else {
             this.tutorial.render(context);
         }
+
+        fillRect(context, 0, 0, width * (this.player.health/PLAYER_MAX_HEALTH), HEALTH_BAR_HEIGHT, playerColor);
     }
 
     spawnEnermy() {
@@ -384,9 +439,9 @@ class Game {
     toggleGamePause() {
         this.paused = !this.paused;
         if (this.paused) {
-            globalFillCircleFilter = greyScaleFilter;
+            globalFillFilter = greyScaleFilter;
         } else {
-            globalFillCircleFilter = idFilter;
+            globalFillFilter = idFilter;
         }
     }
 
@@ -410,33 +465,6 @@ class Game {
         const mousePos = new V2(event.offsetX, event.offsetY);
         this.bullets.push(this.player.shootAt(mousePos));
     }
-}
-
-function greyScaleFilter(color) {
-    return color.greyScale();
-}
-
-function idFilter(color) {
-    return color;
-}
-
-let globalFillCircleFilter = idFilter;
-
-function fillCircle(context, center, radius, color) {
-    context.beginPath();
-    context.arc(center.x, center.y, radius, 0, 2*Math.PI, false);
-    context.fillStyle = globalFillCircleFilter(color).toRgba();
-    context.fill();
-}
-
-function renderMessage(context, color, size, align, msg) {
-    const width  = context.canvas.width;
-    const height = context.canvas.height;
-
-    context.fillStyle = `${color}`;
-    context.font = `${size}px LexendMega-Regular`;
-    context.textAlign = `${align}`;
-    context.fillText(msg, width/2, height/2);
 }
 
 const game = new Game();
