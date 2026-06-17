@@ -17,7 +17,7 @@ class Color {
     }
 
     greyScale() {
-        let x = Math.max(this.r, this.g, this.b);
+        let x = Math.min(this.r, this.g, this.b);
         return new Color(x, x, x, this.a);
     }
 
@@ -100,13 +100,13 @@ const directionMap = {
 const TutorialState = Object.freeze({
     "LearningMovemeant" : 0,
     "LearningShooting" : 1,
-    "Finish" : 2
+    "Finish" : 2,
 });
 
 const TutorialMessages = Object.freeze([
-    "WASD to move around.",
+    "WASD to move around",
     "Left Mouse Click to Shoot",
-    ""
+    "",
 ]);
 
 class TutorialPopUp {
@@ -140,15 +140,8 @@ class TutorialPopUp {
     }
 
     render(context) {
-        const width  = context.canvas.width;
-        const height = context.canvas.height;
-
-        context.fillStyle = `rgba(255, 255, 255, ${this.alpha})`;
-        // context.font = "2rem CaskaydiaMono Nerd Font Mono";
-        context.font = "1rem LexendMega-Regular";
-        // context.center = true;
-        context.textAlign = "center";
-        context.fillText(this.text, width/2, height/2);
+        const color = `rgba(255, 255, 255, ${this.alpha})`;
+        renderMessage(context, color, 18, "center", this.text);
     }
 
     fadeIn() {
@@ -225,6 +218,31 @@ function particalBuster(partical, center) {
     }
 }
 
+class Player {
+    constructor(pos) {
+        this.pos = pos;
+    }
+
+    render(context) {
+        fillCircle(context, this.pos, PLAYER_RADIUS, playerColor);
+    }
+
+    update(velocity, deltaTime) {
+        this.pos = this.pos.add(velocity.scale(deltaTime));
+    }
+
+    shootAt(target) {
+        const bulletDir = target.sub(this.pos)
+                                  .normalize();
+        const bulletVel = bulletDir.scale(BULLET_SPEED);
+        const bulletPos = this.pos
+                              .add(bulletDir
+                              .scale(PLAYER_RADIUS + BULLET_RADIUS));
+
+        return new Bullet(bulletPos, bulletVel);
+    }
+}
+
 class Enermy {
     constructor(pos) {
         this.pos = pos;
@@ -268,11 +286,10 @@ function renderEntities(context, entities) {
 }
 
 class Game {
-    playerPos = new V2(PLAYER_RADIUS + 10, PLAYER_RADIUS + 10);
+    player = new Player(new V2(PLAYER_RADIUS + 10, PLAYER_RADIUS + 10));
     mousePos = new V2(0, 0);
     pressedKeys = new Set();
     tutorial = new Tutorial();
-    playerLearnedToMove = false;
     bullets = [];
     enermies = [];
     particals = [];
@@ -296,7 +313,8 @@ class Game {
             this.tutorial.playerMoved();
         }
 
-        this.playerPos = this.playerPos.add(velocity.scale(deltaTime));
+        this.player.update(velocity, deltaTime);
+
         this.tutorial.update(deltaTime);
 
         for (let bullet of this.bullets) {
@@ -317,12 +335,12 @@ class Game {
         this.bullets = this.bullets.filter((bullet) => bullet.lifetime > 0.0);
 
         for (let enermy of this.enermies) {
-            enermy.update(deltaTime, this.playerPos);
+            enermy.update(deltaTime, this.player.pos);
         }
         this.enermies = this.enermies.filter((enermy) => !enermy.isDead);
 
         for (let partical of this.particals) {
-            partical.update(deltaTime, this.playerPos);
+            partical.update(deltaTime, this.player.pos);
         }
         this.particals = this.particals.filter((partical) => partical.lifetime > 0.0);
 
@@ -339,24 +357,28 @@ class Game {
         const width  = context.canvas.width;
         const height = context.canvas.height;
 
-        if (this.playerPos.x + PLAYER_RADIUS >= width)  { this.playerPos.x = width - PLAYER_RADIUS - 2; }
-        if (this.playerPos.x - PLAYER_RADIUS <= 0)      { this.playerPos.x = PLAYER_RADIUS + 2; }
-        if (this.playerPos.y + PLAYER_RADIUS >= height) { this.playerPos.y = height - PLAYER_RADIUS - 2; }
-        if (this.playerPos.y - PLAYER_RADIUS <= 0)      { this.playerPos.y = PLAYER_RADIUS + 2; }
+        if (this.player.pos.x + PLAYER_RADIUS >= width)  { this.player.pos.x = width - PLAYER_RADIUS - 2; }
+        if (this.player.pos.x - PLAYER_RADIUS <= 0)      { this.player.pos.x = PLAYER_RADIUS + 2; }
+        if (this.player.pos.y + PLAYER_RADIUS >= height) { this.player.pos.y = height - PLAYER_RADIUS - 2; }
+        if (this.player.pos.y - PLAYER_RADIUS <= 0)      { this.player.pos.y = PLAYER_RADIUS + 2; }
 
         context.clearRect(0, 0, width, height);
-        fillCircle(context, this.playerPos, PLAYER_RADIUS, playerColor);
+        this.player.render(context);
 
         renderEntities(context, this.bullets);
         renderEntities(context, this.particals);
         renderEntities(context, this.enermies);
 
-        this.tutorial.render(context);
+        if (this.paused) {
+            renderMessage(context, "#9ca0b0", 24, "center", "PAUSED (space to play)")
+        } else {
+            this.tutorial.render(context);
+        }
     }
 
     spawnEnermy() {
         let direction = Math.random() * 2 * Math.PI;
-        this.enermies.push(new Enermy(this.playerPos.add(polarV2(ENERMY_SPAWN_DISTANCE, direction))));
+        this.enermies.push(new Enermy(this.player.pos.add(polarV2(ENERMY_SPAWN_DISTANCE, direction))));
     }
 
     toggleGamePause() {
@@ -383,14 +405,10 @@ class Game {
     }
 
     mouseDown(event) {
+        // if (this.paused) return;
         this.tutorial.playerShot();
         const mousePos = new V2(event.offsetX, event.offsetY);
-        const bulletDir = mousePos.sub(this.playerPos)
-                                  .normalize();
-        const bulletVel = bulletDir.scale(BULLET_SPEED);
-        const bulletPos = this.playerPos.add(bulletDir.scale(PLAYER_RADIUS + BULLET_RADIUS));
-
-        this.bullets.push(new Bullet(bulletPos, bulletVel));
+        this.bullets.push(this.player.shootAt(mousePos));
     }
 }
 
@@ -409,6 +427,16 @@ function fillCircle(context, center, radius, color) {
     context.arc(center.x, center.y, radius, 0, 2*Math.PI, false);
     context.fillStyle = globalFillCircleFilter(color).toRgba();
     context.fill();
+}
+
+function renderMessage(context, color, size, align, msg) {
+    const width  = context.canvas.width;
+    const height = context.canvas.height;
+
+    context.fillStyle = `${color}`;
+    context.font = `${size}px LexendMega-Regular`;
+    context.textAlign = `${align}`;
+    context.fillText(msg, width/2, height/2);
 }
 
 const game = new Game();
