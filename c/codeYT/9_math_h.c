@@ -7,7 +7,7 @@ int main(){
     int C = round(6.1323);// int - %d
     int D = ceil(3.243);
     double E = floor(6.999);
-    double F = fabs(-777);
+    double F = fabs(-777.0);
     double G = log(45);
     double H = sin(45);
     double I = cos(45);
