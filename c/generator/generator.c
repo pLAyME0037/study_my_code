@@ -20,6 +20,7 @@ typedef struct {
     void *rsp;
     void *stack_base;
     bool is_dead;
+    bool is_fresh;
 } Generator;
 
 typedef struct {
@@ -55,7 +56,7 @@ void __attribute__((naked)) generator_restore_context(void *rsp) {
 
 void __attribute__((naked)) generator_restore_context_with_return(void *rsp, void *arg) {
     // @arch
-    (void)rsp;
+    UNUSED(rsp);
     UNUSED(arg);
     asm(
     "    movq %rdi, %rsp\n"
@@ -73,8 +74,9 @@ void __attribute__((naked)) generator_restore_context_with_return(void *rsp, voi
 // Linux x86_64 call convention
 // %rdi, %rsi, %rdx, %rcx, %r8, and %9
 
-void* __attribute__((naked)) generator_next(Generator *g) {
+void* __attribute__((naked)) generator_next(Generator *g, void* arg) {
     UNUSED(g);
+    UNUSED(arg);
     // @arch
     asm(
     "    pushq %rdi\n"
@@ -84,14 +86,21 @@ void* __attribute__((naked)) generator_next(Generator *g) {
     "    pushq %r13\n"
     "    pushq %r14\n"
     "    pushq %r15\n"
-    "    movq %rsp, %rsi\n"     // rsp
+    "    movq %rsp, %rdx\n"     // rsp
     "    jmp generator_switch_context\n");
 }
 
-void generator_switch_context(Generator *g, void *rsp) {
+void generator_switch_context(Generator *g, void *arg, void *rsp) {
     da_lasted(&generator_stack)->rsp = rsp;
     da_append(&generator_stack, g);
-    generator_restore_context(g->rsp);
+    if (g->is_fresh) {
+        g->is_fresh = false;
+        void **rsp = (void**)((char*)g->stack_base + GENERATOR_STACK_CAPACITY);
+        *(rsp-3) = arg;
+        generator_restore_context(g->rsp);
+    } else {
+        generator_restore_context_with_return(g->rsp, arg);
+    }
 }
 
 void* __attribute__((naked)) generator_yield(void *arg) {
@@ -121,7 +130,7 @@ void generator__finish_current(void) {
     generator_restore_context_with_return(da_lasted(&generator_stack)->rsp, NULL);
 }
 
-Generator *generator_create(void (*f)(void*), void *arg) {
+Generator *generator_create(void (*f)(void*)) {
     Generator *g = malloc(sizeof(*g));
     assert(g != NULL && "Buy More Ram");
     memset(g, 0, sizeof(*g));
@@ -132,7 +141,7 @@ Generator *generator_create(void (*f)(void*), void *arg) {
 
     *(--rsp) = generator__finish_current;
     *(--rsp) = f;
-    *(--rsp) = arg; // push rdi
+    *(--rsp) = 0;   // push rdi
     *(--rsp) = 0;   // push rbx
     *(--rsp) = 0;   // push rbp
     *(--rsp) = 0;   // push r12
@@ -140,16 +149,17 @@ Generator *generator_create(void (*f)(void*), void *arg) {
     *(--rsp) = 0;   // push r14
     *(--rsp) = 0;   // push r15
     g->rsp = rsp;
+    g->is_fresh = true;
 
     return g;
 }
 
-Generator *generator_destory(Generator *g) {
+void generator_destory(Generator *g) {
     munmap(g->stack_base, GENERATOR_STACK_CAPACITY);
     free(g);
 }
 
-#define foreach(it, g) for (void* it = generator_next(g); !g->is_dead; it = generator_next(g))
+#define foreach(it, g, arg) for (void* it = generator_next(g, arg); !g->is_dead; it = generator_next(g, arg))
 
 void forever(void *arg) {
     while (true) generator_yield(arg);
@@ -164,7 +174,7 @@ void fibonacci(void *arg) {
 
         // Generator *g = generator_create(forever, (void*)a);
         //
-    // result += (long)generator_next(g);
+        // result += (long)generator_next(g);
         // result += (long)generator_next(g);
         // result += (long)generator_next(g);
 
@@ -176,12 +186,32 @@ void fibonacci(void *arg) {
     }
 }
 
+void square(void *arg) {
+    while (true) {
+        long x = (long)arg;
+        arg = generator_yield((void*)(x*x));
+    }
+}
+
 int main() {
     generator_init();
-    Generator *g = generator_create(fibonacci, (void*)(1000*1000));
-    foreach (value, g) {
-        printf("%ld\n", (long)value);
+
+    
+    // for (long it = (long)generator_next(g, (void*)(1000*1000)); !g->is_dead; it = (long)generator_next(g, NULL)) {
+    //     printf("%ld\n", it);
+    // }
+
+    // Generator *g = generator_create(fibonacci);
+    // foreach (value, g, (void*)(1000*1000)) {
+    //     printf("%ld\n", (long)value);
+    // }
+
+    Generator *g = generator_create(square);
+    for (long x = 1; x < 100; ++x) {
+        long xx = (long)generator_next(g, (void*)x);
+        printf("%ld\n", xx);
     }
+
     generator_destory(g);
 
     return 0;

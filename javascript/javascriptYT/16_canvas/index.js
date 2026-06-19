@@ -77,10 +77,9 @@ function polarV2(mag, dirtory) {
 
 let playerColor = Color.hex("#f36ba3");
 let enermyColor = Color.hex("#cdd6f4");
-let particalColor = enermyColor;
 
-const PLAYER_MAX_HEALTH     = 100/2;
-const HEALTH_BAR_HEIGHT     = 25;
+const PLAYER_MAX_HEALTH     = 100;
+const HEALTH_BAR_HEIGHT     = 10;
 const PLAYER_RADIUS         = 30;
 const PLAYER_SPEED          = 500;
 const BULLET_SPEED          = 1000;
@@ -93,7 +92,7 @@ const PARTICAL_COUNT        = 50.0;
 const PARTICAL_RADIUS       = 10.0;
 const PARTICAL_MAG          = BULLET_SPEED;
 const PARTICAL_LIFETIME     = 1.0;
-const ENERMY_SPAWN_COOLDOWN = 2.0;
+const ENERMY_SPAWN_COOLDOWN = 2;
 const ENERMY_SPAWN_DISTANCE = 1600.0;
 const ENERMY_HIT_POINT      = PLAYER_MAX_HEALTH/5;
 
@@ -143,7 +142,7 @@ function renderMessage(context, color, size, align, msg) {
     const height = context.canvas.height;
 
     context.fillStyle = `${color}`;
-    context.font = `${size}px LexendMega-Regular`;
+    context.font = `${size}em LexendMega-Regular`;
     context.textAlign = `${align}`;
     context.fillText(msg, width/2, height/2);
 }
@@ -180,7 +179,8 @@ class TutorialPopUp {
 
     render(context) {
         const color = `rgba(255, 255, 255, ${this.alpha})`;
-        renderMessage(context, color, 18, "center", this.text);
+        // const fontSize = (this.width + this.height)/600;
+        renderMessage(context, color, 8, "center", this.text);
     }
 
     fadeIn() {
@@ -227,16 +227,17 @@ class Tutorial {
 }
 
 class Partical {
-    constructor(pos, velosity, lifetime, radius) {
+    constructor(pos, velosity, lifetime, radius, color) {
         this.pos = pos;
         this.velosity = velosity;
         this.lifetime = lifetime;
         this.radius = radius;
+        this.color = color;
     }
 
     render(context) {
         const alpha = this.lifetime/PARTICAL_LIFETIME;
-        fillCircle(context, this.pos, this.radius, enermyColor.withAlpha(alpha));
+        fillCircle(context, this.pos, this.radius, this.color.withAlpha(alpha));
     }
 
     update(deltaTime) {
@@ -245,14 +246,15 @@ class Partical {
     }
 }
 
-function particalBuster(partical, center) {
+function particalBuster(partical, center, color) {
     const N = Math.random() * PARTICAL_COUNT;
     for (let i = 0; i < N; i++) {
         partical.push(new Partical(
             center,
             polarV2(Math.random() * PARTICAL_MAG, Math.random() * 2 * Math.PI),
             Math.random() * PARTICAL_LIFETIME,
-            Math.random() * PARTICAL_RADIUS + 10.0)
+            Math.random() * PARTICAL_RADIUS + 10.0,
+            color)
         );
     }
 }
@@ -271,7 +273,9 @@ class Player {
     }
 
     render(context) {
-        fillCircle(context, this.pos, PLAYER_RADIUS, playerColor);
+        if (this.health > 0.0) {
+            fillCircle(context, this.pos, PLAYER_RADIUS, playerColor);
+        }
     }
 
     update(velocity, deltaTime) {
@@ -347,6 +351,7 @@ class Game {
         let moved = false;
 
         if (this.paused) return;
+        if (this.player.health <= 0.0) deltaTime /= 20;
 
         for (let key of this.pressedKeys) {
             if (key in directionMap) {
@@ -363,22 +368,19 @@ class Game {
         this.tutorial.update(deltaTime);
 
         for (let enermy of this.enermies) {
-            if (!enermy.isDead) {
-                for (let bullet of this.bullets) {
-                    if (enermy.pos.dist(bullet.pos) <= BULLET_RADIUS + ENERMY_RADIUS) {
-                        bullet.lifetime = 0.0;
-                        enermy.isDead = true;
-                        particalBuster(this.particals, enermy.pos);
-                    }
+            if (enermy.isDead) return;
+            for (let bullet of this.bullets) {
+                if (enermy.pos.dist(bullet.pos) <= BULLET_RADIUS + ENERMY_RADIUS) {
+                    bullet.lifetime = 0.0;
+                    enermy.isDead = true;
+                    particalBuster(this.particals, enermy.pos, enermyColor);
                 }
             }
 
-            if (!enermy.isDead) {
-                if (enermy.pos.dist(this.player.pos) <= PLAYER_RADIUS + ENERMY_RADIUS) {
-                    this.player.damage(ENERMY_HIT_POINT);
-                    enermy.isDead = true;
-                    particalBuster(this.particals, enermy.pos);
-                }
+            if (enermy.pos.dist(this.player.pos) <= PLAYER_RADIUS + ENERMY_RADIUS) {
+                this.player.damage(ENERMY_HIT_POINT);
+                enermy.isDead = true;
+                particalBuster(this.particals, enermy.pos, playerColor);
             }
         }
 
@@ -423,7 +425,9 @@ class Game {
         renderEntities(context, this.enermies);
 
         if (this.paused) {
-            renderMessage(context, "#9ca0b0", 24, "center", "PAUSED (space to play)")
+            renderMessage(context, "#9ca0b0", 10, "center", "PAUSED (space to play)")
+        } else if (this.player.health <= 0.0) {
+            renderMessage(context, "#9ca0b0", 10, "center", "YOU DIED (F5 to restart)")
         } else {
             this.tutorial.render(context);
         }
@@ -475,7 +479,7 @@ const game = new Game();
 
     let start;
 
-    function step(timestamp) {
+    function step(timestamp = 1) {
         if (start === undefined) {
             start = timestamp;
         }
