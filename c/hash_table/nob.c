@@ -9,7 +9,9 @@ int main(int argc, char **argv) {
     const char *program = shift_args(&argc, &argv);
 
     Cmd cmd = {0};
-    cmd_append(&cmd, "cc", "-Wall", "-Wextra", "-ggdb", "-pedantic", "-o", "./bin/hash_table", "hash_table.c");
+    cmd_append(&cmd, "cc", "-Wall", "-Wextra", "-ggdb", "-pedantic", "-fdiagnostics-color=always", 
+               "hash_table.c", 
+               "-o", "./bin/main", "main.c");
     if (!nob_cmd_run_sync_and_reset(&cmd)) return 1;
 
     if (argc > 0) {
@@ -17,7 +19,7 @@ int main(int argc, char **argv) {
 
         if (strcmp(subcmd, "run") == 0) {
             cmd.count = 0;
-            cmd_append(&cmd, "./bin/hash_table");
+            cmd_append(&cmd, "./bin/main");
             da_append_many(&cmd, argv, argc);
             if (!nob_cmd_run_sync(cmd)) return 1;
         } else {
