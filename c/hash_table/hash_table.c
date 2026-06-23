@@ -43,9 +43,9 @@ int compare_freqkeyval_count(const void *a, const void *b) {
 }
 
 uint32_t hash(uint8_t *buf, size_t buf_size) {
-    uint32_t result = 0;
+    uint32_t result = 5821;
     for (size_t i = 0; i < buf_size; ++i) {
-        result += (uint32_t)buf[i];
+        result += ((result << 5) + (uint32_t)buf[i]) + i;
     }
     return result;
 }
@@ -111,14 +111,15 @@ int main (int argc, char **argv) {
     memset(slots, 0, sizeof(bool)*n);
 
     size_t count = 0;
-    for (; count < 10 && content.count > 0; ++count) {
+    for (; content.count > 0; ++count) {
         content = sv_trim_left(content);
         Nob_String_View token = sv_chop_by_space(&content);
 
-        uint32_t h = hash((uint8_t*)token.data, token.count);
-        nob_log(INFO, "    %zu: %X = "SV_Fmt, count, h, SV_Arg(token));
+        uint32_t h = hash((uint8_t*)token.data, token.count)%n;
+        nob_log(INFO, "    %zu: 0x%08X = "SV_Fmt, count, h, SV_Arg(token));
     }
-    native_analysis(content);
+    
+    // native_analysis(content);
 
     return 0;
 }

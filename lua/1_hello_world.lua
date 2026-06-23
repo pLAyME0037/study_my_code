@@ -9,3 +9,4 @@ end
 print("enter a number:")
 local a = io.read("*number")
 print(fact(a))
+
