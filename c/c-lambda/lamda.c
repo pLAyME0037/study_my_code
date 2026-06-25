@@ -63,7 +63,7 @@ void expr_display(Expr *expr, String_Builder *builder) {
         sb_appendf(builder, "%s", expr->as.var);
     break;
     case EXPR_FUN:
-        sb_appendf(builder, "(λ%s->", expr->as.fun.arg);
+        sb_appendf(builder, "(λ%s.", expr->as.fun.arg);
         expr_display(expr->as.fun.body, builder);
         sb_appendf(builder, ")");
     break;
@@ -78,12 +78,23 @@ void expr_display(Expr *expr, String_Builder *builder) {
     }
 }
 
-Expr *replace(const char *arg, Expr *body, Expr *val) {}
+Expr *replace(const char *arg, Expr *body, Expr *val) {
+    switch (body->kind) {
+    case EXPR_VAR:
+        if (strcmp(body->as.var, arg) == 0) { return val; }
+        return body;
+    case EXPR_FUN:
+        return fun(body->as.fun.arg, replace(arg, body->as.fun.body, val));
+    case EXPR_APP:
+        return app(
+            replace(arg, body->as.app.lhs, val),
+            replace(arg, body->as.app.rhs, val));
+    default: UNREACHABLE("Expr_kind");
+    }
+}
 
 Expr *apply(Expr_Fun fun, Expr *val) {
-    UNUSED(fun);
-    UNUSED(val);
-    TODO("apply");
+    return replace(fun.arg, fun.body, val);
 }
 
 Expr *eval1(Expr *expr) {
@@ -112,24 +123,29 @@ Expr *eval1(Expr *expr) {
 
 }
 
-void trace_builder(Expr *expr, String_Builder *str_b) {
+void trace_expr(Expr *expr, String_Builder *str_b) {
     str_b->count = 0;
     expr_display(expr, str_b);
     sb_append_null(str_b);
-    printf("bool = true %s\n", str_b->items);
+    printf("%s\n", str_b->items);
 }
 
 int main(void) {
 
     String_Builder str_b = {0};
 
-    Expr *expr = fun("then", fun("else", var("then")));
+    // Expr *expr = app(fun("x", app(var("x"), var("x"))), var("y"));
+    // Expr *expr = app(
+    //         fun("x", app(var("x"), var("x"))),
+    //         fun("x", app(var("x"), var("x"))));
+    Expr *expr = app(app(fun("y",fun("x", var("y"))), var("x")), var("else"));
 
-    trace_builder(expr, &str_b);
+    trace_expr(expr, &str_b);
+
     Expr *expr1 = eval1(expr);
-
     while (expr1 != expr) {
-        trace_builder(expr, &str_b);
+        expr = expr1;
+        trace_expr(expr, &str_b);
         expr1 = eval1(expr);
     }
 
