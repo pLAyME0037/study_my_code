@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <ctype.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -208,9 +209,186 @@ Expr *bind_vars(Expr *expr) {
     }
 }
 
+typedef enum {
+    TOKEN_INVALID,
+    TOKEN_END,
+    TOKEN_OPAREN,
+    TOKEN_CPAREN,
+    TOKEN_LAMBDA,
+    TOKEN_DOT,
+    TOKEN_NAME,
+} Token_Kind;
+
+const char *token_kind_display(Token_Kind kind) {
+    switch (kind) {
+    case TOKEN_INVALID:printf("TOKEN_INVALID"); break;
+    case TOKEN_END:    printf("TOKEN_END");     break;
+    case TOKEN_OPAREN: printf("TOKEN_OPAREN");  break;
+    case TOKEN_CPAREN: printf("TOKEN_CPAREN");  break;
+    case TOKEN_LAMBDA: printf("TOKEN_LAMBDA");  break;
+    case TOKEN_DOT:    printf("TOKEN_DOT");     break;
+    case TOKEN_NAME:   printf("TOKEN_NAME");    break;
+    default: UNREACHABLE("Token_Kind");
+    }
+}
+
+typedef struct {
+    size_t pos, bol, col;
+} Cursor;
+
+typedef struct {
+    const char *content;
+    size_t count;
+
+    Cursor cur;
+    
+    Token_Kind token;
+    String_Builder name;
+} Lexer;
+
+char lexer_curr_char(Lexer *l) {
+    if (l->cur.pos >= l->count) return 0;
+    return l->content[l->cur.pos];
+}
+
+char lexer_next_char(Lexer *l) {
+    if (l->cur.pos >= l->count) return 0;
+    char x = l->content[l->cur.pos++];
+    if (x == '\n') {
+        l->cur.col += 1;
+        l->cur.bol = l->cur.pos;
+    }
+    return x;
+}
+
+bool lexer_next(Lexer *l) {
+    while (isspace(lexer_curr_char(l))) {
+        lexer_next_char(l);
+    }
+    
+    char x = lexer_next_char(l);
+    if (x == '\0') {
+        l->token = TOKEN_END;
+        return false;
+    }
+
+    switch (x) {
+    case '(':  l->token = TOKEN_OPAREN; return true;
+    case ')':  l->token = TOKEN_CPAREN; return true;
+    case '\\': l->token = TOKEN_LAMBDA; return true;
+    case '.':  l->token = TOKEN_DOT;    return true;
+    }
+
+    if (isalnum(x)) {
+        l->token = TOKEN_NAME;
+        l->name.count = 0;
+        da_append(&l->name, x);
+        while (isalnum(lexer_curr_char(l))) {
+            x = lexer_next_char(l);
+            da_append(&l->name, x);
+        }
+        sb_append_null(&l->name);
+        return true;
+    }
+
+    l->token = TOKEN_INVALID;
+    fprintf(stderr, "ERROR: Unknown token starts with `%c`", x);
+    return false;
+}
+bool lexer_expect(Lexer *l, Token_Kind expected) {
+    if (!lexer_next(l)) return false;
+    if (l->token != expected) {
+         fprintf(stderr, "Unknown Token Type: %s", token_kind_display(l->token));
+         return false;
+    }
+    return true;
+}
+
+Expr *parse_expr(Lexer *l);
+
+Expr *parse_app(Lexer *l) {
+    Expr *lhs = parse_expr(l);
+    Expr *rhs = parse_expr(l);
+    if (!lexer_expect(l, TOKEN_CPAREN)) return NULL;
+    return app(lhs, rhs);
+}
+
+Expr *parse_fun(Lexer *l) {
+    if (!lexer_expect(l, TOKEN_NAME)) return NULL;
+    const char *arg = strdup(l->name.items);
+    if (!lexer_expect(l, TOKEN_DOT)) return NULL;
+    Expr *body = parse_expr(l);
+    if (body == NULL) return NULL;
+    if (!lexer_expect(l, TOKEN_CPAREN)) return NULL;
+    return fun(arg, body);
+}
+
+Expr *parse_expr(Lexer *l) {
+    if (!lexer_next(l)) return NULL;
+    switch (l->token) {
+    case TOKEN_OPAREN: {
+        Cursor saved = l->cur;
+        if (!lexer_next(l)) return NULL;
+        if (l->token == TOKEN_LAMBDA) {
+            return parse_fun(l);
+        } else {
+            l->cur = saved;
+            return parse_app(l);
+        }
+    } break;
+    case TOKEN_NAME: { return var(strdup(l->name.items)); } break;
+    default: 
+         fprintf(stderr, "Unknown Token Type: %s", token_kind_display(l->token));
+         return NULL;
+    }
+}
+
+char buffer[1000];
+
 int main(void) {
 
     String_Builder str_b = {0};
+
+    for (;;) {
+        printf("λ> ");
+        fflush(stdout);
+        if (!fgets(buffer, sizeof(buffer), stdin)) break;
+
+        const char *source = buffer;
+
+        Lexer l = {
+            .content = source,
+            .count = strlen(source)
+        };
+
+        while (lexer_next(&l)) {
+            switch (l.token) {
+                case TOKEN_INVALID:printf("TOKEN_INVALID\n"); break;
+                case TOKEN_END:    printf("TOKEN_END\n");     break;
+                case TOKEN_OPAREN: printf("TOKEN_OPAREN\n");  break;
+                case TOKEN_CPAREN: printf("TOKEN_CPAREN\n");  break;
+                case TOKEN_LAMBDA: printf("TOKEN_LAMBDA\n");  break;
+                case TOKEN_DOT:    printf("TOKEN_DOT\n");     break;
+                case TOKEN_NAME:   printf("TOKEN_NAME: %s\n", l.name.items);    break;
+                default: UNREACHABLE("Token_Kind");
+            }
+        }
+
+        Expr *expr = parse_expr(&l);
+        if (!expr) continue;
+        bind_vars(expr);
+
+        trace_expr(expr, &str_b);
+
+        Expr *expr1 = eval1(expr);
+        while (expr1 != expr) {
+            expr = expr1;
+            trace_expr(expr, &str_b);
+            expr1 = eval1(expr);
+        }
+    }
+
+
 
     // Expr *expr = app(fun("x", app(var("x"), var("x"))), var("y"));
     // Expr *expr = app(
@@ -219,16 +397,8 @@ int main(void) {
     // Expr *expr = bind_vars(
     //     app(app(fun("y",fun("x", var("y"))), var("x")), var("pp"))
     // );
-    Expr *expr = bind_vars(app(fun("y", app(fun("x", var("x")), var("y"))), var("pp")));
-
-    trace_expr(expr, &str_b);
-
-    Expr *expr1 = eval1(expr);
-    while (expr1 != expr) {
-        expr = expr1;
-        trace_expr(expr, &str_b);
-        expr1 = eval1(expr);
-    }
+    // Expr *expr = bind_vars(app(fun("y", app(fun("x", var("x")), var("y"))), var("pp")));
+    //
 
     /* asm("int3"); */
 
