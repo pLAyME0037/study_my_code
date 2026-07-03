@@ -68,6 +68,11 @@ uint32_t *render(float dt) {
     return pixels;
 }
 
+#define WASM_PLATFORM 0
+#define SDL_PLATFORM 1
+#define TERM_PLATFORM 2
+
+#if PLATFORM == SDL_PLATFORM
 #include <SDL3/SDL.h>
 
 int main() {
@@ -108,4 +113,39 @@ int main() {
 
     return 0;
 }
+#elif PLATFORM == TERM_PLATFORM
 
+#include <stdio.h>
+
+char color_to_char(uint32_t pixel) {
+    char table[] = " .:a@#";
+    size_t n = sizeof(table) - 1;
+    size_t r = (0x000000FF&pixel)>>(8*0);
+    size_t g = (0x0000FF00&pixel)>>(8*1);
+    size_t b = (0x00FF0000&pixel)>>(8*2);
+    size_t bright = r;
+    if (bright < g) bright = g;
+    if (bright < b) bright = b;
+    return table[bright*n/256];
+}
+
+int main(void) {
+    for (;;) {
+        uint32_t *pixels = render(1.0f/60.0f);
+        for (size_t x = 0; x < WIDTH; ++x) {
+            for (size_t y = 0; y < HEIGHT; ++y) {
+                putc(color_to_char(pixels[y*WIDTH + x]), stdout);
+            }
+            putc('\n', stdout);
+        }
+        return 0;
+    }
+
+    return 0;
+}
+
+#elif PLATFORM == WASM_PLATFORM
+// Do Nothing
+#else
+#error "Unknown Platform"
+#endif /* PLATFORM */

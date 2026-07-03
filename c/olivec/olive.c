@@ -238,6 +238,8 @@ static char default_font_glyphs[128][DEFAULT_FONT_HEIGHT][DEFAULT_FONT_WIDTH] = 
     },
 };
 
+#define UNUSED(value) (void)(value)
+
 static Olivec_Font default_font = {
     .glyphs = &default_font_glyphs[0][0][0],
     .width  = DEFAULT_FONT_WIDTH,
