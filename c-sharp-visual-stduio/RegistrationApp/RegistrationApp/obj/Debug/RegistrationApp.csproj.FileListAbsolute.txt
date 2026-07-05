@@ -1,0 +1,130 @@
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildForm\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\RegistrationApp.exe.config
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildForm\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\RegistrationApp.exe
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildForm\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\RegistrationApp.pdb
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildForm\RegistrationApp\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.csproj.AssemblyReference.cache
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildForm\RegistrationApp\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.FmLogin.resources
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildForm\RegistrationApp\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.Properties.Resources.resources
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildForm\RegistrationApp\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.csproj.GenerateResource.cache
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildForm\RegistrationApp\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.csproj.CoreCompileInputs.cache
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildForm\RegistrationApp\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.exe
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildForm\RegistrationApp\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.pdb
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildForm\RegistrationApp\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.FmDashboard.resources
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildForm\RegistrationApp\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.FmRegistrationMng.resources
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildForm\RegistrationApp\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.FmRegistrationAdd.resources
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildForm\RegistrationApp\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.FmUserManagement.resources
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\RegistrationApp.exe.config
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\RegistrationApp.exe
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\RegistrationApp.pdb
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.csproj.AssemblyReference.cache
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.FmDashboard.resources
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.FmLogin.resources
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.FmRegistrationAdd.resources
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.FmRegistrationMng.resources
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.FmUserManagement.resources
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.Properties.Resources.resources
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.csproj.GenerateResource.cache
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.csproj.CoreCompileInputs.cache
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.exe
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.pdb
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\RegistrationApp.exe.manifest
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\RegistrationApp.application
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.exe.manifest
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.application
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.FmUserAdd.resources
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.FmUserEdit.resources
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\SqlServerTypes\x64\msvcr120.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\SqlServerTypes\x64\SqlServerSpatial140.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\SqlServerTypes\x86\msvcr120.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\SqlServerTypes\x86\SqlServerSpatial140.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\Microsoft.ReportViewer.Common.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\Microsoft.ReportViewer.DataVisualization.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\Microsoft.ReportViewer.Design.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\Microsoft.ReportViewer.ProcessingObjectModel.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\Microsoft.ReportViewer.WinForms.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\Microsoft.SqlServer.Types.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\EnvDTE.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\Microsoft.VisualStudio.Shell.Interop.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\Microsoft.VisualStudio.Shell.Interop.8.0.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\stdole.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\Microsoft.VisualStudio.OLE.Interop.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\Microsoft.VisualStudio.TextManager.Interop.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\Microsoft.VisualStudio.TextManager.Interop.8.0.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\Microsoft.MSXML.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\de\Microsoft.ReportViewer.Common.resources.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\es\Microsoft.ReportViewer.Common.resources.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\fr\Microsoft.ReportViewer.Common.resources.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\it\Microsoft.ReportViewer.Common.resources.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\ja\Microsoft.ReportViewer.Common.resources.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\ko\Microsoft.ReportViewer.Common.resources.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\pt\Microsoft.ReportViewer.Common.resources.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\ru\Microsoft.ReportViewer.Common.resources.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\zh-CHS\Microsoft.ReportViewer.Common.resources.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\zh-CHT\Microsoft.ReportViewer.Common.resources.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\de\Microsoft.ReportViewer.DataVisualization.resources.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\es\Microsoft.ReportViewer.DataVisualization.resources.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\fr\Microsoft.ReportViewer.DataVisualization.resources.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\it\Microsoft.ReportViewer.DataVisualization.resources.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\ja\Microsoft.ReportViewer.DataVisualization.resources.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\ko\Microsoft.ReportViewer.DataVisualization.resources.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\pt\Microsoft.ReportViewer.DataVisualization.resources.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\ru\Microsoft.ReportViewer.DataVisualization.resources.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\zh-CHS\Microsoft.ReportViewer.DataVisualization.resources.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\zh-CHT\Microsoft.ReportViewer.DataVisualization.resources.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\de\Microsoft.ReportViewer.Design.resources.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\es\Microsoft.ReportViewer.Design.resources.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\fr\Microsoft.ReportViewer.Design.resources.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\it\Microsoft.ReportViewer.Design.resources.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\ja\Microsoft.ReportViewer.Design.resources.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\ko\Microsoft.ReportViewer.Design.resources.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\pt\Microsoft.ReportViewer.Design.resources.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\ru\Microsoft.ReportViewer.Design.resources.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\zh-CHS\Microsoft.ReportViewer.Design.resources.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\zh-CHT\Microsoft.ReportViewer.Design.resources.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\de\Microsoft.ReportViewer.WinForms.resources.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\es\Microsoft.ReportViewer.WinForms.resources.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\fr\Microsoft.ReportViewer.WinForms.resources.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\it\Microsoft.ReportViewer.WinForms.resources.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\ja\Microsoft.ReportViewer.WinForms.resources.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\ko\Microsoft.ReportViewer.WinForms.resources.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\pt\Microsoft.ReportViewer.WinForms.resources.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\ru\Microsoft.ReportViewer.WinForms.resources.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\zh-CHS\Microsoft.ReportViewer.WinForms.resources.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\bin\Debug\zh-CHT\Microsoft.ReportViewer.WinForms.resources.dll
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.FmRegistrationReport.resources
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\obj\Debug\RdlCompile.cache
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\obj\Debug\RdlCompile.compiled
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.csproj.CopyComplete
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.FmRegistrationListReport.resources
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.FmUserChangePassword.resources
+C:\Users\Thirith\Desktop\C#1-Practices\Parent&ChildFormWithDB\RegistrationApp\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.FmReport.resources
+C:\Users\USER\Desktop\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.csproj.AssemblyReference.cache
+C:\Users\USER\Desktop\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.exe.config
+C:\Users\USER\Desktop\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.FmDashboard.resources
+C:\Users\USER\Desktop\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.FmLogin.resources
+C:\Users\USER\Desktop\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.FmRegistrationAdd.resources
+C:\Users\USER\Desktop\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.FmRegistrationMng.resources
+C:\Users\USER\Desktop\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.FmRegistrationReport.resources
+C:\Users\USER\Desktop\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.FmRegistrationListReport.resources
+C:\Users\USER\Desktop\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.FmUserAdd.resources
+C:\Users\USER\Desktop\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.FmUserChangePassword.resources
+C:\Users\USER\Desktop\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.FmUserEdit.resources
+C:\Users\USER\Desktop\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.FmUserManagement.resources
+C:\Users\USER\Desktop\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.Properties.Resources.resources
+C:\Users\USER\Desktop\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.csproj.GenerateResource.cache
+C:\Users\USER\Desktop\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.exe
+C:\Users\USER\Desktop\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.pdb
+E:\MyThings\o Visual Stduio\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.csproj.AssemblyReference.cache
+E:\MyThings\o Visual Stduio\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.exe.config
+E:\MyThings\o Visual Stduio\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.FmDashboard.resources
+E:\MyThings\o Visual Stduio\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.FmLogin.resources
+E:\MyThings\o Visual Stduio\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.FmRegistrationAdd.resources
+E:\MyThings\o Visual Stduio\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.FmRegistrationMng.resources
+E:\MyThings\o Visual Stduio\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.FmRegistrationReport.resources
+E:\MyThings\o Visual Stduio\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.FmRegistrationListReport.resources
+E:\MyThings\o Visual Stduio\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.FmUserAdd.resources
+E:\MyThings\o Visual Stduio\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.FmUserChangePassword.resources
+E:\MyThings\o Visual Stduio\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.FmUserEdit.resources
+E:\MyThings\o Visual Stduio\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.FmUserManagement.resources
+E:\MyThings\o Visual Stduio\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.Properties.Resources.resources
+E:\MyThings\o Visual Stduio\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.Views.ValidationForm.resources
+E:\MyThings\o Visual Stduio\RegistrationApp\RegistrationApp\obj\Debug\RegistrationApp.csproj.GenerateResource.cache

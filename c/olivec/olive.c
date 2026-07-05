@@ -282,7 +282,7 @@ struct Olivec_Canvas {
     size_t stride;
 };
 
-Olivec_Canvas Olivec_make_canvas(uint32_t *pixels, size_t width, size_t height) {
+Olivec_Canvas olivec_canvas(uint32_t *pixels, size_t width, size_t height) {
 
     Olivec_Canvas oc = {
         .pixels = pixels,
@@ -293,7 +293,7 @@ Olivec_Canvas Olivec_make_canvas(uint32_t *pixels, size_t width, size_t height) 
     return oc;
 }
 
-Olivec_Canvas Olivec_subcanvas(Olivec_Canvas oc, int x, int y, int w, int h) {
+Olivec_Canvas olivec_subcanvas(Olivec_Canvas oc, int x, int y, int w, int h) {
 
     int x1, x2, y1, y2;
     if (!olivec_normalize_rect(x, y, w, h, oc.width, oc.height, &x1, &x2, &y1, &y2)) {
