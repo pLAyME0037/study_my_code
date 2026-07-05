@@ -2,7 +2,7 @@
 #include "linkedlist.h"
 
 int main() {
-    Node head = NULL;
+    Node *head = NULL;
     int val[] = {1, 2, 3, 4, 5};
 
     for (size_t i = 0; i < sizeof(val)/sizeof(val[0]); ++i) {

@@ -1,0 +1,14 @@
+E:\MyThings\o Visual Stduio\DesignPattern\bin\Debug\net8.0\DesignPattern.exe
+E:\MyThings\o Visual Stduio\DesignPattern\bin\Debug\net8.0\DesignPattern.deps.json
+E:\MyThings\o Visual Stduio\DesignPattern\bin\Debug\net8.0\DesignPattern.runtimeconfig.json
+E:\MyThings\o Visual Stduio\DesignPattern\bin\Debug\net8.0\DesignPattern.dll
+E:\MyThings\o Visual Stduio\DesignPattern\bin\Debug\net8.0\DesignPattern.pdb
+E:\MyThings\o Visual Stduio\DesignPattern\obj\Debug\net8.0\DesignPattern.GeneratedMSBuildEditorConfig.editorconfig
+E:\MyThings\o Visual Stduio\DesignPattern\obj\Debug\net8.0\DesignPattern.AssemblyInfoInputs.cache
+E:\MyThings\o Visual Stduio\DesignPattern\obj\Debug\net8.0\DesignPattern.AssemblyInfo.cs
+E:\MyThings\o Visual Stduio\DesignPattern\obj\Debug\net8.0\DesignPattern.csproj.CoreCompileInputs.cache
+E:\MyThings\o Visual Stduio\DesignPattern\obj\Debug\net8.0\DesignPattern.dll
+E:\MyThings\o Visual Stduio\DesignPattern\obj\Debug\net8.0\refint\DesignPattern.dll
+E:\MyThings\o Visual Stduio\DesignPattern\obj\Debug\net8.0\DesignPattern.pdb
+E:\MyThings\o Visual Stduio\DesignPattern\obj\Debug\net8.0\DesignPattern.genruntimeconfig.cache
+E:\MyThings\o Visual Stduio\DesignPattern\obj\Debug\net8.0\ref\DesignPattern.dll

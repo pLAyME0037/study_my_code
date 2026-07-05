@@ -36,7 +36,7 @@ void rotate_point(int *x, int *y) {
 uint32_t *render(float dt) {
     triangleAngle += 0.9f * PI * dt;
 
-    Olivec_Canvas oc = Olivec_make_canvas(pixels, WIDTH, HEIGHT);
+    Olivec_Canvas oc = olivec_canvas(pixels, WIDTH, HEIGHT);
     olivec_fill(oc, TERCOISE_COLOR);
     {
         int x1 = WIDTH/2,     y1 = HEIGHT/8;
@@ -115,7 +115,20 @@ int main() {
 }
 #elif PLATFORM == TERM_PLATFORM
 
+#include <unistd.h>
+#include <assert.h>
+#include <time.h>
 #include <stdio.h>
+#include <errno.h>
+#include <stdlib.h>
+
+#define SCALE_DOWN_FACTOR 20
+static_assert(WIDTH%SCALE_DOWN_FACTOR == 0, "WIDTH must be devicible by the SCALE_DOWN_FACTOR");
+#define SCALE_DOWN_WIDTH (WIDTH/SCALE_DOWN_FACTOR)
+static_assert(HEIGHT%SCALE_DOWN_FACTOR == 0, "HEIGHT must be devicible by the SCALE_DOWN_FACTOR");
+#define SCALE_DOWN_HEIGHT (HEIGHT/SCALE_DOWN_FACTOR)
+
+char char_canvas[SCALE_DOWN_WIDTH*SCALE_DOWN_HEIGHT];
 
 char color_to_char(uint32_t pixel) {
     char table[] = " .:a@#";
@@ -129,16 +142,71 @@ char color_to_char(uint32_t pixel) {
     return table[bright*n/256];
 }
 
+uint32_t compress_pixel_chunk(Olivec_Canvas oc) {
+    size_t r = 0;
+    size_t g = 0;
+    size_t b = 0;
+    size_t a = 0;
+
+    for (size_t x = 0; x < oc.width; ++x) {
+        for (size_t y = 0; y < oc.height; ++y) {
+            r += OLIVEC_RED(OLIVEC_PIXEL(oc, x, y));
+            g += OLIVEC_GREEN(OLIVEC_PIXEL(oc, x, y));
+            b += OLIVEC_BLUE(OLIVEC_PIXEL(oc, x, y));
+            a += OLIVEC_ALPHA(OLIVEC_PIXEL(oc, x, y));
+        }
+    }
+
+    r /= oc.width*oc.height;
+    g /= oc.width*oc.height;
+    b /= oc.width*oc.height;
+    a /= oc.width*oc.height;
+
+    return OLIVEC_RGBA(r, g, b, a);
+}
+
+void compress_pixel(uint32_t *pixel) {
+    Olivec_Canvas oc = olivec_canvas(pixel, WIDTH, HEIGHT);
+
+    for (size_t x = 0; x < SCALE_DOWN_WIDTH; ++x) {
+        for (size_t y = 0; y < SCALE_DOWN_HEIGHT; ++y) {
+            Olivec_Canvas soc = olivec_subcanvas(oc,
+                                                 x*SCALE_DOWN_FACTOR,
+                                                 y*SCALE_DOWN_FACTOR,
+                                                 SCALE_DOWN_FACTOR,
+                                                 SCALE_DOWN_FACTOR);
+            char_canvas[y*SCALE_DOWN_WIDTH + x] = color_to_char(compress_pixel_chunk(soc));
+        }
+        putc('\n', stdout);
+    }
+}
+
+size_t get_curr_ms(void) {
+    struct timespec tp;
+    if (clock_gettime(CLOCK_MONOTONIC, &tp) < 0) {
+        fprintf(stderr, "ERROR: Could not get clock: %s", strerror(errno));
+        exit(1);
+    }
+    return tp.tv_nsec/1000/1000 + tp.tv_nsec/1000;
+}
+
 int main(void) {
     for (;;) {
-        uint32_t *pixels = render(1.0f/60.0f);
-        for (size_t x = 0; x < WIDTH; ++x) {
-            for (size_t y = 0; y < HEIGHT; ++y) {
-                putc(color_to_char(pixels[y*WIDTH + x]), stdout);
+        // size_t curr_ms = get_curr_ms();
+        // float delta_time = (curr_ms - prev_ms)*0.001f;
+        // prev_ms = curr_ms;
+        compress_pixel(render(1.f/60));
+        for (size_t y = 0; y < SCALE_DOWN_HEIGHT; ++y) {
+            for (size_t x = 0; x < SCALE_DOWN_WIDTH; ++x) {
+                putc(char_canvas[y*SCALE_DOWN_WIDTH + x], stdout);
+                putc(char_canvas[y*SCALE_DOWN_WIDTH + x], stdout);
             }
             putc('\n', stdout);
         }
-        return 0;
+        printf("\033[%dA", SCALE_DOWN_HEIGHT);
+        printf("\033[%dD", SCALE_DOWN_WIDTH);
+
+        usleep(1000*1000/60);
     }
 
     return 0;
