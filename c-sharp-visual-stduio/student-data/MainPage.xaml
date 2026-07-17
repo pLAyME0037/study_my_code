@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="student_data.MainPage"
+             Title="Home">
+
+    <ScrollView>
+        <VerticalStackLayout
+            Padding="30,0"
+            Spacing="25"
+            VerticalOptions="Center">
+
+            <Label
+                Text="Student Id"
+                Style="{StaticResource Headline}"
+                SemanticProperties.HeadingLevel="Level1"
+                HorizontalOptions="Center" />
+
+            <Entry
+                x:Name="IdEntry"
+                Placeholder="Id"
+                HorizontalOptions="Fill" />
+
+            <Label
+                Text="Name"
+                Style="{StaticResource SubHeadline}"
+                HorizontalOptions="Center" />
+
+            <Entry
+                x:Name="NameEntry"
+                Placeholder="Name"
+                HorizontalOptions="Fill" />
+
+            <Label
+                Text="Age"
+                Style="{StaticResource SubHeadline}"
+                HorizontalOptions="Center" />
+
+            <Entry
+                x:Name="AgeEntry"
+                Placeholder="Age"
+                HorizontalOptions="Fill" />
+
+            <Label
+                Text="Major"
+                Style="{StaticResource SubHeadline}"
+                HorizontalOptions="Center" />
+
+            <Entry
+                x:Name="MajorEntry"
+                Placeholder="Major"
+                HorizontalOptions="Fill" />
+
+            <Button
+                x:Name="ClearStudBtn"
+                Text="Clear Student"
+                Clicked="OnClear"
+                HorizontalOptions="Fill" />
+
+            <Button
+                x:Name="FillStudBtn"
+                Text="Fill Student"
+                Clicked="OnFillStud"
+                HorizontalOptions="Fill" />
+
+            <Button
+                x:Name="CounterBtn"
+                Text="Click me"
+                SemanticProperties.Hint="Counts the number of times you click"
+                Clicked="OnCounterClicked"
+                HorizontalOptions="Fill" />
+
+            <HorizontalStackLayout
+                Spacing="10"
+                HorizontalOptions="Center">
+
+                <CheckBox
+                    x:Name="AgreeCheckBox"
+                    IsChecked="False" />
+                <Label
+                    Text="I agree to the terms"
+                    VerticalOptions="Center" />
+
+            </HorizontalStackLayout>
+
+            <Entry
+                x:Name="WelcomeNameEntry"
+                Placeholder="Enter your name"
+                HorizontalOptions="Fill" />
+
+            <Slider
+                x:Name="VolumeSlider"
+                Minimum="0"
+                Maximum="100"
+                Value="50"
+                HorizontalOptions="Fill" />
+
+            <Label
+                x:Name="VolumeLabel"
+                Text="Volume: 50"
+                HorizontalOptions="Center" />
+
+            <Switch
+                x:Name="DarkModeSwitch"
+                IsToggled="False"
+                HorizontalOptions="Center" />
+
+            <ProgressBar
+                x:Name="LoadingProgress"
+                Progress="0.5"
+                ProgressColor="{StaticResource Primary}"
+                HorizontalOptions="Fill" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

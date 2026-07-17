@@ -1,0 +1,15 @@
+/mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/DesignPattern/bin/Debug/net10.0/DesignPattern
+/mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/DesignPattern/bin/Debug/net10.0/DesignPattern.deps.json
+/mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/DesignPattern/bin/Debug/net10.0/DesignPattern.runtimeconfig.json
+/mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/DesignPattern/bin/Debug/net10.0/DesignPattern.dll
+/mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/DesignPattern/bin/Debug/net10.0/DesignPattern.pdb
+/mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/DesignPattern/obj/Debug/net10.0/DesignPattern.GeneratedMSBuildEditorConfig.editorconfig
+/mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/DesignPattern/obj/Debug/net10.0/DesignPattern.AssemblyInfoInputs.cache
+/mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/DesignPattern/obj/Debug/net10.0/DesignPattern.AssemblyInfo.cs
+/mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/DesignPattern/obj/Debug/net10.0/DesignPattern.csproj.CoreCompileInputs.cache
+/mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/DesignPattern/obj/Debug/net10.0/DesignPattern.sourcelink.json
+/mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/DesignPattern/obj/Debug/net10.0/DesignPattern.dll
+/mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/DesignPattern/obj/Debug/net10.0/refint/DesignPattern.dll
+/mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/DesignPattern/obj/Debug/net10.0/DesignPattern.pdb
+/mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/DesignPattern/obj/Debug/net10.0/DesignPattern.genruntimeconfig.cache
+/mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/DesignPattern/obj/Debug/net10.0/ref/DesignPattern.dll
