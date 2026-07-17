@@ -1,0 +1,60 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!--
+      Multi-target:
+        Linux   → net10.0                      (OpenMAUI)
+        Windows → net10.0-android;net10.0-windows10.0.19041.0;net10.0  (standard MAUI + OpenMAUI)
+      Condition avoids workload validation failures on machines without
+      the Android/Windows MAUI workloads installed.
+    -->
+    <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('Linux'))">net10.0</TargetFrameworks>
+    <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('Windows'))">net10.0-android;net10.0-windows10.0.19041.0;net10.0</TargetFrameworks>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>maui_default</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <ApplicationId>com.companyname.maui_default</ApplicationId>
+    <ApplicationVersion>1</ApplicationVersion>
+    <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+
+    <UseMaui Condition="'$(TargetFramework)' != 'net10.0'">true</UseMaui>
+    <EnableDefaultXamlItems Condition="'$(TargetFramework)' == 'net10.0'">true</EnableDefaultXamlItems>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net10.0'">
+    <RuntimeIdentifiers>linux-x64;linux-arm64</RuntimeIdentifiers>
+  </PropertyGroup>
+
+  <!-- OpenMAUI packages (Linux only) -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
+    <PackageReference Include="OpenMaui.Hosting" Version="10.0.*" />
+    <PackageReference Include="OpenMaui.Controls.Linux" Version="10.0.*" />
+    <PackageReference Include="Microsoft.Maui.Controls" Version="10.0.*" />
+    <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="10.0.*" />
+  </ItemGroup>
+
+  <!-- Exclude non-Linux platform files for Linux build -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
+    <Compile Remove="Platforms\Android\**" />
+    <Compile Remove="Platforms\Windows\**" />
+  </ItemGroup>
+
+  <!-- Exclude Linux platform files for non-Linux builds -->
+  <ItemGroup Condition="'$(TargetFramework)' != 'net10.0'">
+    <Compile Remove="Platforms\Linux\**" />
+  </ItemGroup>
+
+  <!-- XAML Files (Linux only — UseMaui handles this for Android/Windows) -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
+    <MauiXaml Update="**/*.xaml" />
+  </ItemGroup>
+
+  <!-- Resources (Linux only — UseMaui handles this for Android/Windows) -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
+    <MauiFont Include="Resources\Fonts\*" />
+    <MauiImage Include="Resources\Images\*" Exclude="Resources\Images\*.md;Resources\Images\.gitkeep" />
+  </ItemGroup>
+
+</Project>

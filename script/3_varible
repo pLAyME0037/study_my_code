@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+set -e
+
+cmp=`hostname`
+name="mean"
+age=22
+
+echo $cmp
+echo "my name is $name"
+echo "i am $age years old"
+
+user_login=$(whoami)
+login_date=$(date)
+num_user=$(who | wc -l)
+
+echo "user login is $user_login"
+echo "login date is $login_date"
+echo "number of users $num_user"

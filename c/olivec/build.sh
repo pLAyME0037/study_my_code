@@ -23,6 +23,6 @@ cc -Wall -Wextra -ggdb -DSDL_PLATFORM -I. -DPLATFORM=TERM_PLATFORM -o bin/ddd.te
 cc -Wall -Wextra -ggdb -DSDL_PLATFORM -I. -DPLATFORM=SDL_PLATFORM -o bin/ddd.sdl 3d.c -lm -lSDL3
 clang -Wall -Wextra --target=wasm32 -I. -DPLATFORM=WASM_PLATFORM -o bin/ddd.o -c 3d.c
 wasm-ld -m wasm32 --no-entry --export-all --allow-undefined -o bin/ddd.wasm bin/ddd.o
-./bin/ddd.sdl
+./bin/ddd.term
 
 # python -m http.server 3333

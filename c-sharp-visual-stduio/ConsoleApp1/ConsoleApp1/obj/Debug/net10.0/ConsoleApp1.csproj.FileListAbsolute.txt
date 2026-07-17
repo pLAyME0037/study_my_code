@@ -1,0 +1,17 @@
+/mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/ConsoleApp1/ConsoleApp1/bin/Debug/net10.0/ConsoleApp1
+/mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/ConsoleApp1/ConsoleApp1/bin/Debug/net10.0/ConsoleApp1.deps.json
+/mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/ConsoleApp1/ConsoleApp1/bin/Debug/net10.0/ConsoleApp1.runtimeconfig.json
+/mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/ConsoleApp1/ConsoleApp1/bin/Debug/net10.0/ConsoleApp1.dll
+/mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/ConsoleApp1/ConsoleApp1/bin/Debug/net10.0/ConsoleApp1.pdb
+/mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/ConsoleApp1/ConsoleApp1/obj/Debug/net10.0/ConsoleApp1.Properties.Resources.resources
+/mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/ConsoleApp1/ConsoleApp1/obj/Debug/net10.0/ConsoleApp1.csproj.GenerateResource.cache
+/mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/ConsoleApp1/ConsoleApp1/obj/Debug/net10.0/ConsoleApp1.GeneratedMSBuildEditorConfig.editorconfig
+/mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/ConsoleApp1/ConsoleApp1/obj/Debug/net10.0/ConsoleApp1.AssemblyInfoInputs.cache
+/mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/ConsoleApp1/ConsoleApp1/obj/Debug/net10.0/ConsoleApp1.AssemblyInfo.cs
+/mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/ConsoleApp1/ConsoleApp1/obj/Debug/net10.0/ConsoleApp1.csproj.CoreCompileInputs.cache
+/mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/ConsoleApp1/ConsoleApp1/obj/Debug/net10.0/ConsoleApp1.sourcelink.json
+/mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/ConsoleApp1/ConsoleApp1/obj/Debug/net10.0/ConsoleApp1.dll
+/mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/ConsoleApp1/ConsoleApp1/obj/Debug/net10.0/refint/ConsoleApp1.dll
+/mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/ConsoleApp1/ConsoleApp1/obj/Debug/net10.0/ConsoleApp1.pdb
+/mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/ConsoleApp1/ConsoleApp1/obj/Debug/net10.0/ConsoleApp1.genruntimeconfig.cache
+/mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/ConsoleApp1/ConsoleApp1/obj/Debug/net10.0/ref/ConsoleApp1.dll
