@@ -28,8 +28,7 @@ namespace __NAMESPACE__;
 
 public class Program
 {
-    public static void Main(string[] args)
-    {
+    public static void Main(string[] args) {
         var app = MauiProgram.CreateMauiAppBuilder()
             .UseLinux()
             .Build();
@@ -137,13 +136,11 @@ namespace __NAMESPACE__;
 
 public static class MauiProgram
 {
-    public static MauiAppBuilder CreateMauiAppBuilder()
-    {
+    public static MauiAppBuilder CreateMauiAppBuilder() {
         var builder = MauiApp.CreateBuilder();
         builder
             .UseMauiApp<App>()
-            .ConfigureFonts(fonts =>
-            {
+            .ConfigureFonts(fonts => {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
@@ -155,8 +152,7 @@ public static class MauiProgram
         return builder;
     }
 
-    public static MauiApp CreateMauiApp()
-    {
+    public static MauiApp CreateMauiApp() {
         return CreateMauiAppBuilder().Build();
     }
 }

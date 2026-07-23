@@ -8,10 +8,9 @@
             Padding="30,0"
             Spacing="25">
 
-            <Label
-                Text="Hello, World!"
-                Style="{StaticResource Headline}"
-                SemanticProperties.HeadingLevel="Level1" />
+            <Label Text="Hello, World!"
+                   Style="{StaticResource Headline}"
+                   SemanticProperties.HeadingLevel="Level1" />
 
             <Label Text="Staff Id" />
             <Entry Text="{Binding StaffId}" />
