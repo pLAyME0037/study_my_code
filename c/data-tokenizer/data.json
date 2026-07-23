@@ -1,6 +1,6 @@
-src = {
-    { "password":"12345678", "type":"password", "sensitivity":3 },
-    { "date":"dd-mm-yy", "type":"date", "sensitivity":1 },
-    { "date":"dd-mmm-yyyy", "type":"date", "sensitivity":1 },
-    { "word":"kill", "type":"word", "sensitivity":2 }
-}
+[
+  { "value": "12345678",    "type": "password",  "sensitivity": 3 },
+  { "value": "10-09-24",    "type": "date",      "sensitivity": 1 },
+  { "value": "09-Mar-2010", "type": "date",      "sensitivity": 1 },
+  { "value": "kill",        "type": "word",      "sensitivity": 2 }
+]
