@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+
+# read -p "Input: " CHOICE
+#
+# case "$CHOICE" in
+# "1") echo "Hello"
+# ;;
+# "2") echo "World"
+# ;;
+# *) break
+# ;;
+# esac
+
+# -----------------------------------------------
+
+# read -p "Input: " DAY
+#
+# case "$DAY" in
+# Mon|mon|Tue|tue|Wen|wen|Thu|thu|Fri|fri)
+#     echo "It is week day. Time to school"
+# ;;
+# Sat|sat|Sun|sun)
+#     echo "It is weekend. Relac"
+# ;;
+# *)
+#     echo "Invalit input"
+# ;;
+# esac
+
+# -----------------------------------------------
+
+# while true; do
+#     echo " === SYSTEM UTILITY MENU === "
+#     echo " 1. Display date and time"
+#     echo " 2. Show stroage usage"
+#     echo -e " 3. Exit\n"
+#
+#     read -rp " Selete option [1-3]: " CHOICE
+#
+#     case $CHOICE in
+#     1)
+#         echo " =========================== "
+#         date
+#         echo " =========================== "
+#     ;;
+#     2)
+#         echo " =========================== "
+#         df -h /
+#         echo " =========================== "
+#     ;;
+#     3)
+#         echo "Exit Program. Good bye!"
+#         break
+#     ;;
+#     esac
+# done
+
+# -----------------------------------------------
+
+echo -e "Enter name of action:\nstart\nstop\nstatus\nrestart\nvvv"
+read ACTION
+read -p "Enter name of service: " SERVICE
+
+case $ACTION in
+    start|stop|status|restart)
+        systemctl $ACTION $SERVICE
+    ;;
+    *)
+        echo "Invalid Input"
+    ;;
+esac
+
+# -----------------------------------------------
