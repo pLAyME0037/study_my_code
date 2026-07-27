@@ -1,18 +1,18 @@
 #include "third_party/hash_table.h"
 #include "third_party/json_format.h"
-#include <stdio.h>
 
 int main(void) {
-    const char *file_path = "./data_2mb.json";
-    String_Builder buffer = {0};
+    SensitiveReport report = {0};
 
-    if (!read_entire_file(file_path, &buffer)) return 1;
-    String_View content = {
-        .data  = buffer.items,
-        .count = buffer.count,
-    };
+    if (!find_sensetive_data("./data_2mb.json", &report)) return 1;
 
-    find_sensetive_data(content, "./data.json");
+    confirm_sensitive_fields(&report);
+    print_report(&report);
 
+    // TODO: pass &report to hash_analysis for indexing
+    // String_View content = ...;
+    // hash_analysis(content, &report);
+
+    free(report.items);
     return 0;
 }
