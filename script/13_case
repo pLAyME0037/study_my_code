@@ -3,12 +3,9 @@
 # read -p "Input: " CHOICE
 #
 # case "$CHOICE" in
-# "1") echo "Hello"
-# ;;
-# "2") echo "World"
-# ;;
-# *) break
-# ;;
+# "1") echo "Hello" ;;
+# "2") echo "World" ;;
+# *)   break ;;
 # esac
 
 # -----------------------------------------------
