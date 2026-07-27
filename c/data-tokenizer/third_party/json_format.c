@@ -1,4 +1,5 @@
 #include <json-c/json.h>
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -6,18 +7,21 @@
 #include "../build/nob.h"
 #include "json_format.h"
 
-static const char *patterns_l1[] = { "phone", "date_of_birth" };
-static const char *patterns_l2[] = { "status", "id", "password" };
-static const char *patterns_l3[] = { "kill", "rape", "shit", "jail" };
+static const char *patterns_l3[] = { "kill", "rape", "shit", "jail", "the" };
 
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof((a)[0]))
 
-static void walk_json(struct json_object *obj, const char *prefix,
-                      ssize_t user_idx, SensitiveReport *report);
+static void walk_json(struct json_object *obj,
+                      const char *prefix,
+                      ssize_t user_idx,
+                      SensitiveReport *report);
 
-static void add_field(SensitiveReport *report, size_t user_idx,
-                      const char *path, const char *field_name,
-                      const char *value, int level) {
+static void add_field(SensitiveReport *report,
+                      size_t user_idx,
+                      const char *path,
+                      const char *field_name,
+                      const char *value,
+                      int level) {
     SensitiveField f = {0};
     f.user_idx = user_idx;
     snprintf(f.path, sizeof(f.path), "%s", path);
@@ -28,19 +32,35 @@ static void add_field(SensitiveReport *report, size_t user_idx,
     da_append(report, f);
 }
 
-static void check_string_value(const char *field_name, const char *value,
-                               const char *prefix, ssize_t user_idx,
+static bool contains_word(const char *text, const char *word) {
+    size_t word_len = strlen(word);
+    const char *p = text;
+    while ((p = strstr(p, word)) != NULL) {
+        bool start_ok = (p == text || !isalnum((unsigned char)p[-1]));
+        bool end_ok = (!p[word_len] || !isalnum((unsigned char)p[word_len]));
+        if (start_ok && end_ok) return true;
+        p += word_len;
+    }
+    return false;
+}
+
+static void check_string_value(const char *field_name,
+                               const char *value,
+                               const char *prefix,
+                               ssize_t user_idx,
                                SensitiveReport *report) {
     for (size_t i = 0; i < ARRAY_SIZE(patterns_l3); i++) {
-        if (strstr(value, patterns_l3[i])) {
+        if (contains_word(value, patterns_l3[i])) {
             add_field(report, user_idx, prefix, field_name, value, 3);
             return;
         }
     }
 }
 
-static void walk_json(struct json_object *obj, const char *prefix,
-                      ssize_t user_idx, SensitiveReport *report) {
+static void walk_json(struct json_object *obj,
+                      const char *prefix,
+                      ssize_t user_idx,
+                      SensitiveReport *report) {
     if (!obj) return;
 
     enum json_type type = json_object_get_type(obj);
@@ -61,26 +81,15 @@ static void walk_json(struct json_object *obj, const char *prefix,
             }
 
             const char *str_val = "";
-            if (val_type == json_type_string)
+            if (val_type == json_type_string) {
                 str_val = json_object_get_string(val);
-            else
+            } else {
                 str_val = json_object_to_json_string(val);
-
-            int level = 0;
-            for (size_t i = 0; i < ARRAY_SIZE(patterns_l1); i++) {
-                if (strcmp(key, patterns_l1[i]) == 0) { level = 1; break; }
-            }
-            if (!level) {
-                for (size_t i = 0; i < ARRAY_SIZE(patterns_l2); i++) {
-                    if (strcmp(key, patterns_l2[i]) == 0) { level = 2; break; }
-                }
             }
 
-            if (level)
-                add_field(report, user_idx, path, key, str_val, level);
-
-            if (val_type == json_type_string)
+            if (val_type == json_type_string) {
                 check_string_value(key, str_val, path, user_idx, report);
+            }
         }
     } else if (type == json_type_array) {
         size_t len = json_object_array_length(obj);
@@ -171,8 +180,9 @@ void confirm_sensitive_fields(SensitiveReport *report) {
 
         if (yes) {
             for (size_t j = 0; j < report->count; j++) {
-                if (strcmp(report->items[j].field_name, entries[i].name) == 0)
+                if (strcmp(report->items[j].field_name, entries[i].name) == 0) {
                     report->items[j].sensitive = true;
+                }
             }
         }
     }
