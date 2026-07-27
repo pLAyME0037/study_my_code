@@ -7,7 +7,9 @@
 #include "../build/nob.h"
 #include "json_format.h"
 
-static const char *patterns_l3[] = { "kill", "rape", "shit", "jail", "the" };
+static const char *patterns_l3[] = {
+    "kill", "rape", "shit", "jail", "sex", "an"
+};
 
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof((a)[0]))
 
@@ -188,21 +190,86 @@ void confirm_sensitive_fields(SensitiveReport *report) {
     }
 }
 
+#define W_NO    4
+#define W_USR   6
+#define W_PATH  35
+#define W_VAL   45
+#define W_LVL   5
+#define W_SENS  9
+
+static size_t get_wrap_length(const char *text, size_t max_width) {
+    if (!text || *text == '\0') return 0;
+    size_t len = strlen(text);
+    if (len <= max_width) return len;
+
+    // Look backward from max_width to find a space
+    for (size_t i = max_width; i > 0; i--) {
+        if (isspace((unsigned char)text[i])) {
+            return i;
+        }
+    }
+    // If no space is found within the limit, force a hard break
+    return max_width;
+}
+
 void print_report(const SensitiveReport *report) {
-    printf("\n%-4s %-6s %-35s %-20s %-6s %-9s\n",
-           "No", "User", "Path", "Value", "Level", "Sensitive");
-    printf("----+------+-----------------------------------+"
-           "--------------------+------+----------\n");
+    printf("\n%-*s | %-*s | %-*s | %-*s | %-*s | %-*s\n",
+           W_NO, "No", W_USR, "User", W_PATH, "Path",
+           W_VAL, "Value", W_LVL, "Level", W_SENS, "Sensitive");
+
+    printf("-----|--------|-------------------------------------|-------------"
+           "----------------------------------|-------|----------\n");
 
     for (size_t i = 0; i < report->count; i++) {
         const SensitiveField *f = &report->items[i];
         const char *display_val = f->sensitive ? "***" : f->value;
-        char user_buf[16];
-        snprintf(user_buf, sizeof(user_buf), "%zd", f->user_idx);
 
-        printf("%-4zu %-6s %-35s %-20s %-6d %-9s\n",
-               i, f->user_idx >= 0 ? user_buf : "-", f->path, display_val,
-               f->level, f->sensitive ? "yes ***" : "no");
+        char user_buf[16];
+        if (f->user_idx >= 0) {
+            snprintf(user_buf, sizeof(user_buf), "%zd", f->user_idx);
+        } else {
+            strcpy(user_buf, "-");
+        }
+
+        const char *p_path = f->path;
+        const char *p_val = display_val;
+        bool is_first_line = true;
+
+        while (*p_path != '\0' || *p_val != '\0' || is_first_line) {
+
+            size_t path_len = get_wrap_length(p_path, W_PATH);
+            size_t val_len  = get_wrap_length(p_val, W_VAL);
+
+            const char *next_path = p_path + path_len;
+            while (isspace((unsigned char)*next_path)) next_path++;
+
+            const char *next_val = p_val + val_len;
+            while (isspace((unsigned char)*next_val)) next_val++;
+
+            bool is_last_line = (*next_path == '\0') && (*next_val == '\0');
+
+            if (is_first_line) {
+                printf("%-*zu | %-*s | ", W_NO, i, W_USR, user_buf);
+            } else {
+                printf("%-*s | %-*s | ", W_NO, "", W_USR, "");
+            }
+
+            // Note: %-*.*s means "pad right to X width, but print max Y chars"
+            printf("%-*.*s | %-*.*s | ",
+                   W_PATH, (int)path_len, p_path,
+                   W_VAL,  (int)val_len,  p_val);
+
+            if (is_last_line) {
+                printf("%-*d | %-*s\n", W_LVL, f->level, W_SENS, f->sensitive ? "yes ***" : "no");
+            } else {
+                printf("%-*s | %-*s\n", W_LVL, "", W_SENS, "");
+            }
+
+            // Advance pointers for the next loop iteration
+            p_path = next_path;
+            p_val = next_val;
+            is_first_line = false;
+        }
     }
     printf("\nTotal: %zu fields\n", report->count);
 }
