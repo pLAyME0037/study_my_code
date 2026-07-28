@@ -1,0 +1,126 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "E:\\MyThings\\o Visual Stduio\\Midterm\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|E:\\MyThings\\o Visual Stduio\\Midterm\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|E:\\MyThings\\o Visual Stduio\\Midterm\\CodeData\\Loop.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:CodeData\\Loop.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|E:\\MyThings\\o Visual Stduio\\Midterm\\CodeData\\UserInfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:CodeData\\UserInfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|E:\\MyThings\\o Visual Stduio\\Midterm\\CodeData\\Animals\\WaterAnimal.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:CodeData\\Animals\\WaterAnimal.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|E:\\MyThings\\o Visual Stduio\\Midterm\\CodeData\\Animals\\LandAnimal.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:CodeData\\Animals\\LandAnimal.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|E:\\MyThings\\o Visual Stduio\\Midterm\\CodeData\\Animals\\Animal.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:CodeData\\Animals\\Animal.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 7,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{40ea2e6b-2121-4bb8-a43e-c83c04b51041}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Loop.cs",
+              "DocumentMoniker": "E:\\MyThings\\o Visual Stduio\\Midterm\\CodeData\\Loop.cs",
+              "RelativeDocumentMoniker": "CodeData\\Loop.cs",
+              "ToolTip": "E:\\MyThings\\o Visual Stduio\\Midterm\\CodeData\\Loop.cs",
+              "RelativeToolTip": "CodeData\\Loop.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABUAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-18T13:12:41.402Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "WaterAnimal.cs",
+              "DocumentMoniker": "E:\\MyThings\\o Visual Stduio\\Midterm\\CodeData\\Animals\\WaterAnimal.cs",
+              "RelativeDocumentMoniker": "CodeData\\Animals\\WaterAnimal.cs",
+              "ToolTip": "E:\\MyThings\\o Visual Stduio\\Midterm\\CodeData\\Animals\\WaterAnimal.cs",
+              "RelativeToolTip": "CodeData\\Animals\\WaterAnimal.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABEAAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-18T12:47:55.935Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "LandAnimal.cs",
+              "DocumentMoniker": "E:\\MyThings\\o Visual Stduio\\Midterm\\CodeData\\Animals\\LandAnimal.cs",
+              "RelativeDocumentMoniker": "CodeData\\Animals\\LandAnimal.cs",
+              "ToolTip": "E:\\MyThings\\o Visual Stduio\\Midterm\\CodeData\\Animals\\LandAnimal.cs",
+              "RelativeToolTip": "CodeData\\Animals\\LandAnimal.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABEAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-18T12:44:07.996Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Animal.cs",
+              "DocumentMoniker": "E:\\MyThings\\o Visual Stduio\\Midterm\\CodeData\\Animals\\Animal.cs",
+              "RelativeDocumentMoniker": "CodeData\\Animals\\Animal.cs",
+              "ToolTip": "E:\\MyThings\\o Visual Stduio\\Midterm\\CodeData\\Animals\\Animal.cs",
+              "RelativeToolTip": "CodeData\\Animals\\Animal.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-18T12:39:02.142Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "UserInfo.cs",
+              "DocumentMoniker": "E:\\MyThings\\o Visual Stduio\\Midterm\\CodeData\\UserInfo.cs",
+              "RelativeDocumentMoniker": "CodeData\\UserInfo.cs",
+              "ToolTip": "E:\\MyThings\\o Visual Stduio\\Midterm\\CodeData\\UserInfo.cs",
+              "RelativeToolTip": "CodeData\\UserInfo.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAAAA8AAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-18T12:31:37.268Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "E:\\MyThings\\o Visual Stduio\\Midterm\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "E:\\MyThings\\o Visual Stduio\\Midterm\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAABAAAAAyAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-18T12:30:12.509Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+NUM=0
+
+for i in {1..5}; do
+    NUM=$((NUM+1))
+    echo $NUM
+done
+
+echo "----------------------------"
+
+I=1
+for username in $(awk -F: '{print $1}' /etc/passwd); do
+    echo "User Name: $((I++)) $username"
+done
+
+echo "----------------------------"
+
+for i in run jumb swim; do
+    echo "i can $i"
+done

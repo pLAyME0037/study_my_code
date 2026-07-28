@@ -1,0 +1,601 @@
+/* i learn this form Tsoding Daily */
+
+#ifndef OLIVE_C_
+#define OLIVE_C_
+
+#ifndef OLIVEC_NO_STDLIB
+#include <assert.h>
+#include <string.h>
+#else
+#ifndef assert
+#define assert(expr) ((void)0)
+#endif
+static size_t olivec_strlen(const char *s) {
+    const char *p = s;
+    while (*p) ++p;
+    return (size_t)(p - s);
+}
+#define strlen olivec_strlen
+#endif /* ifndef OLIVEC_NO_STDLIB */
+#include <stddef.h>
+#include <stdint.h>
+#include <stdbool.h>
+#include "olivec.h"
+
+#define GREEN_COLOR      0xFF00FF00
+#define RED_COLOR        0xFFFF0000
+#define SKYBLUE_COLOR    0xFF00FFFF
+#define BLUE_COLOR       0xFF2020AA
+#define YELLOW_COLOR     0xFFFFFF00
+#define GRAY_COLOR       0xFF808080
+#define TERCOISE_COLOR   0xFF008080
+#define PURPLE_COLOR     0xFFFF12FF
+#define BACKGROUND_COLOR 0xFF202020
+#define FOREGROUND_COLOR 0x6495EDFF
+
+#ifndef OLIVEC_AA_RES
+#define OLIVEC_AA_RES 3
+#endif /* ifndef OLIVEC_AA_RES */
+
+#define OLIVEC_SWAP(T, a, b) do { T t = a; a = b; b = t; } while (0)
+#define OLIVEC_LERPF(T, a, b) a + (b - a)*t
+#define OLIVEC_SIGN(T, x) ((T)((x) > 0) - (T)((x) < 0))
+#define OLIVEC_ABS(T, x) (OLIVEC_SIGN(T, x)*(x))
+#define UNREACHABLE()
+#define RETURN_DEFER(value) do { result = (value); goto defer; } while (0)
+#define OLIVEC_PIXEL(oc, x, y) (oc).pixels[(y)*(oc).stride + (x)]
+
+typedef struct {
+    size_t width;
+    size_t height;
+    const char *glyphs;
+} Olivec_Font;
+
+#define DEFAULT_FONT_WIDTH 4
+#define DEFAULT_FONT_HEIGHT 5
+static char default_font_glyphs[128][DEFAULT_FONT_HEIGHT][DEFAULT_FONT_WIDTH] = {
+    ['a'] = {
+        {0, 1, 1, 0},
+        {0, 0, 0, 1},
+        {0, 1, 1, 1},
+        {1, 0, 0, 1},
+        {0, 1, 1, 1},
+    },
+    ['b'] = {
+        {1, 0, 0, 0},
+        {1, 0, 0, 0},
+        {1, 1, 1, 0},
+        {1, 0, 0, 1},
+        {1, 1, 1, 0},
+    },
+    ['c'] = {
+        {0, 1, 1, 0},
+        {1, 0, 0, 1},
+        {1, 0, 0, 0},
+        {1, 0, 0, 1},
+        {0, 1, 1, 0},
+    },
+    ['d'] = {
+        {0, 0, 0, 1},
+        {0, 0, 0, 1},
+        {0, 1, 1, 1},
+        {0, 1, 0, 1},
+        {0, 1, 1, 1},
+    },
+    ['e'] = {
+        {0, 1, 1, 0},
+        {1, 0, 0, 1},
+        {1, 1, 1, 1},
+        {1, 0, 0, 0},
+        {0, 1, 1, 1},
+    },
+    ['f'] = {
+        {1, 1, 1, 0},
+        {1, 0, 0, 0},
+        {1, 1, 1, 0},
+        {1, 0, 0, 0},
+        {1, 0, 0, 0},
+    },
+    ['g'] = {
+        {0, 0, 1, 1},
+        {0, 1, 0, 1},
+        {0, 1, 1, 1},
+        {0, 0, 0, 1},
+        {0, 1, 1, 0},
+    },
+    ['h'] = {
+        {1, 0, 0, 0},
+        {1, 0, 0, 0},
+        {1, 1, 1, 0},
+        {1, 0, 1, 0},
+        {1, 0, 1, 0},
+    },
+    ['i'] = {
+        {0, 1, 0, 0},
+        {0, 0, 0, 0},
+        {0, 1, 0, 0},
+        {0, 1, 0, 0},
+        {0, 1, 1, 0},
+    },
+    ['j'] = {
+        {0, 0, 1, 0},
+        {0, 0, 0, 0},
+        {0, 0, 1, 0},
+        {1, 0, 1, 0},
+        {0, 1, 0, 0},
+    },
+    ['k'] = {
+        {1, 0, 0, 0},
+        {1, 0, 1, 0},
+        {1, 1, 0, 0},
+        {1, 0, 1, 0},
+        {1, 0, 1, 0},
+    },
+    ['l'] = {
+        {1, 1, 0, 0},
+        {0, 1, 0, 0},
+        {0, 1, 0, 0},
+        {0, 1, 0, 0},
+        {0, 1, 1, 0},
+    },
+    ['m'] = {
+        {0, 0, 0, 0},
+        {1, 0, 1, 0},
+        {1, 1, 1, 0},
+        {1, 0, 1, 0},
+        {1, 0, 1, 0},
+    },
+    ['n'] = {
+        {0, 0, 0, 0},
+        {0, 1, 1, 0},
+        {1, 0, 1, 0},
+        {1, 0, 1, 0},
+        {1, 0, 1, 0},
+    },
+    ['o'] = {
+        {0, 0, 0, 0},
+        {0, 1, 1, 0},
+        {1, 0, 0, 1},
+        {1, 0, 0, 1},
+        {0, 1, 1, 0},
+    },
+    ['p'] = {
+        {1, 1, 1, 0},
+        {1, 0, 0, 1},
+        {1, 1, 1, 0},
+        {1, 0, 0, 0},
+        {1, 0, 0, 0},
+    },
+    ['q'] = {
+        {0, 1, 1, 0},
+        {1, 0, 1, 0},
+        {0, 1, 1, 0},
+        {0, 0, 1, 0},
+        {0, 0, 1, 0},
+    },
+    ['r'] = {
+        {1, 0, 1, 0},
+        {0, 1, 0, 1},
+        {0, 1, 0, 0},
+        {0, 1, 0, 0},
+        {1, 1, 1, 0},
+    },
+    ['s'] = {
+        {0, 1, 1, 0},
+        {1, 0, 0, 0},
+        {0, 1, 0, 0},
+        {0, 0, 1, 0},
+        {1, 1, 0, 0},
+    },
+    ['t'] = {
+        {0, 1, 0, 0},
+        {1, 1, 1, 0},
+        {0, 1, 0, 0},
+        {0, 1, 0, 0},
+        {0, 1, 1, 0},
+    },
+    ['u'] = {
+        {0, 0, 0, 0},
+        {1, 0, 1, 0},
+        {1, 0, 1, 0},
+        {1, 0, 1, 0},
+        {0, 1, 1, 0},
+    },
+    ['v'] = {
+        {0, 0, 0, 0},
+        {1, 0, 1, 0},
+        {1, 0, 1, 0},
+        {1, 0, 1, 0},
+        {0, 1, 0, 0},
+    },
+    ['w'] = {
+        {0, 0, 0, 0},
+        {1, 0, 0, 1},
+        {1, 0, 1, 1},
+        {1, 0, 1, 1},
+        {0, 1, 0, 1},
+    },
+    ['x'] = {
+        {0, 0, 0, 0},
+        {1, 0, 1, 0},
+        {0, 1, 0, 0},
+        {0, 1, 0, 0},
+        {1, 0, 1, 0},
+    },
+    ['y'] = {
+        {1, 0, 1, 0},
+        {1, 0, 1, 0},
+        {0, 1, 1, 0},
+        {0, 0, 1, 0},
+        {0, 1, 1, 0},
+    },
+    ['z'] = {
+        {0, 0, 0, 0},
+        {1, 1, 1, 0},
+        {0, 0, 1, 0},
+        {0, 1, 0, 0},
+        {1, 1, 1, 0},
+    },
+};
+
+#define UNUSED(value) (void)(value)
+
+static Olivec_Font default_font = {
+    .glyphs = &default_font_glyphs[0][0][0],
+    .width  = DEFAULT_FONT_WIDTH,
+    .height = DEFAULT_FONT_HEIGHT,
+};
+
+bool olivec_normalize_rect(int x, int y, int w, int h,
+                           size_t pixels_width, size_t pixels_height,
+                           int *x1, int *x2, int *y1, int *y2) {
+    *x1 = x;
+    *y1 = y;
+
+    // convert the rectangle to 2 points repersentation
+    *x2 = *x1 + OLIVEC_SIGN(int, w)*(OLIVEC_ABS(int, w) - 1);
+    if (*x1 > *x2) OLIVEC_SWAP(int, *x1, *x2);
+    *y2 = *y1 + OLIVEC_SIGN(int, h)*(OLIVEC_ABS(int, h) - 1);
+    if (*y1 > *y2) OLIVEC_SWAP(int, *y1, *y2);
+
+    // call out invisible rectangle
+    if (*x1 >= (int)pixels_width) return false;
+    if (*x2 < 0) return false;
+    if (*y1 >= (int)pixels_height) return false;
+    if (*y2 < 0) return false;
+
+    // clamp the rectangle boundaries
+    if (*x1 < 0) *x1 = 0;
+    if (*x2 >= (int)pixels_width) *x2 = (int)pixels_width - 1;
+    if (*y1 < 0) *y1 = 0;
+    if (*y2 >= (int)pixels_width) *y2 = (int)pixels_height - 1;
+
+    return true;
+}
+
+#define OLIVEC_CANVAS_NULL ((Olivec_Canvas) {0})
+
+struct Olivec_Canvas {
+    uint32_t *pixels;
+    size_t width;
+    size_t height;
+    size_t stride;
+};
+
+Olivec_Canvas olivec_canvas(uint32_t *pixels, size_t width, size_t height) {
+
+    Olivec_Canvas oc = {
+        .pixels = pixels,
+        .width  = width,
+        .height = height,
+        .stride = width,
+    };
+    return oc;
+}
+
+Olivec_Canvas olivec_subcanvas(Olivec_Canvas oc, int x, int y, int w, int h) {
+
+    int x1, x2, y1, y2;
+    if (!olivec_normalize_rect(x, y, w, h, oc.width, oc.height, &x1, &x2, &y1, &y2)) {
+        return OLIVEC_CANVAS_NULL;
+    }
+    oc.pixels = &oc.pixels[y1*oc.stride + x1];
+    oc.width  = x2 - x1 + 1;
+    oc.height = y2 - y1 + 1;
+    return oc;
+}
+
+typedef enum {
+    COMP_RED,
+    COMP_GREEN,
+    COMP_BLUE,
+    COMP_ALPHA,
+    COMP_COUNT,
+} Comp_Index;
+
+void unpack_rgba32(uint32_t col, uint8_t comp[COMP_COUNT]) {
+    for (size_t i = 0; i < COMP_COUNT; ++i) {
+        comp[i] = col&0xFF;
+        col >>= 8;
+    }
+}
+
+uint32_t pack_rgba32(uint8_t comp[COMP_COUNT]) {
+    uint32_t result = 0;
+    for (size_t i = 0; i < COMP_COUNT; ++i) {
+        result |= comp[i]<<(8*i);
+    }
+    return result;
+}
+
+uint8_t olivec_mix_comp(uint16_t col1, uint16_t col2, uint16_t alpa) {
+    return col1 + (col2 - col1) * alpa/255;
+}
+
+uint32_t olivec_mix_colors(uint32_t col1, uint32_t col2) {
+    uint8_t comp1[COMP_COUNT];
+    unpack_rgba32(col1, comp1);
+
+    uint8_t comp2[COMP_COUNT];
+    unpack_rgba32(col2, comp2);
+
+    for (size_t i = 0; i < COMP_ALPHA; ++i) {
+        comp1[i] = olivec_mix_comp(comp1[i], comp2[i], comp2[COMP_ALPHA]);
+    }
+
+    return pack_rgba32(comp1);
+}
+
+void olivec_fill(Olivec_Canvas oc, uint32_t color) {
+
+    for (size_t i = 0; i < oc.width*oc.height; ++i) {
+        oc.pixels[i] = color;
+    }
+}
+
+#define OLIVEC_RED(color)   (((color)&0x000000FF)>>(8*0))
+#define OLIVEC_GREEN(color) (((color)&0x0000FF00)>>(8*1))
+#define OLIVEC_BLUE(color)  (((color)&0x00FF0000)>>(8*2))
+#define OLIVEC_ALPHA(color) (((color)&0xFF000000)>>(8*3))
+#define OLIVEC_RGBA(r, g, b, a) ((((r)&0xFF)<<(8*0)) | (((g)&0xFF)<<(8*1)) | (((b)&0xFF)<<(8*2)) | (((a)&0xFF)<<(8*3)))
+
+OLIVECDEF void olivec_blend_color(uint32_t *c1, uint32_t c2) {
+    uint32_t r1 = OLIVEC_RED(*c1);
+    uint32_t g1 = OLIVEC_GREEN(*c1);
+    uint32_t b1 = OLIVEC_BLUE(*c1);
+    uint32_t a1 = OLIVEC_ALPHA(*c1);
+
+    uint32_t r2 = OLIVEC_RED(c2);
+    uint32_t g2 = OLIVEC_GREEN(c2);
+    uint32_t b2 = OLIVEC_BLUE(c2);
+    uint32_t a2 = OLIVEC_ALPHA(c2);
+
+    r1 = (r1*(255 - a2) + r2*a2)/255; if (r1 > 255) r1 = 255;
+    g1 = (g1*(255 - a2) + g2*a2)/255; if (g1 > 255) g1 = 255;
+    b1 = (b1*(255 - a2) + b2*a2)/255; if (b1 > 255) b1 = 255;
+
+    *c1 = OLIVEC_RGBA(r1, g1, b1, a1);
+}
+
+OLIVECDEF void olivec_text(Olivec_Canvas oc, const char *text,
+                           int text_pos_x, int text_pos_y, Olivec_Font font, size_t glyph_size,
+                           uint32_t color) {
+    size_t text_len = strlen(text);
+    for (size_t i = 0; i < text_len; ++i) {
+        int glyph_pos_x = text_pos_x + i*font.width*glyph_size;
+        int glyph_pos_y = text_pos_y;
+        const char *glyph = &font.glyphs[text[i]*sizeof(char)*font.width*font.height];
+
+        for (int delta_x = 0; (size_t)delta_x < font.width; ++delta_x) {
+            for (int delta_y = 0; (size_t)delta_y < font.height; ++delta_y) {
+                int pixel_x = glyph_pos_x + delta_x*glyph_size;
+                int pixel_y = glyph_pos_y + delta_y*glyph_size;
+                if (pixel_x >= 0 && pixel_x < (int)oc.width && pixel_y >= 0 && pixel_y < (int)oc.height) {
+                    if (glyph[delta_y*font.width + delta_x]) {
+                        olivec_fill_rect(oc, pixel_x, pixel_y, glyph_size, glyph_size, color);
+                    }
+                }
+            }
+        }
+    }
+}
+
+#endif /* ifdef OLIVE_C_ */
+
+#ifdef OLIVEC_IMPLEMENTATION
+#undef OLIVEC_IMPLEMENTATION
+
+void swap_int(int *a, int *b) {
+    int t = *a;
+    *a = *b;
+    *b = t;
+}
+
+/**
+ * @param pixels A pointer to the memory buffer representing image
+ * @param pixels_width The total number of horizontal pixels in image
+ * @param pixels_heigth	The total number of vertical pixels in image
+ * @param cx, cy Center X and Y coords where the circle's middle sits
+ * @param r Radius
+ * @param color hex color value to fill the circle
+ */
+OLIVECDEF void olivec_fill_circle(Olivec_Canvas oc,
+                                  int cx, int cy, int r,
+                                  uint32_t color) {
+    int x1, x2, y1, y2;
+    int r1 = r + OLIVEC_SIGN(int, r);
+    if (!olivec_normalize_rect(cx - r1, cy - r1, 2*r1, 2*r1,
+                               oc.width, oc.height,
+                               &x1, &x2, &y1, &y2)) return;
+
+    for (int y = y1; y <= y2; ++y) {
+        for (int x = x1; x <= x2; ++x) {
+            int count = 0;
+            for (int sox = 0; sox < OLIVEC_AA_RES; ++sox) {
+                for (int soy = 0; soy < OLIVEC_AA_RES; ++soy) {
+                    int res1 = (OLIVEC_AA_RES + 1);
+                    int dx = (x*res1*2 + 2 + sox*2 - cx*res1*2 - res1);
+                    int dy = (y*res1*2 + 2 + soy*2 - cy*res1*2 - res1);
+
+                    if (dx*dx + dy*dy <= res1*res1*r*r*2*2) { count += 1; }
+                }
+            }
+            /* float t = (float)count/(float)(OLIVEC_AA_RES*OLIVEC_AA_RES); */
+            uint32_t alpha = ((color&0xFF000000)>>(3*8))*count/OLIVEC_AA_RES/OLIVEC_AA_RES;
+            uint32_t updated_color = (color&0x00FFFFFF)|(alpha<<(3*8));
+            olivec_blend_color(&OLIVEC_PIXEL(oc, x, y), updated_color);
+        }
+    }
+}
+
+#ifndef OLIVEC_NO_STDLIB
+#include <stdio.h>
+#include <errno.h>
+
+Errno olivec_save_to_ppm_file(Olivec_Canvas oc, const char *file_path) {
+
+
+    int result = 0;
+    FILE *f = NULL;
+
+    {
+        f = fopen(file_path, "wb");
+        if (f == NULL) { RETURN_DEFER(errno); }
+
+        fprintf(f, "P6\n%zu %zu 255\n", oc.width, oc.height);
+        if (ferror(f)) { RETURN_DEFER(errno); }
+
+        for (size_t i = 0; i < oc.width*oc.height; ++i) {
+            // 0xAABBGGRR
+            uint32_t pixel = oc.pixels[i];
+            uint8_t bytes[3] = {
+                (pixel>>(8*0))&0xFF,
+                (pixel>>(8*1))&0xFF,
+                (pixel>>(8*2))&0xFF,
+            };
+            fwrite(bytes, sizeof(bytes), 1, f);
+            if (ferror(f)) RETURN_DEFER(errno);
+        }
+    }
+
+defer:
+    if (f) fclose(f);
+    return result;
+}
+#endif /* ifndef OLIVEC_NO_STDLIB */
+
+void olivec_fill_rect(Olivec_Canvas oc,
+                      int x0, int y0, size_t w, size_t h,
+                      uint32_t color) {
+    for (int dy = 0; dy < (int) h; ++dy) {
+        int y = y0 + dy;
+        if (0 <= y && y < (int) oc.height) {
+            for (int dx = 0; dx < (int) w; ++dx) {
+                int x = x0 + dx;
+                if (0 <= x && x < (int) oc.width) {
+                    oc.pixels[y*oc.width + x] = olivec_mix_colors(oc.pixels[y*oc.width + x], color);
+                }
+            }
+        }
+    }
+}
+
+void olivec_draw_line(Olivec_Canvas oc,
+                      int x1, int y1, int x2, int y2,
+                      uint32_t color) {
+    int dx = x2 - x1;
+    int dy = y2 - y1;
+
+    if (dx != 0) {
+        int c = y1 - ( dy*x1 )/dx;
+
+        if (x1 > x2) swap_int(&x1, &x2);
+        for (int x = x1; x <= x2; ++x) {
+            if (0 <= x && x <= (int) oc.width) {
+                int sy1 = dy*x/dx + c;
+                int sy2 = dy*(x + 1)/dx + c;
+                if (sy1 > sy2) swap_int(&sy1, &sy2);
+                for (int y = sy1; y <= sy2; ++y) {
+                    if (0 <= y && y < (int) oc.height) {
+                        oc.pixels[y*oc.width + x] = color;
+                    }
+                }
+            }
+        }
+    } else {
+        int x = x1;
+        if (0 <= x && x < (int) oc.width) {
+            if (y1 > y2) swap_int(&y1, &y2);
+            for (int y = y1; y <= y2; ++y) {
+                if (0 <= y && y < (int) oc.height) {
+                    oc.pixels[y*oc.width + x] = color;
+                }
+            }
+        }
+    }
+}
+
+void olivec_sort_tri_points_by_y(int *x1, int *y1,
+                                 int *x2, int *y2,
+                                 int *x3, int *y3) {
+    if (*y1 > *y2) {
+        OLIVEC_SWAP(int, *x1, *x2);
+        OLIVEC_SWAP(int, *y1, *y2);
+    }
+    if (*y2 > *y3) {
+        OLIVEC_SWAP(int, *x2, *x3);
+        OLIVEC_SWAP(int, *y2, *y3);
+    }
+    if (*y1 > *y2) {
+        OLIVEC_SWAP(int, *x1, *x2);
+        OLIVEC_SWAP(int, *y1, *y2);
+    }
+    /* if (*y3 > *y1) { */
+    /*     OLIVEC_SWAP(int, *x3, *x1); */
+    /*     OLIVEC_SWAP(int, *y3, *y1); */
+    /* } */
+}
+
+void olivec_draw_triangle(Olivec_Canvas oc,
+                          int x1, int y1,
+                          int x2, int y2,
+                          int x3, int y3,
+                          uint32_t color) {
+    olivec_sort_tri_points_by_y(&x1, &y1,
+                                &x2, &y2,
+                                &x3, &y3);
+    int dx12 = x2 - x1;
+    int dy12 = y2 - y1;
+    int dx13 = x3 - x1;
+    int dy13 = y3 - y1;
+    int dx23 = x3 - x2;
+    int dy23 = y3 - y2;
+
+    for (int y = y1; y <= y2; ++y) {
+        if (0 <= y && (size_t) y < oc.height) {
+            // (y -c)/k -x
+            int s1 = dy12 != 0 ? (y - y1)*dx12/dy12 + x1 : x1;
+            int s2 = dy13 != 0 ? (y - y1)*dx13/dy13 + x1 : x1;
+            if (s1 > s2) OLIVEC_SWAP(int, s1, s2);
+            for (int x = s1; x <= s2; ++x) {
+                if (0 <= x && (size_t) x < oc.width) {
+                    oc.pixels[y*oc.width + x] = olivec_mix_colors(oc.pixels[y*oc.width + x], color);
+                }
+            }
+        }
+    }
+    for (int y = y2; y <= y3; ++y) {
+        if (0 <= y && (size_t) y < oc.height) {
+            int s1 = dy23 != 0 ? (y - y2)*dx23/dy23 + x2 : x2;
+            int s2 = dy13 != 0 ? (y - y1)*dx13/dy13 + x1 : x1;
+            if (s1 > s2) OLIVEC_SWAP(int, s1, s2);
+            for (int x = s1; x <= s2; ++x) {
+                if (0 <= x && (size_t) x < oc.width) {
+                    oc.pixels[y*oc.width + x] = olivec_mix_colors(oc.pixels[y*oc.width + x], color);
+                }
+            }
+        }
+    }
+}
+
+#endif /* ifdef OLIVE_IMPLEMENTATION */

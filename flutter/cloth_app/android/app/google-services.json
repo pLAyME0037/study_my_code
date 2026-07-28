@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "964323096567",
+    "firebase_url": "https://first-789fb-default-rtdb.firebaseio.com",
+    "project_id": "first-789fb",
+    "storage_bucket": "first-789fb.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:964323096567:android:011c991f11fc23e612e0f2",
+        "android_client_info": {
+          "package_name": "com.example.cloth_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBf-FOV6_Xkz0rMnUYF0hbE5GOkGkZy7zE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,16 @@
+E:/MyThings/o Visual Stduio/Final/bin/Debug/Final.exe.config
+E:/MyThings/o Visual Stduio/Final/bin/Debug/Final.exe
+E:/MyThings/o Visual Stduio/Final/bin/Debug/Final.pdb
+E:/MyThings/o Visual Stduio/Final/obj/Debug/Final.csproj.AssemblyReference.cache
+E:/MyThings/o Visual Stduio/Final/obj/Debug/Final.Form1.resources
+E:/MyThings/o Visual Stduio/Final/obj/Debug/Final.Properties.Resources.resources
+E:/MyThings/o Visual Stduio/Final/obj/Debug/Final.Views.Forms.Form2.resources
+E:/MyThings/o Visual Stduio/Final/obj/Debug/Final.csproj.GenerateResource.cache
+E:/MyThings/o Visual Stduio/Final/obj/Debug/Final.csproj.CoreCompileInputs.cache
+E:/MyThings/o Visual Stduio/Final/obj/Debug/Final.exe
+E:/MyThings/o Visual Stduio/Final/obj/Debug/Final.pdb
+E:/MyThings/o Visual Stduio/Final/obj/Debug/Final.exe.config
+E:/MyThings/o Visual Stduio/Final/obj/Debug/Final.Views.Forms.PositiveDecimalForm.resources
+E:/MyThings/o Visual Stduio/Final/obj/Debug/Final.Views.Forms.Commision.resources
+/mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/Final/obj/Debug/Final.exe
+/mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/Final/obj/Debug/Final.pdb

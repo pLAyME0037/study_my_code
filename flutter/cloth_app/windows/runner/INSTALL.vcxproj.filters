@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\pLAyME\Desktop\Shared\linux_home\mythings\study-o-code\flutter_folder\cloth_app\windows\CMakeFiles\5bb8101930c3a90fb3d4a6f148c1f4ec\INSTALL_force.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{06FEB90B-9E3C-374C-8948-E2125E9516ED}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
