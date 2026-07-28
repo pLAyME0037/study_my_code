@@ -1,6 +1,0 @@
-[
-  { "value": "12345678",    "type": "password",  "sensitivity": 3 },
-  { "value": "10-09-24",    "type": "date",      "sensitivity": 1 },
-  { "value": "09-Mar-2010", "type": "date",      "sensitivity": 1 },
-  { "value": "kill",        "type": "word",      "sensitivity": 2 }
-]
