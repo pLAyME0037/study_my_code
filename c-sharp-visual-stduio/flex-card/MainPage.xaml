@@ -9,7 +9,6 @@
         Spacing="25"
         VerticalOptions="Center">
 
-
     </VerticalStackLayout>
 
 </ScrollView>

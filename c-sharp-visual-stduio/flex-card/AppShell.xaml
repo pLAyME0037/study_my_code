@@ -14,4 +14,8 @@
                   ContentTemplate="{DataTemplate views:User}"
                   Route="User" />
 
+    <ShellContent Title="Staff"
+                  ContentTemplate="{DataTemplate views:Staff}"
+                  Route="Staff" />
+
 </Shell>
