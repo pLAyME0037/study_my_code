@@ -142,9 +142,9 @@
                 <Label Text="Experience" />
                 <VerticalStackLayout Grid.Column="1" >
                 <Stepper x:Name="ExperienceStepper"
-                        Minimum="0"
-                        Maximum="40"
-                        Increment="2" />
+                         Minimum="0"
+                         Maximum="40"
+                         Increment="2" />
                 <Label x:Name="Experience" Text="Experience: 0 year" />
                 </VerticalStackLayout>
             </Grid>
@@ -168,14 +168,14 @@
                         IsToggled="True" />
             </Grid>
 
-            <!-- <Grid ColumnDefinitions="150,*" -->
-            <!--       RowSpacing="12" -->
-            <!--       ColumnSpacing="15"> -->
-            <!--     <Label Text="Progress" /> -->
-            <!--     <Progress Grid.Column="1" -->
-            <!--             x:Name="Progress" -->
-            <!--             Progress="0.74" /> -->
-            <!-- </Grid> -->
+            <Grid ColumnDefinitions="150,*"
+                  RowSpacing="12"
+                  ColumnSpacing="15">
+                <Label Text="Progress" />
+                <ProgressBar Grid.Column="1"
+                        x:Name="Progress"
+                        Progress="0.74" />
+            </Grid>
 
             <ActivityIndicator IsRunning="True"
                                Color="Blue"
