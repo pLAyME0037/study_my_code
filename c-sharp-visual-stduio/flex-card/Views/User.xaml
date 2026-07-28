@@ -129,7 +129,7 @@
                 <Label Text="Salary" />
                 <VerticalStackLayout Grid.Column="1" >
                 <Slider x:Name="SalarySlider"
-                        Minimum="500"
+                        Minimum="0"
                         Maximum="10000"
                         Value="3000" />
                 <Label x:Name="Salary" Text="Salary: $3000" />
