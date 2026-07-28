@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+i=5
+
+func() {
+    echo "hello"
+    i=$i+6
+}
+
+hello={ func }
+echo $hello
+echo $i

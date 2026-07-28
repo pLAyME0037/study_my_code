@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+echo "What is your name?"
+read NAME
+
+echo "How old are you?"
+read AGE
+
+echo "Hello, $NAME"
+
+if [ $AGE -lt 18 ]; then
+    echo "You are still a minor"
+else
+    echo "You are an adult"
+fi
