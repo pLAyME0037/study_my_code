@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <object class="GtkBox" id="main_box">
+    <property name="orientation">vertical</property>
+    <child>
+      <object class="GtkButton" id="top_button">
+        <property name="label">Hello, world</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel" id="bottom_label">
+        <property name="label"
+                  bind-source="top_button"
+                  bind-property="label"
+                  bind-flags="sync-create" />
+      </object>
+    </child>
+  </object>
+</interface>

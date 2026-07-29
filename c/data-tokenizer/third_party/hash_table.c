@@ -116,7 +116,7 @@ bool hash_analysis(String_View content, const char *file_path) {
     nob_log(INFO, "  Size: %zu bytes", content.count);
 
     FreqKeyVals ht = {0};
-    hash_init(&ht, 10000);
+    hash_init(&ht, 100000);
 
     struct timespec begin = {0};
     int ret = clock_gettime(CLOCK_MONOTONIC, &begin);
