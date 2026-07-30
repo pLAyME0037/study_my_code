@@ -26,6 +26,48 @@ bool add_pkg_config(Cmd *cmd, const char *flag, const char *pkg) {
     return true;
 }
 
+bool json_append_escaped(String_Builder *sb, const char *s, size_t len) {
+    for (size_t i = 0; i < len; ++i) {
+        char c = s[i];
+        if (c == '"')       sb_append_cstr(sb, "\\\"");
+        else if (c == '\\') sb_append_cstr(sb, "\\\\");
+        else if (c == '\n') sb_append_cstr(sb, "\\n");
+        else if (c == '\t') sb_append_cstr(sb, "\\t");
+        else                sb_append(sb, c);
+    }
+    return true;
+}
+
+bool generate_compile_commands(Cmd *cmd, const char *proj_dir) {
+    String_Builder render = {0};
+    cmd_render(*cmd, &render);
+    sb_append_null(&render);
+
+    String_Builder escaped = {0};
+    json_append_escaped(&escaped, render.items, render.count - 1);
+
+    String_Builder json = {0};
+    sb_appendf(&json,
+        "[\n"
+        "  {\n"
+        "    \"directory\": \"%s\",\n"
+        "    \"command\": \"",
+        proj_dir);
+    json_append_escaped(&json, escaped.items, escaped.count);
+    sb_appendf(&json,
+        "\",\n"
+        "    \"file\": \"main.c\"\n"
+        "  }\n"
+        "]\n");
+
+    bool result = write_entire_file("compile_commands.json", json.items, json.count);
+
+    sb_free(render);
+    sb_free(escaped);
+    sb_free(json);
+    return result;
+}
+
 int main(int argc, char **argv) {
     NOB_GO_REBUILD_URSELF(argc, argv);
 
@@ -37,14 +79,19 @@ int main(int argc, char **argv) {
     if (!add_pkg_config(&cmd, "--cflags", "gtk4")) return 1;
     cmd_append(&cmd, "-o", "./build/bin/main", "./main.c");
     cmd_append(&cmd, "./ui/window.c");
+    cmd_append(&cmd, "./coreui/window_core.c");
     cmd_append(&cmd, "./third_party/hash_table.c");
     cmd_append(&cmd, "./third_party/json_format.c");
     if (!add_pkg_config(&cmd, "--libs", "gtk4")) return 1;
     cmd_append(&cmd, "-lm", "-ljson-c");
-    if (!nob_cmd_run_sync_and_reset(&cmd)) return 1;
+
+    const char *proj_dir = get_current_dir_temp();
+    generate_compile_commands(&cmd, proj_dir);
+
+    if (!cmd_run(&cmd)) return 1;
 
     cmd_append(&cmd, "./build/bin/main");
-    if (!nob_cmd_run(&cmd)) return 1;
+    if (!cmd_run(&cmd)) return 1;
 
     return 0;
 }

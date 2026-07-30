@@ -1,5 +1,5 @@
-#ifndef WINDOW_H
-#define WINDOW_H
+#ifndef WINDOW_CORE_H
+#define WINDOW_CORE_H
 
 #include <gtk/gtk.h>
 #include "../third_party/json_format.h"
@@ -33,5 +33,7 @@ const char* view_get_file_path(AppWidgets *w);
 gboolean view_should_confirm(AppWidgets *w);
 void view_populate_confirm(AppWidgets *w, const SensitiveReport *report);
 void view_apply_confirm(AppWidgets *w, SensitiveReport *report);
+
+void controller_init(AppWidgets *w);
 
 #endif
