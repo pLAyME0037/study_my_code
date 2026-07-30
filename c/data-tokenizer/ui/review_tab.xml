@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <object class="GtkBox" id="results_page">
+  <object class="GtkBox" id="confirm_page">
     <property name="orientation">vertical</property>
     <property name="margin-start">24</property>
     <property name="margin-end">24</property>
     <property name="margin-top">24</property>
     <property name="margin-bottom">24</property>
-    <property name="spacing">8</property>
+    <property name="spacing">12</property>
 
     <child>
-      <object class="GtkLabel" id="results_title">
-        <property name="label" translatable="yes">Analysis Results</property>
+      <object class="GtkLabel" id="confirm_title">
+        <property name="label" translatable="yes">Review Sensitive Fields</property>
         <property name="xalign">0</property>
         <attributes>
           <attribute name="weight" value="bold"/>
@@ -20,67 +20,9 @@
     </child>
 
     <child>
-      <object class="GtkLabel" id="summary_label">
+      <object class="GtkLabel" id="confirm_desc">
+        <property name="label" translatable="yes">Uncheck any fields that are NOT sensitive, then click Apply.</property>
         <property name="xalign">0</property>
-      </object>
-    </child>
-
-    <child>
-      <object class="GtkBox" id="results_header">
-        <property name="orientation">horizontal</property>
-        <property name="margin-start">8</property>
-        <property name="margin-end">8</property>
-        <property name="margin-top">8</property>
-        <property name="margin-bottom">4</property>
-        <property name="spacing">8</property>
-        <child>
-          <object class="GtkLabel" id="hdr_no">
-            <property name="label" translatable="yes">No</property>
-            <property name="width-chars">5</property>
-            <property name="xalign">0</property>
-            <attributes><attribute name="weight" value="bold"/></attributes>
-          </object>
-        </child>
-        <child>
-          <object class="GtkLabel" id="hdr_user">
-            <property name="label" translatable="yes">User</property>
-            <property name="width-chars">6</property>
-            <property name="xalign">0</property>
-            <attributes><attribute name="weight" value="bold"/></attributes>
-          </object>
-        </child>
-        <child>
-          <object class="GtkLabel" id="hdr_path">
-            <property name="label" translatable="yes">Path</property>
-            <property name="hexpand">1</property>
-            <property name="xalign">0</property>
-            <attributes><attribute name="weight" value="bold"/></attributes>
-          </object>
-        </child>
-        <child>
-          <object class="GtkLabel" id="hdr_val">
-            <property name="label" translatable="yes">Value</property>
-            <property name="hexpand">1</property>
-            <property name="xalign">0</property>
-            <attributes><attribute name="weight" value="bold"/></attributes>
-          </object>
-        </child>
-        <child>
-          <object class="GtkLabel" id="hdr_lvl">
-            <property name="label" translatable="yes">Level</property>
-            <property name="width-chars">6</property>
-            <property name="xalign">0</property>
-            <attributes><attribute name="weight" value="bold"/></attributes>
-          </object>
-        </child>
-        <child>
-          <object class="GtkLabel" id="hdr_sens">
-            <property name="label" translatable="yes">Sensitive</property>
-            <property name="width-chars">10</property>
-            <property name="xalign">0</property>
-            <attributes><attribute name="weight" value="bold"/></attributes>
-          </object>
-        </child>
       </object>
     </child>
 
@@ -89,13 +31,75 @@
     </child>
 
     <child>
-      <object class="GtkScrolledWindow" id="results_scroll">
+      <object class="GtkBox" id="confirm_header">
+        <property name="orientation">horizontal</property>
+        <property name="margin-start">8</property>
+        <property name="margin-end">8</property>
+        <property name="margin-top">8</property>
+        <property name="margin-bottom">4</property>
+        <property name="spacing">8</property>
+        <child>
+          <object class="GtkLabel" id="chk_hdr_sel">
+            <property name="label" translatable="yes">Sensitive</property>
+            <property name="width-chars">10</property>
+            <property name="xalign">0</property>
+            <attributes><attribute name="weight" value="bold"/></attributes>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="chk_hdr_name">
+            <property name="label" translatable="yes">Field Name</property>
+            <property name="width-chars">20</property>
+            <property name="xalign">0</property>
+            <attributes><attribute name="weight" value="bold"/></attributes>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="chk_hdr_sample">
+            <property name="label" translatable="yes">Sample Value</property>
+            <property name="hexpand">1</property>
+            <property name="xalign">0</property>
+            <attributes><attribute name="weight" value="bold"/></attributes>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="chk_hdr_level">
+            <property name="label" translatable="yes">Level</property>
+            <property name="width-chars">6</property>
+            <property name="xalign">0</property>
+            <attributes><attribute name="weight" value="bold"/></attributes>
+          </object>
+        </child>
+      </object>
+    </child>
+
+    <child>
+      <object class="GtkScrolledWindow" id="confirm_scroll">
         <property name="hexpand">1</property>
         <property name="vexpand">1</property>
         <child>
-          <object class="GtkListBox" id="results_list">
+          <object class="GtkListBox" id="confirm_list">
             <property name="activate-on-single-click">0</property>
             <style><class name="boxed-list"/></style>
+          </object>
+        </child>
+      </object>
+    </child>
+
+    <child>
+      <object class="GtkBox" id="confirm_btn_row">
+        <property name="orientation">horizontal</property>
+        <property name="halign">end</property>
+        <property name="spacing">6</property>
+        <child>
+          <object class="GtkButton" id="confirm_back_btn">
+            <property name="label" translatable="yes">Back</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="confirm_apply_btn">
+            <property name="label" translatable="yes">Apply</property>
+            <style><class name="suggested-action"/></style>
           </object>
         </child>
       </object>

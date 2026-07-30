@@ -79,7 +79,10 @@ int main(int argc, char **argv) {
     if (!add_pkg_config(&cmd, "--cflags", "gtk4")) return 1;
     cmd_append(&cmd, "-o", "./build/bin/main", "./main.c");
     cmd_append(&cmd, "./ui/window.c");
+    cmd_append(&cmd, "./ui/table_tab.c");
+    cmd_append(&cmd, "./ui/review_tab.c");
     cmd_append(&cmd, "./coreui/window_core.c");
+    cmd_append(&cmd, "./coreui/review_tab_core.c");
     cmd_append(&cmd, "./third_party/hash_table.c");
     cmd_append(&cmd, "./third_party/json_format.c");
     if (!add_pkg_config(&cmd, "--libs", "gtk4")) return 1;
