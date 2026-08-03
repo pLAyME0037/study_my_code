@@ -10,10 +10,10 @@ GtkWidget *app_window_new(GtkApplication *app, AppWidgets *w) {
     GtkBuilder *bh = gtk_builder_new_from_file("./ui/home_tab.xml");
     GtkBuilder *br = gtk_builder_new_from_file("./ui/review_tab.xml");
 
-    GtkWidget *paned     = GTK_WIDGET(gtk_builder_get_object(bp, "main_paned"));
-    GtkWidget *sidebar   = GTK_WIDGET(gtk_builder_get_object(bs, "sidebar"));
-    GtkWidget *home_page = GTK_WIDGET(gtk_builder_get_object(bh, "home_page"));
-    GtkWidget *cfm_page  = GTK_WIDGET(gtk_builder_get_object(br, "confirm_page"));
+    GtkWidget *paned       = GTK_WIDGET(gtk_builder_get_object(bp, "main_paned"));
+    GtkWidget *sidebar     = GTK_WIDGET(gtk_builder_get_object(bs, "sidebar"));
+    GtkWidget *home_page   = GTK_WIDGET(gtk_builder_get_object(bh, "home_page"));
+    GtkWidget *confirm_page= GTK_WIDGET(gtk_builder_get_object(br, "confirm_page"));
 
     GtkStack *stack = GTK_STACK(gtk_stack_new());
     gtk_stack_set_transition_type(stack, GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT);
@@ -25,18 +25,20 @@ GtkWidget *app_window_new(GtkApplication *app, AppWidgets *w) {
     gtk_window_set_child(GTK_WINDOW(win), paned);
 
     gtk_stack_add_titled(stack, home_page, "home", "Home");
-    gtk_stack_add_titled(stack, cfm_page, "confirm", "Confirm Hide Value");
+    gtk_stack_add_titled(stack, confirm_page, "confirm", "Confirm Hide Value");
 
-    w->file_entry   = GTK_EDITABLE(gtk_builder_get_object(bh, "file_entry"));
-    w->status_label = GTK_LABEL(gtk_builder_get_object(bh, "status_label"));
-    w->submit_btn   = GTK_BUTTON(gtk_builder_get_object(bh, "submit_btn"));
-    w->cancel_btn   = GTK_BUTTON(gtk_builder_get_object(bh, "cancel_btn"));
-    w->browse_btn   = GTK_BUTTON(gtk_builder_get_object(bh, "browse_btn"));
-    w->cfm_check    = GTK_CHECK_BUTTON(gtk_builder_get_object(bh, "confirm_check"));
+    w->file_entry        = GTK_EDITABLE(gtk_builder_get_object(bh, "file_entry"));
+    w->status_label      = GTK_LABEL(gtk_builder_get_object(bh, "status_label"));
+    w->submit_btn        = GTK_BUTTON(gtk_builder_get_object(bh, "submit_btn"));
+    w->cancel_btn        = GTK_BUTTON(gtk_builder_get_object(bh, "cancel_btn"));
+    w->browse_btn        = GTK_BUTTON(gtk_builder_get_object(bh, "browse_btn"));
+    w->confirm_check     = GTK_CHECK_BUTTON(gtk_builder_get_object(bh, "confirm_check"));
+    w->type_dropdown     = GTK_DROP_DOWN(gtk_builder_get_object(bh, "type_dropdown"));
+    w->subtitle_label    = GTK_LABEL(gtk_builder_get_object(bh, "subtitle_label"));
 
-    w->cfm_list      = GTK_LIST_BOX(gtk_builder_get_object(br, "confirm_list"));
-    w->cfm_apply_btn = GTK_BUTTON(gtk_builder_get_object(br, "confirm_apply_btn"));
-    w->cfm_back_btn  = GTK_BUTTON(gtk_builder_get_object(br, "confirm_back_btn"));
+    w->confirm_list      = GTK_LIST_BOX(gtk_builder_get_object(br, "confirm_list"));
+    w->confirm_apply_btn = GTK_BUTTON(gtk_builder_get_object(br, "confirm_apply_btn"));
+    w->confirm_back_btn  = GTK_BUTTON(gtk_builder_get_object(br, "confirm_back_btn"));
 
     g_object_unref(bp);
     g_object_unref(bs);
@@ -69,4 +71,24 @@ void view_show_page(AppWidgets *w, const char *name) {
 
 const char* view_get_file_path(AppWidgets *w) {
     return gtk_editable_get_text(w->file_entry);
+}
+
+gboolean view_input_is_text(AppWidgets *w) {
+    return gtk_drop_down_get_selected(w->type_dropdown) == 0;
+}
+
+void view_set_input_type(AppWidgets *w, gboolean is_text) {
+    if (is_text) {
+        gtk_label_set_text(w->subtitle_label,
+                           "Select a text file to analyze word frequency and banned words.");
+        gtk_editable_set_text(w->file_entry, "");
+        gtk_entry_set_placeholder_text(GTK_ENTRY(w->file_entry), "Select a text file...");
+        gtk_widget_set_visible(GTK_WIDGET(w->confirm_check), FALSE);
+    } else {
+        gtk_label_set_text(w->subtitle_label,
+                           "Select a JSON file to scan for sensitive data.");
+        gtk_editable_set_text(w->file_entry, "");
+        gtk_entry_set_placeholder_text(GTK_ENTRY(w->file_entry), "Select a JSON file...");
+        gtk_widget_set_visible(GTK_WIDGET(w->confirm_check), TRUE);
+    }
 }

@@ -6,10 +6,7 @@
 #define NOB_STRIP_PREFIX
 #include "../build/nob.h"
 #include "json_format.h"
-
-static const char *patterns_l3[] = {
-    "kill", "demon", "shit", "jail", "bomb", "dinamie", "prison", "prisoner"
-};
+#include "pattern_template.h"
 
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof((a)[0]))
 
