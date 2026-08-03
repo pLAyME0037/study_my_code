@@ -9,13 +9,11 @@ GtkWidget *app_window_new(GtkApplication *app, AppWidgets *w) {
     GtkBuilder *bs = gtk_builder_new_from_file("./ui/sidebar.xml");
     GtkBuilder *bh = gtk_builder_new_from_file("./ui/home_tab.xml");
     GtkBuilder *br = gtk_builder_new_from_file("./ui/review_tab.xml");
-    GtkBuilder *bt = gtk_builder_new_from_file("./ui/table_tab.xml");
 
     GtkWidget *paned       = GTK_WIDGET(gtk_builder_get_object(bp, "main_paned"));
     GtkWidget *sidebar     = GTK_WIDGET(gtk_builder_get_object(bs, "sidebar"));
     GtkWidget *home_page   = GTK_WIDGET(gtk_builder_get_object(bh, "home_page"));
     GtkWidget *confirm_page= GTK_WIDGET(gtk_builder_get_object(br, "confirm_page"));
-    GtkWidget *results_page= GTK_WIDGET(gtk_builder_get_object(bt, "results_page"));
 
     GtkStack *stack = GTK_STACK(gtk_stack_new());
     gtk_stack_set_transition_type(stack, GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT);
@@ -28,7 +26,6 @@ GtkWidget *app_window_new(GtkApplication *app, AppWidgets *w) {
 
     gtk_stack_add_titled(stack, home_page, "home", "Home");
     gtk_stack_add_titled(stack, confirm_page, "confirm", "Confirm Sensitivity");
-    gtk_stack_add_titled(stack, results_page, "results", "Results");
 
     w->file_entry      = GTK_EDITABLE(gtk_builder_get_object(bh, "file_entry"));
     w->status_label    = GTK_LABEL(gtk_builder_get_object(bh, "status_label"));
@@ -41,14 +38,10 @@ GtkWidget *app_window_new(GtkApplication *app, AppWidgets *w) {
     w->confirm_apply_btn= GTK_BUTTON(gtk_builder_get_object(br, "confirm_apply_btn"));
     w->confirm_back_btn = GTK_BUTTON(gtk_builder_get_object(br, "confirm_back_btn"));
 
-    w->results_list  = GTK_LIST_BOX(gtk_builder_get_object(bt, "results_list"));
-    w->summary_label = GTK_LABEL(gtk_builder_get_object(bt, "summary_label"));
-
     g_object_unref(bp);
     g_object_unref(bs);
     g_object_unref(bh);
     g_object_unref(br);
-    g_object_unref(bt);
 
     w->window = win;
     w->stack  = stack;

@@ -6,6 +6,5 @@
 
 void view_populate_results(AppWidgets *w, const SensitiveReport *report);
 void view_clear_results(AppWidgets *w);
-void view_set_summary(AppWidgets *w, const char *text);
 
 #endif
