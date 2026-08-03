@@ -70,10 +70,8 @@ static void walk_json(struct json_object *obj,
     if (type == json_type_object) {
         json_object_object_foreach(obj, key, val) {
             char path[256];
-            if (prefix[0])
-                snprintf(path, sizeof(path), "%s.%s", prefix, key);
-            else
-                snprintf(path, sizeof(path), "%s", key);
+            if (prefix[0]) snprintf(path, sizeof(path), "%s.%s", prefix, key);
+            else snprintf(path, sizeof(path), "%s", key);
 
             enum json_type val_type = json_object_get_type(val);
 

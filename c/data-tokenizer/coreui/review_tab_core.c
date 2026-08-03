@@ -71,6 +71,6 @@ static void on_confirm_back_clicked(GtkButton *btn, gpointer user_data) {
 void review_tab_init(AppWidgets *w) {
     self = w;
     g_signal_connect(self->submit_btn, "clicked", G_CALLBACK(on_submit_clicked), NULL);
-    g_signal_connect(self->confirm_apply_btn, "clicked", G_CALLBACK(on_confirm_apply_clicked), NULL);
-    g_signal_connect(self->confirm_back_btn, "clicked", G_CALLBACK(on_confirm_back_clicked), NULL);
+    g_signal_connect(self->cfm_apply_btn, "clicked", G_CALLBACK(on_confirm_apply_clicked), NULL);
+    g_signal_connect(self->cfm_back_btn, "clicked", G_CALLBACK(on_confirm_back_clicked), NULL);
 }
