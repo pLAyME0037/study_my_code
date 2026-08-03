@@ -8,7 +8,7 @@
 #include "json_format.h"
 
 static const char *patterns_l3[] = {
-    "kill", "rape", "shit", "jail", "sex", "an"
+    "kill", "demon", "shit", "jail", "bomb", "dinamie", "prison", "prisoner"
 };
 
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof((a)[0]))

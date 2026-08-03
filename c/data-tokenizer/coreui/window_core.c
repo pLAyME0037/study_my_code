@@ -53,7 +53,6 @@ static void on_cancel_clicked(GtkButton *btn, gpointer user_data) {
     gtk_editable_set_text(self->file_entry, "");
     view_set_status(self, "");
     view_clear_results(self);
-    view_set_summary(self, "");
     view_show_page(self, "home");
 }
 

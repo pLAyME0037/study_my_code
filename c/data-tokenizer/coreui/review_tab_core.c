@@ -48,7 +48,6 @@ static void on_submit_clicked(GtkButton *btn, gpointer user_data) {
     } else {
         view_populate_results(self, &cached_report);
         free_cached_report();
-        view_show_page(self, "results");
     }
 }
 
@@ -58,7 +57,6 @@ static void on_confirm_apply_clicked(GtkButton *btn, gpointer user_data) {
     view_apply_confirm(self, &cached_report);
     view_populate_results(self, &cached_report);
     free_cached_report();
-    view_show_page(self, "results");
 }
 
 static void on_confirm_back_clicked(GtkButton *btn, gpointer user_data) {

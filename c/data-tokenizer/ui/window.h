@@ -9,9 +9,7 @@ typedef struct {
     GtkStack       *stack;
     GtkEditable    *file_entry;
     GtkLabel       *status_label;
-    GtkListBox     *results_list;
     GtkListBox     *confirm_list;
-    GtkLabel       *summary_label;
     GtkButton      *submit_btn;
     GtkButton      *cancel_btn;
     GtkButton      *browse_btn;
