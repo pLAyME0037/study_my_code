@@ -2,6 +2,7 @@
 #include "review_tab_core.h"
 #include "../ui/review_tab.h"
 #include "../ui/table_tab.h"
+#include "text_tab_core.h"
 
 static AppWidgets *self;
 static SensitiveReport cached_report = {0};
@@ -18,6 +19,12 @@ static void free_cached_report(void) {
 static void on_submit_clicked(GtkButton *btn, gpointer user_data) {
     (void)btn;
     (void)user_data;
+
+    if (view_input_is_text(self)) {
+        text_analyze(self);
+        return;
+    }
+
     const char *path = view_get_file_path(self);
     if (!path || *path == '\0') {
         view_set_status(self, "Please select a JSON file.");
@@ -71,6 +78,6 @@ static void on_confirm_back_clicked(GtkButton *btn, gpointer user_data) {
 void review_tab_init(AppWidgets *w) {
     self = w;
     g_signal_connect(self->submit_btn, "clicked", G_CALLBACK(on_submit_clicked), NULL);
-    g_signal_connect(self->cfm_apply_btn, "clicked", G_CALLBACK(on_confirm_apply_clicked), NULL);
-    g_signal_connect(self->cfm_back_btn, "clicked", G_CALLBACK(on_confirm_back_clicked), NULL);
+    g_signal_connect(self->confirm_apply_btn, "clicked", G_CALLBACK(on_confirm_apply_clicked), NULL);
+    g_signal_connect(self->confirm_back_btn, "clicked", G_CALLBACK(on_confirm_back_clicked), NULL);
 }

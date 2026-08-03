@@ -31,6 +31,31 @@
     </child>
 
     <child>
+      <object class="GtkBox" id="type_row">
+        <property name="orientation">horizontal</property>
+        <property name="spacing">6</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="label" translatable="yes">Input type:</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkDropDown" id="type_dropdown">
+            <property name="model">
+              <object class="GtkStringList">
+                <items>
+                  <item>Text File</item>
+                  <item>JSON File</item>
+                </items>
+              </object>
+            </property>
+            <property name="selected">1</property>
+          </object>
+        </child>
+      </object>
+    </child>
+
+    <child>
       <object class="GtkBox" id="file_row">
         <property name="orientation">horizontal</property>
         <property name="spacing">6</property>

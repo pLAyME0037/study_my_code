@@ -80,9 +80,11 @@ int main(int argc, char **argv) {
     cmd_append(&cmd, "-o", "./build/bin/main", "./main.c");
     cmd_append(&cmd, "./ui/window.c");
     cmd_append(&cmd, "./ui/table_tab.c");
+    cmd_append(&cmd, "./ui/text_tab.c");
     cmd_append(&cmd, "./ui/review_tab.c");
     cmd_append(&cmd, "./coreui/window_core.c");
     cmd_append(&cmd, "./coreui/review_tab_core.c");
+    cmd_append(&cmd, "./coreui/text_tab_core.c");
     cmd_append(&cmd, "./third_party/hash_table.c");
     cmd_append(&cmd, "./third_party/json_format.c");
     if (!add_pkg_config(&cmd, "--libs", "gtk4")) return 1;
@@ -92,6 +94,17 @@ int main(int argc, char **argv) {
     generate_compile_commands(&cmd, proj_dir);
 
     if (!cmd_run(&cmd)) return 1;
+
+    Cmd test_cmd = {0};
+    cmd_append(&test_cmd, "cc", "-Wall", "-Wextra", "-ggdb", "-I.");
+    cmd_append(&test_cmd, "-o", "./build/bin/test_hash_analysis");
+    cmd_append(&test_cmd, "./tests/test_hash_analysis.c");
+    cmd_append(&test_cmd, "./third_party/hash_table.c");
+    cmd_append(&test_cmd, "-lm");
+    if (!cmd_run(&test_cmd)) return 1;
+
+    cmd_append(&test_cmd, "./build/bin/test_hash_analysis");
+    if (!cmd_run(&test_cmd)) return 1;
 
     cmd_append(&cmd, "./build/bin/main");
     if (!cmd_run(&cmd)) return 1;

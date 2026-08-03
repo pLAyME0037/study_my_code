@@ -1,6 +1,7 @@
 #include <gtk/gtk.h>
 #include "window_core.h"
 #include "review_tab_core.h"
+#include "text_tab_core.h"
 #include "../ui/table_tab.h"
 
 static AppWidgets *self;
@@ -28,22 +29,26 @@ static void on_browse_clicked(GtkButton *btn, gpointer user_data) {
     (void)btn;
     (void)user_data;
     GtkFileDialog *dialog = gtk_file_dialog_new();
-    gtk_file_dialog_set_title(dialog, "Select JSON File");
+    gtk_file_dialog_set_title(dialog, "Select File");
 
-    GtkFileFilter *json_filter = gtk_file_filter_new();
-    gtk_file_filter_set_name(json_filter, "JSON Files (*.json)");
-    gtk_file_filter_add_pattern(json_filter, "*.json");
+    GListStore *filters = g_list_store_new(GTK_TYPE_FILE_FILTER);
 
     GtkFileFilter *all_filter = gtk_file_filter_new();
     gtk_file_filter_set_name(all_filter, "All Files");
     gtk_file_filter_add_pattern(all_filter, "*");
-
-    GListStore *filters = g_list_store_new(GTK_TYPE_FILE_FILTER);
-    g_list_store_append(filters, json_filter);
     g_list_store_append(filters, all_filter);
-    gtk_file_dialog_set_filters(dialog, G_LIST_MODEL(filters));
-    gtk_file_dialog_set_default_filter(dialog, json_filter);
 
+    if (!view_input_is_text(self)) {
+        GtkFileFilter *json_filter = gtk_file_filter_new();
+        gtk_file_filter_set_name(json_filter, "JSON Files (*.json)");
+        gtk_file_filter_add_pattern(json_filter, "*.json");
+        g_list_store_append(filters, json_filter);
+        gtk_file_dialog_set_default_filter(dialog, json_filter);
+    } else {
+        gtk_file_dialog_set_default_filter(dialog, all_filter);
+    }
+
+    gtk_file_dialog_set_filters(dialog, G_LIST_MODEL(filters));
     gtk_file_dialog_open(dialog, GTK_WINDOW(self->window), NULL, on_file_opened, NULL);
 }
 
@@ -53,12 +58,22 @@ static void on_cancel_clicked(GtkButton *btn, gpointer user_data) {
     gtk_editable_set_text(self->file_entry, "");
     view_set_status(self, "");
     view_clear_results(self);
+    text_clear_results(self);
     view_show_page(self, "home");
+}
+
+static void on_type_changed(GObject *obj, GParamSpec *pspec, gpointer user_data) {
+    (void)obj;
+    (void)pspec;
+    (void)user_data;
+    view_set_input_type(self, view_input_is_text(self));
 }
 
 void controller_init(AppWidgets *w) {
     self = w;
     g_signal_connect(self->browse_btn, "clicked", G_CALLBACK(on_browse_clicked), NULL);
     g_signal_connect(self->cancel_btn, "clicked", G_CALLBACK(on_cancel_clicked), NULL);
+    g_signal_connect(self->type_dropdown, "notify::selected", G_CALLBACK(on_type_changed), NULL);
+    view_set_input_type(self, FALSE);
     review_tab_init(w);
 }
