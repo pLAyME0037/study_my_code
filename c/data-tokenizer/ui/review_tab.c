@@ -10,11 +10,11 @@ static void clear_list(GtkListBox *list) {
 }
 
 gboolean view_should_confirm(AppWidgets *w) {
-    return gtk_check_button_get_active(w->confirm_check);
+    return gtk_check_button_get_active(w->cfm_check);
 }
 
 void view_populate_confirm(AppWidgets *w, const SensitiveReport *report) {
-    clear_list(w->confirm_list);
+    clear_list(w->cfm_list);
 
     typedef struct { char name[64]; int level; size_t count; size_t sample_idx; } Entry;
     Entry entries[256] = {0};
@@ -75,16 +75,17 @@ void view_populate_confirm(AppWidgets *w, const SensitiveReport *report) {
         gtk_label_set_xalign(GTK_LABEL(lbl), 0.0f);
         gtk_box_append(GTK_BOX(row), lbl);
 
-        gtk_list_box_append(w->confirm_list, row);
+        gtk_list_box_append(w->cfm_list, row);
     }
 }
 
 void view_apply_confirm(AppWidgets *w, SensitiveReport *report) {
-    GtkWidget *child = gtk_widget_get_first_child(GTK_WIDGET(w->confirm_list));
-    while (child) {
-        const char *field_name = g_object_get_data(G_OBJECT(child), "field-name");
+    GtkWidget *row = gtk_widget_get_first_child(GTK_WIDGET(w->cfm_list));
+    while (row) {
+        GtkWidget *box = gtk_list_box_row_get_child(GTK_LIST_BOX_ROW(row));
+        const char *field_name = g_object_get_data(G_OBJECT(box), "field-name");
         if (field_name) {
-            GtkWidget *check = gtk_widget_get_first_child(child);
+            GtkWidget *check = gtk_widget_get_first_child(box);
             if (check && GTK_IS_CHECK_BUTTON(check)) {
                 gboolean active = gtk_check_button_get_active(GTK_CHECK_BUTTON(check));
                 for (size_t j = 0; j < report->count; j++) {
@@ -94,6 +95,6 @@ void view_apply_confirm(AppWidgets *w, SensitiveReport *report) {
                 }
             }
         }
-        child = gtk_widget_get_next_sibling(child);
+        row = gtk_widget_get_next_sibling(row);
     }
 }

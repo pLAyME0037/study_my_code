@@ -21,7 +21,7 @@
 
     <child>
       <object class="GtkLabel" id="confirm_desc">
-        <property name="label" translatable="yes">Uncheck any fields that are NOT sensitive, then click Apply.</property>
+        <property name="label" translatable="yes">Check any fields to hide their value (shown as ***), then click Apply.</property>
         <property name="xalign">0</property>
       </object>
     </child>

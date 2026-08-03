@@ -2,20 +2,19 @@
 #define WINDOW_H
 
 #include <gtk/gtk.h>
-#include "../third_party/json_format.h"
 
 typedef struct {
     GtkWidget      *window;
     GtkStack       *stack;
     GtkEditable    *file_entry;
     GtkLabel       *status_label;
-    GtkListBox     *confirm_list;
+    GtkListBox     *cfm_list;
     GtkButton      *submit_btn;
     GtkButton      *cancel_btn;
     GtkButton      *browse_btn;
-    GtkButton      *confirm_apply_btn;
-    GtkButton      *confirm_back_btn;
-    GtkCheckButton *confirm_check;
+    GtkButton      *cfm_apply_btn;
+    GtkButton      *cfm_back_btn;
+    GtkCheckButton *cfm_check;
 } AppWidgets;
 
 GtkWidget* app_window_new(GtkApplication *app, AppWidgets *w);

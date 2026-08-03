@@ -10,10 +10,10 @@ GtkWidget *app_window_new(GtkApplication *app, AppWidgets *w) {
     GtkBuilder *bh = gtk_builder_new_from_file("./ui/home_tab.xml");
     GtkBuilder *br = gtk_builder_new_from_file("./ui/review_tab.xml");
 
-    GtkWidget *paned       = GTK_WIDGET(gtk_builder_get_object(bp, "main_paned"));
-    GtkWidget *sidebar     = GTK_WIDGET(gtk_builder_get_object(bs, "sidebar"));
-    GtkWidget *home_page   = GTK_WIDGET(gtk_builder_get_object(bh, "home_page"));
-    GtkWidget *confirm_page= GTK_WIDGET(gtk_builder_get_object(br, "confirm_page"));
+    GtkWidget *paned     = GTK_WIDGET(gtk_builder_get_object(bp, "main_paned"));
+    GtkWidget *sidebar   = GTK_WIDGET(gtk_builder_get_object(bs, "sidebar"));
+    GtkWidget *home_page = GTK_WIDGET(gtk_builder_get_object(bh, "home_page"));
+    GtkWidget *cfm_page  = GTK_WIDGET(gtk_builder_get_object(br, "confirm_page"));
 
     GtkStack *stack = GTK_STACK(gtk_stack_new());
     gtk_stack_set_transition_type(stack, GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT);
@@ -25,18 +25,18 @@ GtkWidget *app_window_new(GtkApplication *app, AppWidgets *w) {
     gtk_window_set_child(GTK_WINDOW(win), paned);
 
     gtk_stack_add_titled(stack, home_page, "home", "Home");
-    gtk_stack_add_titled(stack, confirm_page, "confirm", "Confirm Sensitivity");
+    gtk_stack_add_titled(stack, cfm_page, "confirm", "Confirm Hide Value");
 
-    w->file_entry      = GTK_EDITABLE(gtk_builder_get_object(bh, "file_entry"));
-    w->status_label    = GTK_LABEL(gtk_builder_get_object(bh, "status_label"));
-    w->submit_btn      = GTK_BUTTON(gtk_builder_get_object(bh, "submit_btn"));
-    w->cancel_btn      = GTK_BUTTON(gtk_builder_get_object(bh, "cancel_btn"));
-    w->browse_btn      = GTK_BUTTON(gtk_builder_get_object(bh, "browse_btn"));
-    w->confirm_check   = GTK_CHECK_BUTTON(gtk_builder_get_object(bh, "confirm_check"));
+    w->file_entry   = GTK_EDITABLE(gtk_builder_get_object(bh, "file_entry"));
+    w->status_label = GTK_LABEL(gtk_builder_get_object(bh, "status_label"));
+    w->submit_btn   = GTK_BUTTON(gtk_builder_get_object(bh, "submit_btn"));
+    w->cancel_btn   = GTK_BUTTON(gtk_builder_get_object(bh, "cancel_btn"));
+    w->browse_btn   = GTK_BUTTON(gtk_builder_get_object(bh, "browse_btn"));
+    w->cfm_check    = GTK_CHECK_BUTTON(gtk_builder_get_object(bh, "confirm_check"));
 
-    w->confirm_list     = GTK_LIST_BOX(gtk_builder_get_object(br, "confirm_list"));
-    w->confirm_apply_btn= GTK_BUTTON(gtk_builder_get_object(br, "confirm_apply_btn"));
-    w->confirm_back_btn = GTK_BUTTON(gtk_builder_get_object(br, "confirm_back_btn"));
+    w->cfm_list      = GTK_LIST_BOX(gtk_builder_get_object(br, "confirm_list"));
+    w->cfm_apply_btn = GTK_BUTTON(gtk_builder_get_object(br, "confirm_apply_btn"));
+    w->cfm_back_btn  = GTK_BUTTON(gtk_builder_get_object(br, "confirm_back_btn"));
 
     g_object_unref(bp);
     g_object_unref(bs);
