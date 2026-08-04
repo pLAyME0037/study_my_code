@@ -1,4 +1,4 @@
-using Microsoft.Maui.Platform.Linux.Hosting;
+using user_info.Services;
 
 namespace user_info.Pages;
 
@@ -9,10 +9,10 @@ public partial class EditStudentPage : ContentPage
 	}
 
     private void GoBack(object sender, EventArgs e) {
-        LinuxViewRenderer.PopPage();
+        Nav.Pop();
     }
 
     private void GoHome(object sender, EventArgs e) {
-        LinuxViewRenderer.NavigateToRoute("HomePage");
+        Nav.GoHome();
     }
 }

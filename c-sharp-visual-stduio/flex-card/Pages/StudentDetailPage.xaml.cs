@@ -1,4 +1,4 @@
-using Microsoft.Maui.Platform.Linux.Hosting;
+using user_info.Services;
 
 namespace user_info.Pages;
 
@@ -9,6 +9,6 @@ public partial class StudentDetailPage : ContentPage
 	}
 
     private void EditStudent(object sender, EventArgs e) {
-        LinuxViewRenderer.PushPage(new EditStudentPage());
+        Nav.Push(new EditStudentPage());
     }
 }
