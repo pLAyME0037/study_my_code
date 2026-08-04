@@ -3,12 +3,26 @@
     x:Class="user_info.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:pages="clr-namespace:user_info.Pages"
     xmlns:views="clr-namespace:user_info.Views"
     Title="user_info">
 
     <ShellContent Title="Home"
+                  ContentTemplate="{DataTemplate pages:HomePage}"
+                  Route="HomePage" />
+
+    <ShellContent Title="Home Page"
                   ContentTemplate="{DataTemplate views:MainPage}"
                   Route="MainPage" />
+
+    <ShellContent Title="Course"
+                  ContentTemplate="{DataTemplate pages:CoursePage}" />
+
+    <ShellContent Title="Student"
+                  ContentTemplate="{DataTemplate pages:StudentPage}" />
+
+    <ShellContent Title="Setting"
+                  ContentTemplate="{DataTemplate pages:SettingPage}" />
 
     <ShellContent Title="User"
                   ContentTemplate="{DataTemplate views:User}"
@@ -17,5 +31,8 @@
     <ShellContent Title="Staff"
                   ContentTemplate="{DataTemplate views:Staff}"
                   Route="Staff" />
+
+    <ShellContent Title="Student Management"
+                  ContentTemplate="{DataTemplate views:StudentManagement}" />
 
 </Shell>
