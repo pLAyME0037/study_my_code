@@ -1,4 +1,4 @@
-using Microsoft.Maui.Platform.Linux.Hosting;
+using user_info.Services;
 using System.ComponentModel;
 
 namespace user_info.Pages;
@@ -10,10 +10,10 @@ public partial class StudentList : ContentPage
     }
 
     private void StudentDetail1(object sender, EventArgs e) {
-        LinuxViewRenderer.PushPage(new StudentDetailPage());
+        Nav.Push(new StudentDetailPage());
     }
 
     private void StudentDetail2(object sender, EventArgs e) {
-        LinuxViewRenderer.PushPage(new StudentDetailPage());
+        Nav.Push(new StudentDetailPage());
     }
 }
