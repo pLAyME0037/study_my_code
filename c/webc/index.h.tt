@@ -10,10 +10,29 @@
       <h3>Header ? INT(i) ?</h3>
     ? } ?
 
-    ? for (int row = 1; row <= 3; ++row) { ?
-        ? for (int col = 1; row <= 3; ++col) { ?
-            [? INT(row) ?|? INT(col) ?]
-        ? } ?
-    ? } ?
+    <div>
+        <table>
+            <thead style="background-color: red;">
+                <tr style="background-color: red;">
+                    ? for (int headers = 0; headers <= 3; ++headers) { ?
+                        <th>
+                            Header ? INT(headers) ?
+                        </th>
+                    ? } ?
+                </tr>
+            </thead>
+            <tbody style="background-color: blue;">
+                ? for (int row = 0; row <= 3; ++row) { ?
+                    <tr style="background-color: blue;">
+                        ? for (int rows = 0; rows <= 3; ++rows) { ?
+                            <th>
+                                Row ? INT(rows) ?
+                            </th>
+                        ? } ?
+                    </tr>
+                ? } ?
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>
