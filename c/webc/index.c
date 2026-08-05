@@ -4,9 +4,8 @@
 #define OUT STDOUT_FILENO
 #define INT(x) dprintf(STDOUT_FILENO, "%d", x);
 
-void create_html() {
+void create_html(void) {
 #include "index.h"
-
 }
 
 int main(void) {
