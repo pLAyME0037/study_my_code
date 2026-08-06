@@ -6,6 +6,7 @@
 
 void create_html(void) {
 #include "auto_ctrl/cttochtml/index.h"
+#include "auto_ctrl/cttochtml/sample.h"
 }
 
 int main(void) {
