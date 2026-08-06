@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <object class="GtkBox" id="home_page">
+    <property name="orientation">vertical</property>
+    <property name="margin-start">24</property>
+    <property name="margin-end">24</property>
+    <property name="margin-top">24</property>
+    <property name="margin-bottom">24</property>
+    <property name="spacing">12</property>
+
+    <child>
+      <object class="GtkLabel" id="title_label">
+        <property name="label" translatable="yes">Data Tokenizer</property>
+        <property name="xalign">0</property>
+        <attributes>
+          <attribute name="weight" value="bold"/>
+          <attribute name="scale" value="1.8"/>
+        </attributes>
+      </object>
+    </child>
+
+    <child>
+      <object class="GtkLabel" id="subtitle_label">
+        <property name="label" translatable="yes">Select a JSON file to scan for sensitive data.</property>
+        <property name="xalign">0</property>
+      </object>
+    </child>
+
+    <child>
+      <object class="GtkSeparator"/>
+    </child>
+
+    <child>
+      <object class="GtkBox" id="type_row">
+        <property name="orientation">horizontal</property>
+        <property name="spacing">6</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="label" translatable="yes">Input type:</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkDropDown" id="type_dropdown">
+            <property name="model">
+              <object class="GtkStringList">
+                <items>
+                  <item>Text File</item>
+                  <item>JSON File</item>
+                </items>
+              </object>
+            </property>
+            <property name="selected">1</property>
+          </object>
+        </child>
+      </object>
+    </child>
+
+    <child>
+      <object class="GtkBox" id="file_row">
+        <property name="orientation">horizontal</property>
+        <property name="spacing">6</property>
+        <child>
+          <object class="GtkEntry" id="file_entry">
+            <property name="hexpand">1</property>
+            <property name="placeholder-text">Select a JSON file...</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="browse_btn">
+            <property name="label" translatable="yes">Browse</property>
+          </object>
+        </child>
+      </object>
+    </child>
+
+    <child>
+      <object class="GtkCheckButton" id="confirm_check">
+        <property name="label" translatable="yes">Review sensitive fields after scan</property>
+        <property name="active">1</property>
+      </object>
+    </child>
+
+    <child>
+      <object class="GtkLabel" id="status_label">
+        <property name="xalign">0</property>
+      </object>
+    </child>
+
+    <child>
+      <object class="GtkBox" id="btn_row">
+        <property name="orientation">horizontal</property>
+        <property name="halign">end</property>
+        <property name="spacing">6</property>
+        <child>
+          <object class="GtkButton" id="cancel_btn">
+            <property name="label" translatable="yes">Cancel</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="submit_btn">
+            <property name="label" translatable="yes">Submit</property>
+            <style><class name="suggested-action"/></style>
+          </object>
+        </child>
+      </object>
+    </child>
+
+  </object>
+</interface>

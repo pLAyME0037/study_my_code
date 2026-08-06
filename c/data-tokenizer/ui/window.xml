@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <object class="GtkPaned" id="main_paned">
+    <property name="wide-handle">1</property>
+    <property name="position">180</property>
+    <property name="resize-start-child">0</property>
+    <property name="shrink-start-child">0</property>
+  </object>
+</interface>
