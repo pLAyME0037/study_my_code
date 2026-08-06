@@ -2556,6 +2556,31 @@ NOBDEF Nob_String_View nob_sv_chop_while(Nob_String_View *sv, int (*p)(int x))
     return result;
 }
 
+NOBDEF Nob_String_View nob_sv_chop_by_sv(Nob_String_View *sv, const char *delim) {
+    size_t i = 0;
+    while (i < sv->count) {
+        if (sv->data[i] == delim[0] &&
+            i + 1 < sv->count       &&
+            sv->data[i + 1] == delim[1])
+        {
+            break;
+        }
+        ++i;
+    }
+
+    Nob_String_View result = nob_sv_from_parts(sv->data, i);
+
+    if (i < sv->count) {
+        sv->count -= i + 2;
+        sv->data  += i + 2;
+    } else {
+        sv->count = 0;
+        sv->data  += i;
+    }
+
+    return result;
+}
+
 NOBDEF Nob_String_View nob_sv_chop_by_delim(Nob_String_View *sv, char delim)
 {
     size_t i = 0;
@@ -3023,6 +3048,7 @@ NOBDEF char *nob_temp_running_executable_path(void)
         #define String_View Nob_String_View
         #define temp_sv_to_cstr nob_temp_sv_to_cstr
         #define sv_chop_by_delim nob_sv_chop_by_delim
+        #define sv_chop_by_sv nob_sv_chop_by_sv
         #define sv_chop_by_space nob_sv_chop_by_space
         #define sv_chop_while nob_sv_chop_while
         #define sv_chop_prefix nob_sv_chop_prefix

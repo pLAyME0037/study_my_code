@@ -5,32 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Title</title>
 </head>
-<body>
-    ? for (int i = 0; i <= 10; ++i) { ?
-      <h3>Header ? INT(i) ?</h3>
-    ? } ?
+<body style="background-color: #1e1e2e;">
+    ({ for (int i = 0; i <= 10; ++i) { })
+        <h3 style="color: #fff2f2;">Header ({ INT(i) })</h3>
+    ({ } })
 
     <div>
         <table>
-            <thead style="background-color: red;">
-                <tr style="background-color: red;">
-                    ? for (int headers = 0; headers <= 3; ++headers) { ?
+            <thead style="background-color: #1e1e2e;">
+                <tr style="background-color: #b4befe; color: #fff2f2;">
+                    ({ for (int headers = 0; headers <= 3; ++headers) { })
                         <th>
-                            Header ? INT(headers) ?
+                            Column ({ INT(headers) })
                         </th>
-                    ? } ?
+                    ({ } })
                 </tr>
             </thead>
-            <tbody style="background-color: blue;">
-                ? for (int row = 0; row <= 3; ++row) { ?
-                    <tr style="background-color: blue;">
-                        ? for (int rows = 0; rows <= 3; ++rows) { ?
+            <tbody style="background-color: #a6e3a1;">
+                ({ for (int row = 0; row <= 3; ++row) { })
+                    <tr style="background-color: #a6e3a1; color: #cdd6f4;">
+                        ({ for (int rows = 0; rows <= 3; ++rows) { })
                             <th>
-                                Row ? INT(rows) ?
+                                <button onclick="alert('Hello Row: ({ INT(row) }) Column: ({ INT(rows) })')">
+                                    Row ({ INT(row) })
+                                </button>
                             </th>
-                        ? } ?
+                        ({ } })
                     </tr>
-                ? } ?
+                ({ } })
             </tbody>
         </table>
     </div>
