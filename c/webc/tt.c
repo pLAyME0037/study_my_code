@@ -28,12 +28,9 @@ int main(int argc, char *argv[]) {
     String_View tmplat = sb_to_sv(sb);
     int c_code_mode = 0;
     while (tmplat.count) {
-        String_View token = sv_chop_by_delim(&tmplat, '?');
-        if (c_code_mode) {
-            compile_c_code(token);
-        } else {
-            compile_byte_array(token);
-        }
+        String_View token = sv_chop_by_sv(&tmplat, c_code_mode ? "})" : "({");
+        if (c_code_mode) compile_c_code(token);
+        else compile_byte_array(token);
         c_code_mode = !c_code_mode;
     }
 

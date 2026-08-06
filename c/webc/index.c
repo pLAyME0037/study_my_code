@@ -5,7 +5,7 @@
 #define INT(x) dprintf(STDOUT_FILENO, "%d", x);
 
 void create_html(void) {
-#include "index.h"
+#include "auto_ctrl/cttochtml/index.h"
 }
 
 int main(void) {
