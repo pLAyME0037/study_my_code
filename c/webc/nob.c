@@ -24,7 +24,6 @@ int prepare_cttochtml(Cmd cmd) {
         String_Builder output = {0};
         sb_append_cstr(&output, "./auto_ctrl/cttochtml/");
         sb_append_sv(&output, base);
-        sb_append_cstr(&output, ".h");
         sb_append_null(&output);
 
         Fd out_fd = fd_open_for_write(output.items);
@@ -49,23 +48,26 @@ int main(int argc, char **argv) {
     cmd_append(&cmd, "cc", "-Wall", "-Wextra", "-Wswitch-enum", "-ggdb", "-o", "./bin/tt", "tt.c");
     if (!cmd_run_sync_and_reset(&cmd)) return 1;
 
-    prepare_cttochtml(cmd);
+    if (prepare_cttochtml(cmd)) return 1;
 
-    Fd index_fd = fd_open_for_write("./auto_ctrl/cttochtml/index.h");
+    cmd_append(&cmd, "./bin/tailwindcss-linux-x64", "-i", "css/input.css", "-o", "css/output.css", "--minify");
+    if (!cmd_run_sync_and_reset(&cmd)) return 1;
+
+    Fd index_fd = fd_open_for_write("./index.h");
     if (index_fd == INVALID_FD) return 1;
 
-    cmd_append(&cmd, "./bin/tt", "./index.h.tt");
+    cmd_append(&cmd, "./bin/tt", "./display/body.h.tt");
     if (!cmd_run_sync_redirect_and_reset(&cmd, (Nob_Cmd_Redirect) {
         .fdout = &index_fd
     })) return 1;
 
-    cmd_append(&cmd, "cc", "-o", "./auto_ctrl/bintohtml/index", "index.c");
+    cmd_append(&cmd, "cc", "-o", "./bin/index", "index.c");
     if (!nob_cmd_run(&cmd)) return 1;
 
     Fd html_fd = fd_open_for_write("index.html");
     if (html_fd == INVALID_FD) return 1;
 
-    cmd_append(&cmd, "./auto_ctrl/bintohtml/index");
+    cmd_append(&cmd, "./bin/index");
     if (!cmd_run_sync_redirect_and_reset(&cmd, (Nob_Cmd_Redirect) {
         .fdout = &html_fd
     })) return 1;
