@@ -153,8 +153,7 @@ typedef struct {
     const char *output_root;
 } Cttochtml_Walk_Data;
 
-bool cttochtml_walk_func(Nob_Walk_Entry entry)
-{
+bool cttochtml_walk_func(Nob_Walk_Entry entry) {
     if (entry.type != NOB_FILE_REGULAR) return true;
     if (!sv_ends_with_cstr(sv_from_cstr(entry.path), ".tt")) return true;
 
@@ -231,9 +230,6 @@ int main(int argc, char **argv) {
 
     cmd_append(&cmd, "cc", "-Wall", "-Wextra", "-Wswitch-enum", "-ggdb", "-o", "./bin/tt", "tt.c");
     if (!cmd_run_sync_and_reset(&cmd)) return 1;
-
-    // cmd_append(&cmd, "cc", "-Wall", "-Wextra", "-Wswitch-enum", "-ggdb", "-o", "./bin/watch", "watch.c");
-    // if (!cmd_run_sync_and_reset(&cmd)) return 1;
 
     if (prepare_cttochtml(cmd)) return 1;
 

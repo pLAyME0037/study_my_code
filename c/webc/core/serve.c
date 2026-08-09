@@ -19,8 +19,7 @@
 
 #include "../src/user.h"
 
-Resource *find_resource(const char *file_path)
-{
+Resource *find_resource(const char *file_path) {
     for (size_t i = 0; i < resources_count; ++i) {
         if (strcmp(file_path, resources[i].file_path) == 0) {
             return &resources[i];
@@ -29,8 +28,7 @@ Resource *find_resource(const char *file_path)
     return NULL;
 }
 
-bool write_entire_sv(int fd, String_View sv)
-{
+bool write_entire_sv(int fd, String_View sv) {
     String_View untransfered = sv;
     while (untransfered.count > 0) {
         ssize_t transfered = write(fd, untransfered.data, untransfered.count);
@@ -59,7 +57,6 @@ void serve_resource(Serve_Context *sc,
         .count = resource->size,
     };
     http_render_response(sc, 200, content_type, body);
-    UNUSED(write_entire_sv(sc->client_fd, sb_to_sv(sc->response)));
 }
 
 void serve_request(Serve_Context *sc) {
@@ -214,8 +211,9 @@ void render_page_shell(Serve_Context *sc,
     sb_append_cstr(sb, "</body></html>");
 }
 
-void render_page_header(String_Builder *sb, const char *page_title, const char *current_path)
-{
+void render_page_header(String_Builder *sb,
+                        const char *page_title,
+                        const char *current_path) {
     User u = User_data();
 #define OUT(buf, size) sb_append_buf(sb, buf, size);
 #define STR(x) sb_append_cstr(sb, (x) ? (x) : "");
@@ -232,8 +230,7 @@ void render_page_header(String_Builder *sb, const char *page_title, const char *
 #undef OUT
 }
 
-void render_page_footer(String_Builder *sb)
-{
+void render_page_footer(String_Builder *sb) {
 #define OUT(buf, size) sb_append_buf(sb, buf, size);
 #include "../auto_ctrl/cttochtml/footer.h"
 #undef OUT
@@ -264,15 +261,13 @@ void sb_append_html_escaped(String_Builder *sb, const char *s) {
     }
 }
 
-void serve_ok(Serve_Context *sc)
-{
+void serve_ok(Serve_Context *sc) {
     String_Builder resp = {0};
     sb_append_cstr(&resp, "{\"ok\":true}");
     http_render_response(sc, 200, "application/json", sb_to_sv(resp));
 }
 
-void sb_append_json_escaped(String_Builder *sb, const char *s)
-{
+void sb_append_json_escaped(String_Builder *sb, const char *s) {
     sb_append_cstr(sb, "\"");
     if (s) {
         for (const char *p = s; *p; ++p) {
@@ -289,8 +284,7 @@ void sb_append_json_escaped(String_Builder *sb, const char *s)
     sb_append_cstr(sb, "\"");
 }
 
-bool json_find_string(String_View body, const char *key, String_View *out)
-{
+bool json_find_string(String_View body, const char *key, String_View *out) {
     size_t key_len = strlen(key);
     for (size_t i = 0; i + key_len + 2 <= body.count; ++i) {
         if (memcmp(body.data + i, key, key_len) == 0 &&
@@ -316,8 +310,7 @@ bool json_find_string(String_View body, const char *key, String_View *out)
     return false;
 }
 
-bool json_find_int(String_View body, const char *key, long long *out)
-{
+bool json_find_int(String_View body, const char *key, long long *out) {
     size_t key_len = strlen(key);
     for (size_t i = 0; i + key_len + 2 <= body.count; ++i) {
         if (memcmp(body.data + i, key, key_len) == 0 &&

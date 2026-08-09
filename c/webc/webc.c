@@ -4,6 +4,8 @@
 #include <time.h>
 #include <errno.h>
 #include <stdbool.h>
+#include <signal.h>
+#include <poll.h>
 
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -43,7 +45,8 @@ typedef enum {
 void command_describe(struct Command command,
                       const char *program_name,
                       int pad,
-                      Description_Type description_type) {
+                      Description_Type description_type)
+{
     printf("%*s%s %s", pad, "", program_name, command.name);
     if (command.signature) printf(" %s", command.signature);
     printf("\n");
@@ -68,9 +71,7 @@ void command_describe(struct Command command,
     }
 }
 
-bool version_run(Command *self,
-                 const char *program_name,
-                 int argc, char **argv) {
+bool version_run(Command *self, const char *program_name, int argc, char **argv) {
     UNUSED(self);
     UNUSED(program_name);
     UNUSED(argc);
@@ -123,6 +124,11 @@ bool serve_run(Command *self, const char *program_name, int argc, char **argv) {
 
     printf("Listening to http://%s:%d/\n", addr, port);
 
+    // NOTE: Writes to sockets that the client already closed would raise
+    // SIGPIPE and silently kill the whole server. Ignore it and handle the
+    // EPIPE return values in write_entire_sv instead.
+    signal(SIGPIPE, SIG_IGN);
+
     Serve_Context sc = {0};
     for (;;) {
         struct sockaddr_in client_addr;
@@ -136,8 +142,13 @@ bool serve_run(Command *self, const char *program_name, int argc, char **argv) {
         UNUSED(serve_request(&sc));
 
         shutdown(sc.client_fd, SHUT_WR);
+        // Drain any unread data with a bounded wait so a slow or keep-alive
+        // client can never stall the single-threaded server.
+        struct pollfd pfd = { .fd = sc.client_fd, .events = POLLIN };
         char buffer[4096];
-        while (read(sc.client_fd, buffer, sizeof(buffer)) > 0);
+        while (poll(&pfd, 1, 100) > 0) {
+            if (read(sc.client_fd, buffer, sizeof(buffer)) <= 0) break;
+        }
         close(sc.client_fd);
         sc_reset(&sc);
         temp_reset();

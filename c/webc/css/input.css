@@ -6,7 +6,7 @@
 @source "./index.html";
 
 body.sidebar-collapsed #sidebar {
-    width: 4rem;
+  width: 3rem;
 }
 
 body.sidebar-collapsed #sidebar .nav-label {
@@ -17,7 +17,12 @@ body.sidebar-collapsed #sidebar .nav-label {
     white-space: nowrap;
 }
 
+#sidebar .sidebar-tooltip {
+    display: none;
+}
+
 body.sidebar-collapsed #sidebar .sidebar-tooltip {
+    display: block;
     opacity: 0;
     pointer-events: none;
     position: absolute;
@@ -36,11 +41,29 @@ body.sidebar-collapsed #sidebar .sidebar-tooltip {
     transition: opacity 0.15s ease;
 }
 
-body.sidebar-collapsed #sidebar .group\/item:hover .sidebar-tooltip {
+body.sidebar-collapsed #sidebar .group\/item:hover .sidebar-tooltip,
+body.sidebar-collapsed #sidebar .user-card:hover ~ .sidebar-tooltip {
     opacity: 1;
 }
 
+body.sidebar-collapsed #sidebar .user-card,
+body.sidebar-collapsed #sidebar .nav-link {
+    justify-content: center;
+}
+
+#sidebar #sidebar-pad {
+    padding: 0.3rem 0 0.3rem 1rem;
+}
+
+body.sidebar-collapsed #sidebar #sidebar-pad {
+    padding: 0.3rem 0;
+}
+
 #sidebar {
-    width: 16rem;
+    width: 15rem;
+}
+
+body.sidebar-collapsed #page-footer {
+    display: none;
 }
 
