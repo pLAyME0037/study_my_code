@@ -24,14 +24,15 @@
         window.themeController.apply(window.themeController.get());
     </script>
 </head>
+
 <header class="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 sticky top-0 z-30">
     <div class="flex items-center justify-between px-4 py-3">
 
         <!-- LEFT: Toggle & Logo & Title -->
         <div class="flex items-center gap-4">
 
-            <button @click="sidebarCollapsed = !sidebarCollapsed"
-             class="p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <button onclick="sidebar_collapsed = !sidebar_collapsed"
+                    class="p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500">
                 <svg class="w-6 h-6"
                      fill="none"
                      stroke="currentColor"
@@ -44,10 +45,9 @@
             </button>
 
             <div class="hidden md:flex items-center gap-2">
-                <x-application-logo class="w-8 h-8 text-indigo-600 dark:text-indigo-400" />
-                    <span class="font-bold text-xl text-gray-800 dark:text-white tracking-tight">
-                        Schul SYS
-                    </span>
+                <span class="font-bold text-xl text-gray-800 dark:text-white tracking-tight">
+                    Schul SYS
+                </span>
             </div>
 
             <div class="h-6 w-px bg-gray-300 dark:bg-gray-600 mx-2 hidden md:block"></div>
@@ -92,28 +92,25 @@
                  class="relative">
                 <button @click="open = !open"
                  class="flex items-center gap-2 p-1 pr-3 rounded-full border border-transparent hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                    <x-profile-image src=""
-                                          alt=""
-                                               size="xs"
-                                                     class="h-8 w-8" />
-                        <span
-                        class="hidden md:block text-sm font-medium text-gray-700 dark:text-gray-200">
-                               hello kitty
-                        </span>
-                        <svg class="w-4 h-4 text-gray-400"
-                                    fill="none"
-                                          stroke="currentColor"
-                                                  viewBox="0 0 24 24">
-                            <path stroke-linecap="round"
-                                                  stroke-linejoin="round"
-                                                                                                               stroke-width="2"
-                                                                                                                                                                                                                                                                                                             d="M19 9l-7 7-7-7">
-                            </path>
-                        </svg>
+                    <img src=""
+                         alt=""
+                         class="h-8 w-8" />
+                    <span class="hidden md:block text-sm font-medium text-gray-700 dark:text-gray-200">
+                        
+                    </span>
+                    <svg class="w-4 h-4 text-gray-400"
+                         fill="none"
+                         stroke="currentColor"
+                         viewBox="0 0 24 24">
+                        <path stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2" d="M19 9l-7 7-7-7">
+                        </path>
+                    </svg>
                 </button>
 
                 <div x-show="open"
-                             @click.away="open = false"
+                     @click.away="open = false"
                      style="display: none;"
                      class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg py-1 border dark:border-gray-700 z-50">
                     <div class="px-4 py-2 border-b dark:border-gray-700">
@@ -121,13 +118,13 @@
                         Signed in as
                         </p>
                         <p class="text-sm font-bold text-gray-900 dark:text-white truncate">
-                        hellokitty1@gmail.com
+                        
                         </p>
                     </div>
 
                     <a href="/profile"
-                       class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">Profile
-                       Settings
+                       class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                        Profile Settings
                     </a>
 
                     <form method="POST"
@@ -145,6 +142,35 @@
 </header>
 
 <body style="background-color: #1e1e2e">
+    <script>
+        sidebarOpen: false,
+            sidebarCollapsed: localStorage.getItem('sidebarCollapsed') === 'true',
+            toggleSidebar() {
+                this.sidebarCollapsed = !this.sidebarCollapsed;
+                localStorage.setItem('sidebarCollapsed', this.sidebarCollapsed);
+            }
+    </script>
+
+<aside class="shrink-0 hidden md:flex flex-col border-r border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 transition-all duration-300 "
+    <div class="relative group mb-1">
+        <a href=""
+            class="flex items-center rounded-lg transition-all duration-200 ease-in-out  ">
+
+            <svg class="w-5 h-5 shrink-0 transition-colors "
+                 fill="none"
+                 stroke="currentColor"
+                 viewBox="0 0 24 24">
+            </svg>
+
+            
+
+            
+        </a>
+
+        
+    </div>
+<aside>
+
 
     <h3 style="color: #fff2f2;"
         class="p-1 text-sm font-bold">Header 0</h3>
@@ -183,7 +209,8 @@
 <div>
     <table>
         <thead style="background-color: #1e1e2e;">
-            <tr style="background-color: #b4befe; color: #fff2f2;">
+            <tr style="background-color: #b4befe;"
+                class="text-gray-800">
                 
                     <th>
                         Column 0
@@ -205,7 +232,8 @@
         </thead>
         <tbody style="background-color: #a6e3a1;">
             
-                <tr style="background-color: #a6e3a1; color: #cdd6f4;">
+                <tr style="background-color: #a6e3a1;"
+                    class="text-gray-700">
                     
                         <th>
                             <button onclick="alert('Hello Row: 0 Column: 0')">
@@ -233,7 +261,8 @@
                     
                 </tr>
             
-                <tr style="background-color: #a6e3a1; color: #cdd6f4;">
+                <tr style="background-color: #a6e3a1;"
+                    class="text-gray-700">
                     
                         <th>
                             <button onclick="alert('Hello Row: 1 Column: 0')">
@@ -261,7 +290,8 @@
                     
                 </tr>
             
-                <tr style="background-color: #a6e3a1; color: #cdd6f4;">
+                <tr style="background-color: #a6e3a1;"
+                    class="text-gray-700">
                     
                         <th>
                             <button onclick="alert('Hello Row: 2 Column: 0')">
@@ -394,6 +424,18 @@
     </table>
 </div>
 
+
+<script>
+(function(){
+  var last = null;
+  (function tick(){ fetch('index.html', {cache:'no-store'})
+    .then(function(r){ var lm = r.headers.get('Last-Modified');
+      if (last && lm && lm !== last) { location.reload(); return; }
+      last = lm;
+    }).catch(function(){}).finally(function(){ setTimeout(tick, 1500); });
+  })();
+})();
+</script>
 </body>
 
 <footer>
@@ -401,4 +443,4 @@
 </footer>
 
 </html>
-src="resource/image/user1.png"alt="hello kitty"
+resource/image/user1.pnghello kittyhello kittyhellokitty1@gmail.comw-64w-full p-2text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-200text-gray-400 group-hover:text-gray-500 dark:text-gray-500 dark:group-hover:text-gray-300

@@ -2,6 +2,150 @@
 #define NOB_STRIP_PREFIX
 #include "nob.h"
 
+#define BUILD_FOLDER "./build/"
+#define SQLITE3_AMALGAMATION_FOLDER "./src/sqlite-amalgamation-3460100/"
+#define SQLITE3_OBJ_PATH BUILD_FOLDER"sqlite3.o"
+#define BUNDLE_H_PATH BUILD_FOLDER"bundle.h"
+#define BUILD_TIME_PATH BUILD_FOLDER"build_time.txt"
+
+#define genf(out, ...) \
+    do { \
+        fprintf((out), __VA_ARGS__); \
+        fprintf((out), " // %s:%d\n", __FILE__, __LINE__); \
+    } while(0)
+
+static const char *const SNIPPET =
+    "\n<script>\n"
+    "(function(){\n"
+    "  var last = null;\n"
+    "  (function tick(){ fetch('index.html', {cache:'no-store'})\n"
+    "    .then(function(r){ var lm = r.headers.get('Last-Modified');\n"
+    "      if (last && lm && lm !== last) { location.reload(); return; }\n"
+    "      last = lm;\n"
+    "    }).catch(function(){}).finally(function(){ setTimeout(tick, 1500); });\n"
+    "  })();\n"
+    "})();\n"
+    "</script>\n";
+
+int inject_reload_snippet(const char *path) {
+    String_Builder sb = {0};
+    if (!read_entire_file(path, &sb)) return 1;
+
+    String_View html = sb_to_sv(sb);
+    const char *needle = "</body>";
+    size_t nl = strlen(needle);
+    size_t at = (size_t)-1;
+    for (size_t i = 0; i + nl <= html.count; ++i) {
+        if (html.data[i] == needle[0] && memcmp(html.data + i, needle, nl) == 0) {
+            at = i;
+            break;
+        }
+    }
+    if (at == (size_t)-1) {
+        nob_log(NOB_WARNING, "%s: no </body>, skipping dev snippet", path);
+        return 0;
+    }
+
+    String_Builder out = {0};
+    sb_append_buf(&out, html.data, at);
+    sb_append_buf(&out, SNIPPET, strlen(SNIPPET));
+    sb_append_buf(&out, html.data + at, html.count - at);
+
+    if (!write_entire_file(path, out.items, out.count)) return 1;
+    nob_log(NOB_INFO, "%s: dev snippet injected", path);
+    return 0;
+}
+
+int build_bundle(const char *webc_build_time) {
+    struct {
+        const char *file_path;
+        size_t offset;
+        size_t size;
+    } resources[] = {
+        { .file_path = "./index.html" },
+        { .file_path = "./css/output.css" },
+        { .file_path = "./resource/image/user1.png" },
+    };
+
+    Nob_String_Builder bundle = {0};
+    Nob_String_Builder content = {0};
+    FILE *out = NULL;
+
+    mkdir_if_not_exists(BUILD_FOLDER);
+
+    for (size_t i = 0; i < NOB_ARRAY_LEN(resources); ++i) {
+        nob_log(NOB_INFO, "Bundling %s into %s", resources[i].file_path, BUNDLE_H_PATH);
+        content.count = 0;
+        if (!nob_read_entire_file(resources[i].file_path, &content)) {
+            nob_log(NOB_ERROR, "Could not read %s for bundling", resources[i].file_path);
+            return 1;
+        }
+        resources[i].offset = bundle.count;
+        resources[i].size = content.count;
+        nob_da_append_many(&bundle, content.items, content.count);
+        nob_da_append(&bundle, 0);
+    }
+
+    out = fopen(BUNDLE_H_PATH, "wb");
+    if (out == NULL) {
+        nob_log(NOB_ERROR, "Could not open file %s for writing: %s", BUNDLE_H_PATH, strerror(errno));
+        return 1;
+    }
+
+    genf(out, "#ifndef BUNDLE_H_");
+    genf(out, "#define BUNDLE_H_");
+    genf(out, "#define WEBC_BUILD_TIME \"%s\"", webc_build_time);
+    genf(out, "typedef struct {");
+    genf(out, "    const char *file_path;");
+    genf(out, "    size_t offset;");
+    genf(out, "    size_t size;");
+    genf(out, "} Resource;");
+    genf(out, "size_t resources_count = %zu;", NOB_ARRAY_LEN(resources));
+    genf(out, "Resource resources[] = {");
+    for (size_t i = 0; i < NOB_ARRAY_LEN(resources); ++i) {
+        genf(out, "    {.file_path = \"%s\", .offset = %zu, .size = %zu},",
+             resources[i].file_path, resources[i].offset, resources[i].size);
+    }
+    genf(out, "};");
+
+    genf(out, "unsigned char bundle[] = {");
+    size_t row_size = 20;
+    for (size_t i = 0; i < bundle.count; ) {
+        fprintf(out, "     ");
+        for (size_t col = 0; col < row_size && i < bundle.count; ++col, ++i) {
+            fprintf(out, "0x%02X, ", (unsigned char)bundle.items[i]);
+        }
+        fprintf(out, "\n");
+    }
+    genf(out, "};");
+    genf(out, "#endif // BUNDLE_H_");
+
+    fclose(out);
+    free(content.items);
+    free(bundle.items);
+    return 0;
+}
+
+bool build_sqlite3(void) {
+    const char *output_path = SQLITE3_OBJ_PATH;
+    const char *input_path = SQLITE3_AMALGAMATION_FOLDER"sqlite3.c";
+    int rebuild_is_needed = needs_rebuild1(output_path, input_path);
+    if (rebuild_is_needed < 0) return false;
+    if (rebuild_is_needed) {
+        // NOTE: We are omitting extension loading because it depends on dlopen which prevents us from
+        // making webc statically linked
+        Cmd cmd = {0};
+        cmd_append(&cmd, "cc", "-Wall", "-Wextra", "-Wswitch-enum", "-ggdb",
+                   "-I"SQLITE3_AMALGAMATION_FOLDER,
+                   "-DSQLITE_OMIT_LOAD_EXTENSION",
+                   "-O3", "-c", "-o", output_path, input_path);
+        if (!cmd_run_sync_and_reset(&cmd)) return false;
+    } else {
+        nob_log(NOB_INFO, "%s is up to date", output_path);
+    }
+    return true;
+}
+
 int prepare_cttochtml(Cmd cmd) {
     mkdir_if_not_exists("./auto_ctrl");
     mkdir_if_not_exists("./auto_ctrl/cttochtml");
@@ -34,7 +178,7 @@ int prepare_cttochtml(Cmd cmd) {
             .fdout = &out_fd }))
         {
             return 1;
-        } 
+        }
     }
 
     dir_entry_close(dir);
@@ -45,8 +189,13 @@ int main(int argc, char **argv) {
     NOB_GO_REBUILD_URSELF(argc, argv);
     Cmd cmd = {0};
 
+    mkdir_if_not_exists("./bin");
+
     cmd_append(&cmd, "cc", "-Wall", "-Wextra", "-Wswitch-enum", "-ggdb", "-o", "./bin/tt", "tt.c");
     if (!cmd_run_sync_and_reset(&cmd)) return 1;
+
+    // cmd_append(&cmd, "cc", "-Wall", "-Wextra", "-Wswitch-enum", "-ggdb", "-o", "./bin/watch", "watch.c");
+    // if (!cmd_run_sync_and_reset(&cmd)) return 1;
 
     if (prepare_cttochtml(cmd)) return 1;
 
@@ -60,9 +209,10 @@ int main(int argc, char **argv) {
     if (!cmd_run_sync_redirect_and_reset(&cmd, (Nob_Cmd_Redirect) {
         .fdout = &index_fd
     })) return 1;
+    fd_close(index_fd);
 
     cmd_append(&cmd, "cc", "-o", "./bin/index", "index.c");
-    if (!nob_cmd_run(&cmd)) return 1;
+    if (!cmd_run_sync_and_reset(&cmd)) return 1;
 
     Fd html_fd = fd_open_for_write("index.html");
     if (html_fd == INVALID_FD) return 1;
@@ -71,7 +221,36 @@ int main(int argc, char **argv) {
     if (!cmd_run_sync_redirect_and_reset(&cmd, (Nob_Cmd_Redirect) {
         .fdout = &html_fd
     })) return 1;
+    fd_close(html_fd);
+
+    inject_reload_snippet("index.html");
+
+    char webc_build_time[64] = {0};
+    {
+        mkdir_if_not_exists(BUILD_FOLDER);
+        cmd_append(&cmd, "date", "-u", "+%a, %d %b %Y %H:%M:%S GMT");
+        if (!cmd_run(&cmd, .stdout_path = BUILD_TIME_PATH)) return 1;
+        cmd.count = 0;
+
+        String_Builder out_sb = {0};
+        if (!read_entire_file(BUILD_TIME_PATH, &out_sb)) return 1;
+        while (out_sb.count > 0 && isspace(out_sb.items[out_sb.count - 1])) out_sb.count -= 1;
+        if (out_sb.count < sizeof(webc_build_time)) {
+            memcpy(webc_build_time, out_sb.items, out_sb.count);
+        }
+        if (webc_build_time[0] == '\0') snprintf(webc_build_time, sizeof(webc_build_time), "Thu, 01 Jan 1970 00:00:00 GMT");
+    }
+
+    if (!build_sqlite3()) return 1;
+
+    if (build_bundle(webc_build_time)) return 1;
+
+    cmd_append(&cmd, "cc", "-Wall", "-Wextra", "-Wswitch-enum", "-ggdb",
+               "-I"BUILD_FOLDER,
+               "-I"SQLITE3_AMALGAMATION_FOLDER,
+               "-o", "./bin/webc",
+               "webc.c", SQLITE3_OBJ_PATH);
+    if (!cmd_run_sync_and_reset(&cmd)) return 1;
 
     return 0;
 }
-

@@ -1,4 +1,3 @@
-#include <stdio.h>
 #define NOB_IMPLEMENTATION
 #define NOB_STRIP_PREFIX
 #include "../../nob.h"
@@ -16,25 +15,26 @@ typedef struct {
     String_View last_login_at;
     bool is_active;
     bool is_soft_del;
-    Timestamps ts;
+    TimeStamp ts;
 } User;
 
+tsa = timestamps_add();
+
+User user = {
+    .id                     = 1,
+    .name.data              = "hello kitty",
+    .username.data          = "hellokitty1",
+    .email.data             = "hellokitty1@gmail.com",
+    .profile_pic.data       = "../../resources/image/user1.png",
+    .bio.data               = "hello kitty my email is hellokitty1@gmail.com",
+    .password.data          = "12345678",
+    .email_verified_at.data = __TIMESTAMP__,
+    .last_login_at.data     = __TIMESTAMP__,
+    .is_active              = true,
+    .is_soft_del            = false,
+    .ts                     = tsa,
+};
+
 User *user_new(User user) {
-    user.id = 1;
-    user.name = "hello kitty";
-    user.username = "hellokitty1";
-    user.email = "hellokitty1@gmail.com";
-    user.profile_pic = "../../resources/image/user1.png";
-    user.bio = "hello kitty my email is hellokitty1@gmail.com";
-    user.password = "12345678";
-    user.email_verified_at = get.current_time;
-    user.last_login_at = get.current_time;
-    user.is_active = true;
-    user.is_soft_del = false;
-    user.ts = timestamp_add();
 }
 
-int main(void) {
-
-    return 0;
-}

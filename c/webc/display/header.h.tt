@@ -24,14 +24,15 @@
         window.themeController.apply(window.themeController.get());
     </script>
 </head>
+
 <header class="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 sticky top-0 z-30">
     <div class="flex items-center justify-between px-4 py-3">
 
         <!-- LEFT: Toggle & Logo & Title -->
         <div class="flex items-center gap-4">
 
-            <button @click="sidebarCollapsed = !sidebarCollapsed"
-             class="p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <button onclick="sidebar_collapsed = !sidebar_collapsed"
+                    class="p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500">
                 <svg class="w-6 h-6"
                      fill="none"
                      stroke="currentColor"
@@ -44,10 +45,9 @@
             </button>
 
             <div class="hidden md:flex items-center gap-2">
-                <x-application-logo class="w-8 h-8 text-indigo-600 dark:text-indigo-400" />
-                    <span class="font-bold text-xl text-gray-800 dark:text-white tracking-tight">
-                        Schul SYS
-                    </span>
+                <span class="font-bold text-xl text-gray-800 dark:text-white tracking-tight">
+                    Schul SYS
+                </span>
             </div>
 
             <div class="h-6 w-px bg-gray-300 dark:bg-gray-600 mx-2 hidden md:block"></div>
@@ -92,28 +92,25 @@
                  class="relative">
                 <button @click="open = !open"
                  class="flex items-center gap-2 p-1 pr-3 rounded-full border border-transparent hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                    <x-profile-image src="({ printf("src=\"%s\"", u.profile_pic); })"
-                                          alt="({ printf("alt=\"%s\"", u.name); })"
-                                               size="xs"
-                                                     class="h-8 w-8" />
-                        <span
-                        class="hidden md:block text-sm font-medium text-gray-700 dark:text-gray-200">
-                               ({ dprintf(STDOUT_FILENO, "%s", u.name); })
-                        </span>
-                        <svg class="w-4 h-4 text-gray-400"
-                                    fill="none"
-                                          stroke="currentColor"
-                                                  viewBox="0 0 24 24">
-                            <path stroke-linecap="round"
-                                                  stroke-linejoin="round"
-                                                                                                               stroke-width="2"
-                                                                                                                                                                                                                                                                                                             d="M19 9l-7 7-7-7">
-                            </path>
-                        </svg>
+                    <img src="({ STR(u.profile_pic); })"
+                         alt="({ STR(u.name); })"
+                         class="h-8 w-8" />
+                    <span class="hidden md:block text-sm font-medium text-gray-700 dark:text-gray-200">
+                        ({ STR(u.name); })
+                    </span>
+                    <svg class="w-4 h-4 text-gray-400"
+                         fill="none"
+                         stroke="currentColor"
+                         viewBox="0 0 24 24">
+                        <path stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2" d="M19 9l-7 7-7-7">
+                        </path>
+                    </svg>
                 </button>
 
                 <div x-show="open"
-                             @click.away="open = false"
+                     @click.away="open = false"
                      style="display: none;"
                      class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg py-1 border dark:border-gray-700 z-50">
                     <div class="px-4 py-2 border-b dark:border-gray-700">
@@ -121,13 +118,13 @@
                         Signed in as
                         </p>
                         <p class="text-sm font-bold text-gray-900 dark:text-white truncate">
-                        ({ dprintf(STDOUT_FILENO, "%s", u.email); })
+                        ({ STR(u.email); })
                         </p>
                     </div>
 
                     <a href="/profile"
-                       class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">Profile
-                       Settings
+                       class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                        Profile Settings
                     </a>
 
                     <form method="POST"
@@ -145,3 +142,12 @@
 </header>
 
 <body style="background-color: #1e1e2e">
+    <script>
+        sidebarOpen: false,
+            sidebarCollapsed: localStorage.getItem('sidebarCollapsed') === 'true',
+            toggleSidebar() {
+                this.sidebarCollapsed = !this.sidebarCollapsed;
+                localStorage.setItem('sidebarCollapsed', this.sidebarCollapsed);
+            }
+    </script>
+
