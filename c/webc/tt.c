@@ -10,7 +10,7 @@ void compile_c_code(String_View s) {
 }
 
 void compile_byte_array(String_View s) {
-    printf("write(OUT, \"");
+    printf("OUT(\"");
     for (uint64_t i = 0; i < s.count; ++i) {
         printf("\\x%02x", s.data[i]);
     }

@@ -62,7 +62,6 @@ int build_bundle(const char *webc_build_time) {
         size_t offset;
         size_t size;
     } resources[] = {
-        { .file_path = "./index.html" },
         { .file_path = "./css/output.css" },
         { .file_path = "./resource/image/user1.png" },
     };
@@ -100,15 +99,16 @@ int build_bundle(const char *webc_build_time) {
     genf(out, "    size_t offset;");
     genf(out, "    size_t size;");
     genf(out, "} Resource;");
-    genf(out, "size_t resources_count = %zu;", NOB_ARRAY_LEN(resources));
-    genf(out, "Resource resources[] = {");
+    genf(out, "#ifdef BUNDLE_IMPLEMENTATION");
+    genf(out, "static size_t resources_count = %zu;", NOB_ARRAY_LEN(resources));
+    genf(out, "static Resource resources[] = {");
     for (size_t i = 0; i < NOB_ARRAY_LEN(resources); ++i) {
         genf(out, "    {.file_path = \"%s\", .offset = %zu, .size = %zu},",
              resources[i].file_path, resources[i].offset, resources[i].size);
     }
     genf(out, "};");
 
-    genf(out, "unsigned char bundle[] = {");
+    genf(out, "static unsigned char bundle[] = {");
     size_t row_size = 20;
     for (size_t i = 0; i < bundle.count; ) {
         fprintf(out, "     ");
@@ -118,6 +118,7 @@ int build_bundle(const char *webc_build_time) {
         fprintf(out, "\n");
     }
     genf(out, "};");
+    genf(out, "#endif // BUNDLE_IMPLEMENTATION");
     genf(out, "#endif // BUNDLE_H_");
 
     fclose(out);
@@ -202,29 +203,6 @@ int main(int argc, char **argv) {
     cmd_append(&cmd, "./bin/tailwindcss-linux-x64", "-i", "css/input.css", "-o", "css/output.css", "--minify");
     if (!cmd_run_sync_and_reset(&cmd)) return 1;
 
-    Fd index_fd = fd_open_for_write("./index.h");
-    if (index_fd == INVALID_FD) return 1;
-
-    cmd_append(&cmd, "./bin/tt", "./display/body.h.tt");
-    if (!cmd_run_sync_redirect_and_reset(&cmd, (Nob_Cmd_Redirect) {
-        .fdout = &index_fd
-    })) return 1;
-    fd_close(index_fd);
-
-    cmd_append(&cmd, "cc", "-o", "./bin/index", "index.c");
-    if (!cmd_run_sync_and_reset(&cmd)) return 1;
-
-    Fd html_fd = fd_open_for_write("index.html");
-    if (html_fd == INVALID_FD) return 1;
-
-    cmd_append(&cmd, "./bin/index");
-    if (!cmd_run_sync_redirect_and_reset(&cmd, (Nob_Cmd_Redirect) {
-        .fdout = &html_fd
-    })) return 1;
-    fd_close(html_fd);
-
-    inject_reload_snippet("index.html");
-
     char webc_build_time[64] = {0};
     {
         mkdir_if_not_exists(BUILD_FOLDER);
@@ -249,7 +227,9 @@ int main(int argc, char **argv) {
                "-I"BUILD_FOLDER,
                "-I"SQLITE3_AMALGAMATION_FOLDER,
                "-o", "./bin/webc",
-               "webc.c", SQLITE3_OBJ_PATH);
+               "webc.c", "core/serve.c", "core/route.c",
+               "core/notes_controller.c", "core/version_controller.c",
+               "src/db.c", "src/notes.c", SQLITE3_OBJ_PATH);
     if (!cmd_run_sync_and_reset(&cmd)) return 1;
 
     return 0;

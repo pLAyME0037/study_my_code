@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include <stdio.h>
 #include <unistd.h>
 
@@ -15,6 +16,7 @@ void create_html(void) {
 #include "auto_ctrl/cttochtml/header.h"
 #include "index.h"
 #include "auto_ctrl/cttochtml/sample.h"
+#include "auto_ctrl/cttochtml/sqlite.h"
 #include "auto_ctrl/cttochtml/footer.h"
 }
 

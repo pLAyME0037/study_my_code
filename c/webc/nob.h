@@ -958,6 +958,8 @@ NOBDEF char *nob_win32_error_message(DWORD err);
 #endif // NOB_H_
 
 #ifdef NOB_IMPLEMENTATION
+#ifndef NOB_IMPLEMENTATION_GUARD_
+#define NOB_IMPLEMENTATION_GUARD_
 
 // This is like nob_proc_wait() but waits asynchronously. Depending on the platform ms means different thing.
 // On Windows it means timeout. On POSIX it means for how long to sleep after checking if the process exited,
@@ -2897,6 +2899,7 @@ NOBDEF char *nob_temp_running_executable_path(void)
 #endif
 }
 
+#endif // NOB_IMPLEMENTATION_GUARD_
 #endif // NOB_IMPLEMENTATION
 
 #ifndef NOB_STRIP_PREFIX_GUARD_
