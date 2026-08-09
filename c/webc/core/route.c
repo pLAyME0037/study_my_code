@@ -6,8 +6,7 @@
 
 #include "../src/user.h"
 
-void serve_resource_route(Serve_Context *sc, String_View uri)
-{
+void serve_resource_route(Serve_Context *sc, String_View uri) {
     if (sv_eq(uri, sv_from_cstr("/css/output.css"))) {
         serve_resource(sc, "./css/output.css", "text/css; charset=utf-8");
         return;
@@ -40,8 +39,7 @@ void serve_resource_route(Serve_Context *sc, String_View uri)
     serve_error(sc, 404);
 }
 
-void route_request(Serve_Context *sc, String_View method, String_View uri)
-{
+void route_request(Serve_Context *sc, String_View method, String_View uri) {
     if (sv_eq(uri, sv_from_cstr("/")) || sv_eq(uri, sv_from_cstr("/notes"))) {
         serve_notes(sc, method);
         return;
@@ -54,23 +52,32 @@ void route_request(Serve_Context *sc, String_View method, String_View uri)
         serve_notes_api(sc, method);
         return;
     }
-    if (sv_eq(method, sv_from_cstr("POST")) && sv_eq(uri, sv_from_cstr("/notes/create"))) {
+    if (sv_eq(method, sv_from_cstr("POST")) &&
+        sv_eq(uri, sv_from_cstr("/notes/create"))) {
         serve_notes_create(sc);
         return;
     }
-    if (sv_eq(method, sv_from_cstr("GET")) && sv_ends_with(uri, sv_from_cstr("/edit")) && sv_starts_with(uri, sv_from_cstr("/notes/"))) {
+    if (sv_eq(method, sv_from_cstr("GET"))       &&
+        sv_ends_with(uri, sv_from_cstr("/edit")) &&
+        sv_starts_with(uri, sv_from_cstr("/notes/"))) {
         serve_notes_edit(sc, uri);
         return;
     }
-    if (sv_eq(method, sv_from_cstr("POST")) && sv_ends_with(uri, sv_from_cstr("/update")) && sv_starts_with(uri, sv_from_cstr("/notes/"))) {
+    if (sv_eq(method, sv_from_cstr("POST"))        &&
+        sv_ends_with(uri, sv_from_cstr("/update")) &&
+        sv_starts_with(uri, sv_from_cstr("/notes/"))) {
         serve_notes_update(sc, uri);
         return;
     }
-    if (sv_eq(method, sv_from_cstr("POST")) && sv_ends_with(uri, sv_from_cstr("/delete")) && sv_starts_with(uri, sv_from_cstr("/notes/"))) {
+    if (sv_eq(method, sv_from_cstr("POST"))        &&
+        sv_ends_with(uri, sv_from_cstr("/delete")) &&
+        sv_starts_with(uri, sv_from_cstr("/notes/"))) {
         serve_notes_delete(sc, uri);
         return;
     }
-    if (sv_starts_with(uri, sv_from_cstr("/css/")) || sv_starts_with(uri, sv_from_cstr("/resource/")) || sv_eq(uri, sv_from_cstr("/favicon.ico"))) {
+    if (sv_starts_with(uri, sv_from_cstr("/css/"))      ||
+        sv_starts_with(uri, sv_from_cstr("/resource/")) ||
+        sv_eq(uri, sv_from_cstr("/favicon.ico"))) {
         serve_resource_route(sc, uri);
         return;
     }

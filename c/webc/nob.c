@@ -147,42 +147,79 @@ bool build_sqlite3(void) {
     return true;
 }
 
+typedef struct {
+    Cmd cmd;
+    const char *display_root;
+    const char *output_root;
+} Cttochtml_Walk_Data;
+
+bool cttochtml_walk_func(Nob_Walk_Entry entry)
+{
+    if (entry.type != NOB_FILE_REGULAR) return true;
+    if (!sv_ends_with_cstr(sv_from_cstr(entry.path), ".tt")) return true;
+
+    Cttochtml_Walk_Data *data = (Cttochtml_Walk_Data *)entry.data;
+
+    String_View input = sv_from_cstr(entry.path);
+    size_t prefix_len = strlen(data->display_root);
+    if (input.count <= prefix_len || strncmp(input.data, data->display_root, prefix_len) != 0) {
+        nob_log(NOB_ERROR, "Unexpected path %s outside %s", entry.path, data->display_root);
+        return false;
+    }
+
+    // "./display/component/sidebar.h.tt" -> "component/sidebar.h"
+    String_View rel = {
+        .data  = input.data + prefix_len + 1,
+        .count = input.count - prefix_len - 1,
+    };
+    String_View base = rel;
+    sv_chop_suffix(&base, sv_from_cstr(".tt"));
+
+    String_Builder output = {0};
+    sb_append_cstr(&output, data->output_root);
+    sb_append_cstr(&output, "/");
+    sb_append_sv(&output, base);
+    sb_append_null(&output);
+
+    // Make sure the parent directory of the output exists
+    size_t slash = output.count;
+    for (size_t i = output.count - 1; i > 0; --i) {
+        if (output.items[i] == '/') {
+            slash = i;
+            break;
+        }
+    }
+    if (slash < output.count - 1) {
+        String_Builder parent = {0};
+        sb_append_buf(&parent, output.items, slash);
+        sb_append_null(&parent);
+        if (!mkdir_if_not_exists(parent.items)) return false;
+    }
+
+    Fd out_fd = fd_open_for_write(output.items);
+    if (out_fd == INVALID_FD) return false;
+
+    cmd_append(&data->cmd, "./bin/tt", entry.path);
+    if (!cmd_run_sync_redirect_and_reset(&data->cmd, (Nob_Cmd_Redirect) {
+        .fdout = &out_fd }))
+    {
+        return false;
+    }
+    return true;
+}
+
 int prepare_cttochtml(Cmd cmd) {
     mkdir_if_not_exists("./auto_ctrl");
     mkdir_if_not_exists("./auto_ctrl/cttochtml");
 
-    Dir_Entry dir = {0};
-    if (!dir_entry_open("./display", &dir)) return 1;
+    Cttochtml_Walk_Data data = {
+        .cmd = cmd,
+        .display_root = "./display",
+        .output_root = "./auto_ctrl/cttochtml",
+    };
 
-    while (dir_entry_next(&dir)) {
-        String_View name = sv_from_cstr(dir.name);
-        if (sv_eq(name, sv_from_cstr(".")) || sv_eq(name, sv_from_cstr(".."))) continue;
-        if (!sv_ends_with_cstr(name, ".tt")) continue;
+    if (!nob_walk_dir("./display", cttochtml_walk_func, .data = &data)) return 1;
 
-        String_Builder input = {0};
-        sb_append_cstr(&input, "./display/");
-        sb_append_sv(&input, name);
-        sb_append_null(&input);
-
-        String_View base = name;
-        sv_chop_suffix(&base, sv_from_cstr(".tt"));
-        String_Builder output = {0};
-        sb_append_cstr(&output, "./auto_ctrl/cttochtml/");
-        sb_append_sv(&output, base);
-        sb_append_null(&output);
-
-        Fd out_fd = fd_open_for_write(output.items);
-        if (out_fd == INVALID_FD) return 1;
-
-        cmd_append(&cmd, "./bin/tt", input.items);
-        if (!cmd_run_sync_redirect_and_reset(&cmd, (Nob_Cmd_Redirect) {
-            .fdout = &out_fd }))
-        {
-            return 1;
-        }
-    }
-
-    dir_entry_close(dir);
     return 0;
 }
 

@@ -17,6 +17,8 @@
 #include "serve.h"
 #include "route.h"
 
+#include "../src/user.h"
+
 Resource *find_resource(const char *file_path)
 {
     for (size_t i = 0; i < resources_count; ++i) {
@@ -212,13 +214,20 @@ void render_page_shell(Serve_Context *sc,
     sb_append_cstr(sb, "</body></html>");
 }
 
-void render_page_header(String_Builder *sb, const char *page_title)
+void render_page_header(String_Builder *sb, const char *page_title, const char *current_path)
 {
+    User u = User_data();
 #define OUT(buf, size) sb_append_buf(sb, buf, size);
 #define STR(x) sb_append_cstr(sb, (x) ? (x) : "");
+#define CLS(cond, t, f) sb_append_cstr(sb, (cond) ? (t) : (f));
+#define NAV_ACTIVE(prefix) (strncmp((current_path), (prefix), strlen(prefix)) == 0)
+#define CURRENT_PATH current_path
 #define PAGE_TITLE page_title
 #include "../auto_ctrl/cttochtml/header.h"
 #undef PAGE_TITLE
+#undef CURRENT_PATH
+#undef NAV_ACTIVE
+#undef CLS
 #undef STR
 #undef OUT
 }

@@ -22,6 +22,20 @@
             }
         };
         window.themeController.apply(window.themeController.get());
+        window.sidebarController = {
+            get() {
+                return localStorage.getItem('sidebarCollapsed') === 'true';
+            },
+            apply(collapsed) {
+                document.body.classList.toggle('sidebar-collapsed', collapsed);
+            },
+            toggle() {
+                const collapsed = !this.get();
+                localStorage.setItem('sidebarCollapsed', collapsed ? 'true' : 'false');
+                this.apply(collapsed);
+            }
+        };
+        window.sidebarController.apply(window.sidebarController.get());
     </script>
 </head>
 
@@ -31,6 +45,14 @@
     <div class="flex items-center justify-between px-4 py-3">
 
         <div class="flex items-center gap-4">
+            <button onclick="window.sidebarController.toggle()"
+                    class="p-2 -ml-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+
             <div class="hidden md:flex items-center gap-2">
                 <span class="font-bold text-xl text-gray-800 dark:text-white tracking-tight">
                     Schul SYS
@@ -57,4 +79,7 @@
     </div>
 </header>
 
-<main class="flex-1 w-full max-w-5xl mx-auto p-6">
+<div class="flex flex-1 overflow-hidden">
+    ({ #include "component/sidebar.h" })
+
+<main class="flex-1 w-full max-w-5xl mx-auto p-6 overflow-y-auto">

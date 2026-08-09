@@ -55,7 +55,7 @@ static bool form_find(String_View body, const char *key, char *out, size_t out_c
 
 void render_notes_page(Serve_Context *sc, Notes notes) {
     String_Builder *sb = &sc->body;
-    render_page_header(sb, "Notes");
+    render_page_header(sb, "Notes", "/notes");
 #define OUT(buf, size) sb_append_buf(sb, buf, size);
 #define INT(x) sb_appendf(sb, "%d", (x));
 #define STR(x) sb_append_cstr(sb, (x) ? (x) : "");
@@ -72,7 +72,7 @@ void render_notes_page(Serve_Context *sc, Notes notes) {
 
 void render_notes_edit_page(Serve_Context *sc, Note note) {
     String_Builder *sb = &sc->body;
-    render_page_header(sb, "Edit Note");
+    render_page_header(sb, "Edit Note", "/notes");
 #define OUT(buf, size) sb_append_buf(sb, buf, size);
 #define INT(x) sb_appendf(sb, "%d", (x));
 #define STR(x) sb_append_cstr(sb, (x) ? (x) : "");
