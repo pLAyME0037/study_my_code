@@ -240,10 +240,10 @@ int main(int argc, char **argv) {
     HOME_PATH = getenv("HOME");
     if (HOME_PATH == NULL) {
         fprintf(stderr, "ERROR: No $HOME environment variable is setup. We "
-                "need it to find the location of ~/.sqlite3/webc/ directory.\n");
+                "need it to find the location of ~/.sqlite3/clinic/ directory.\n");
         return 1;
     }
-    WEBC_DIR_PATH = strdup(temp_sprintf("%s/.sqlite3/webc", HOME_PATH));
+    WEBC_DIR_PATH = strdup(temp_sprintf("%s/.sqlite3/clinic", HOME_PATH));
     WEBC_DB_PATH = strdup(temp_sprintf("%s/db", WEBC_DIR_PATH));
     WEBC_TRACE_MIGRATION_QUERIES = getenv("WEBC_TRACE_MIGRATION_QUERIES") != NULL;
 
