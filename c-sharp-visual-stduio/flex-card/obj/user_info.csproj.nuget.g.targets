@@ -6,7 +6,7 @@
     <Import Project="$(NuGetPackageRoot)microsoft.maui.core/10.0.90/buildTransitive/Microsoft.Maui.Core.targets" Condition="Exists('$(NuGetPackageRoot)microsoft.maui.core/10.0.90/buildTransitive/Microsoft.Maui.Core.targets')" />
     <Import Project="$(NuGetPackageRoot)microsoft.maui.resizetizer/10.0.90/buildTransitive/Microsoft.Maui.Resizetizer.targets" Condition="Exists('$(NuGetPackageRoot)microsoft.maui.resizetizer/10.0.90/buildTransitive/Microsoft.Maui.Resizetizer.targets')" />
     <Import Project="$(NuGetPackageRoot)microsoft.maui.controls.build.tasks/10.0.90/buildTransitive/netstandard2.0/Microsoft.Maui.Controls.Build.Tasks.targets" Condition="Exists('$(NuGetPackageRoot)microsoft.maui.controls.build.tasks/10.0.90/buildTransitive/netstandard2.0/Microsoft.Maui.Controls.Build.Tasks.targets')" />
-    <Import Project="$(NuGetPackageRoot)openmaui.controls.linux/10.0.70.4/build/OpenMaui.Controls.Linux.targets" Condition="Exists('$(NuGetPackageRoot)openmaui.controls.linux/10.0.70.4/build/OpenMaui.Controls.Linux.targets')" />
+    <Import Project="$(NuGetPackageRoot)openmaui.controls.linux/10.0.90.1/build/OpenMaui.Controls.Linux.targets" Condition="Exists('$(NuGetPackageRoot)openmaui.controls.linux/10.0.90.1/build/OpenMaui.Controls.Linux.targets')" />
     <Import Project="$(NuGetPackageRoot)communitytoolkit.mvvm/8.4.2/buildTransitive/CommunityToolkit.Mvvm.targets" Condition="Exists('$(NuGetPackageRoot)communitytoolkit.mvvm/8.4.2/buildTransitive/CommunityToolkit.Mvvm.targets')" />
   </ImportGroup>
 </Project>

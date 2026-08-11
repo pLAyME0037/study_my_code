@@ -121,6 +121,12 @@
 /mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/user_info/obj/Debug/net10.0/user_info.pdb
 /mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/user_info/obj/Debug/net10.0/user_info.genruntimeconfig.cache
 /mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/user_info/obj/Debug/net10.0/ref/user_info.dll
+/mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/flex-card/obj/Debug/net10.0/user_info.csproj.AssemblyReference.cache
+/mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/flex-card/obj/Debug/net10.0/user_info.GeneratedMSBuildEditorConfig.editorconfig
+/mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/flex-card/obj/Debug/net10.0/user_info.AssemblyInfoInputs.cache
+/mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/flex-card/obj/Debug/net10.0/user_info.AssemblyInfo.cs
+/mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/flex-card/obj/Debug/net10.0/user_info.csproj.CoreCompileInputs.cache
+/mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/flex-card/obj/Debug/net10.0/user_info.sourcelink.json
 /mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/flex-card/bin/Debug/net10.0/libopenmaui_wl.so
 /mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/flex-card/bin/Debug/net10.0/user_info
 /mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/flex-card/bin/Debug/net10.0/user_info.deps.json
@@ -160,6 +166,7 @@
 /mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/flex-card/bin/Debug/net10.0/Svg.Custom.dll
 /mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/flex-card/bin/Debug/net10.0/Svg.Model.dll
 /mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/flex-card/bin/Debug/net10.0/Svg.Skia.dll
+/mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/flex-card/bin/Debug/net10.0/Tmds.DBus.dll
 /mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/flex-card/bin/Debug/net10.0/ar/Microsoft.Maui.Controls.resources.dll
 /mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/flex-card/bin/Debug/net10.0/ca/Microsoft.Maui.Controls.resources.dll
 /mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/flex-card/bin/Debug/net10.0/cs/Microsoft.Maui.Controls.resources.dll
@@ -231,12 +238,6 @@
 /mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/flex-card/bin/Debug/net10.0/runtimes/win-x64/native/libSkiaSharp.pdb
 /mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/flex-card/bin/Debug/net10.0/runtimes/win-x86/native/libSkiaSharp.dll
 /mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/flex-card/bin/Debug/net10.0/runtimes/win-x86/native/libSkiaSharp.pdb
-/mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/flex-card/obj/Debug/net10.0/user_info.csproj.AssemblyReference.cache
-/mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/flex-card/obj/Debug/net10.0/user_info.GeneratedMSBuildEditorConfig.editorconfig
-/mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/flex-card/obj/Debug/net10.0/user_info.AssemblyInfoInputs.cache
-/mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/flex-card/obj/Debug/net10.0/user_info.AssemblyInfo.cs
-/mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/flex-card/obj/Debug/net10.0/user_info.csproj.CoreCompileInputs.cache
-/mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/flex-card/obj/Debug/net10.0/user_info.sourcelink.json
 /mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/flex-card/obj/Debug/net10.0/XamlC.stamp
 /mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/flex-card/obj/Debug/net10.0/user_info.csproj.Up2Date
 /mnt/disk2/mythings/study_my_code/c-sharp-visual-stduio/flex-card/obj/Debug/net10.0/user_info.dll

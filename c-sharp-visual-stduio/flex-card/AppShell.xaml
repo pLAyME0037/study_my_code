@@ -7,6 +7,9 @@
     xmlns:views="clr-namespace:user_info.Views"
     Title="user_info">
 
+    <ShellContent Title="Student Note"
+                  ContentTemplate="{DataTemplate views:StudentNote}" />
+
     <ShellContent Title="Home"
                   ContentTemplate="{DataTemplate pages:HomePage}"
                   Route="HomePage" />

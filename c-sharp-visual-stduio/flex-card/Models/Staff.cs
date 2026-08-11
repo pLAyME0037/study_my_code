@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace user_info.Models; 
+namespace user_info.Models;
 
 public class Staff {
     [Required]

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="user_info.Views.StudentNote">
+
+<ScrollView>
+    <VerticalStackLayout>
+        <FlexLayout Direction="Row"
+                    Wrap="Wrap"
+                    JustifyContent="Center"
+                    AlignItems="Start"
+                    Margin="20">
+
+                <Label Text="Title"
+                       FontSize="22"
+                       Padding="16,9"
+                       FontAttributes="Bold" />
+                <Border Stroke="#C49B33"
+                        StrokeThickness="4"
+                        StrokeShape="RoundRectangle 1,1,1,1"
+                        Background="#2B0B98"
+                        Padding="16,9"
+                        HorizontalOptions="Center">
+                    <Entry Text="{Binding Title}"
+                           FontSize="22" />
+                </Border>
+
+                <Label Text="Title"
+                       FontSize="22"
+                       Padding="16,9"
+                       FontAttributes="Bold"/>
+                <Border Stroke="#C49B33"
+                        StrokeThickness="4"
+                        StrokeShape="RoundRectangle 1,1,1,1"
+                        Background="#2B0B98">
+                    <Editor Text="{Binding Content}"
+                            TextColor="Orange"
+                            FontSize="22"
+                            HeightRequest="200"
+                            Placeholder="Enter Content"/>
+                </Border>
+
+                <HorizontalStackLayout HorizontalOptions="Center"
+                                       Padding="16,9"
+                                       Spacing="10">
+                    <Button Text="Save"
+                            FontSize="22"
+                            Command="{Binding SaveCommand}"/>
+                    <Button Text="Load"
+                            FontSize="22"
+                            Command="{Binding LoadCommand}"/>
+                    <Button Text="Delete"
+                            FontSize="22"
+                            Command="{Binding DeleteCommand}"/>
+                </HorizontalStackLayout>
+
+                <Label Text="{Binding Status}"
+                       FontSize="22"
+                       FontAttributes="Bold"/>
+        </FlexLayout>
+    </VerticalStackLayout>
+
+</ScrollView>
+</ContentPage>
+

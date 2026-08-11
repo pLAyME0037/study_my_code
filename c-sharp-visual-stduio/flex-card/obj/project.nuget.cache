@@ -31,10 +31,10 @@
     "/home/playme/.nuget/packages/microsoft.maui.core/10.0.90/microsoft.maui.core.10.0.90.nupkg.sha512",
     "/home/playme/.nuget/packages/microsoft.maui.essentials/10.0.90/microsoft.maui.essentials.10.0.90.nupkg.sha512",
     "/home/playme/.nuget/packages/microsoft.maui.graphics/10.0.90/microsoft.maui.graphics.10.0.90.nupkg.sha512",
-    "/home/playme/.nuget/packages/microsoft.maui.graphics.skia/10.0.70/microsoft.maui.graphics.skia.10.0.70.nupkg.sha512",
+    "/home/playme/.nuget/packages/microsoft.maui.graphics.skia/10.0.90/microsoft.maui.graphics.skia.10.0.90.nupkg.sha512",
     "/home/playme/.nuget/packages/microsoft.maui.resizetizer/10.0.90/microsoft.maui.resizetizer.10.0.90.nupkg.sha512",
-    "/home/playme/.nuget/packages/openmaui.controls.linux/10.0.70.4/openmaui.controls.linux.10.0.70.4.nupkg.sha512",
-    "/home/playme/.nuget/packages/openmaui.hosting/10.0.70.4/openmaui.hosting.10.0.70.4.nupkg.sha512",
+    "/home/playme/.nuget/packages/openmaui.controls.linux/10.0.90.1/openmaui.controls.linux.10.0.90.1.nupkg.sha512",
+    "/home/playme/.nuget/packages/openmaui.hosting/10.0.90.1/openmaui.hosting.10.0.90.1.nupkg.sha512",
     "/home/playme/.nuget/packages/shimskiasharp/3.4.1/shimskiasharp.3.4.1.nupkg.sha512",
     "/home/playme/.nuget/packages/skiasharp/3.119.2/skiasharp.3.119.2.nupkg.sha512",
     "/home/playme/.nuget/packages/skiasharp.nativeassets.linux/3.119.2/skiasharp.nativeassets.linux.3.119.2.nupkg.sha512",
@@ -46,11 +46,12 @@
     "/home/playme/.nuget/packages/svg.custom/3.4.1/svg.custom.3.4.1.nupkg.sha512",
     "/home/playme/.nuget/packages/svg.model/3.4.1/svg.model.3.4.1.nupkg.sha512",
     "/home/playme/.nuget/packages/svg.skia/3.4.1/svg.skia.3.4.1.nupkg.sha512",
-    "/home/playme/.nuget/packages/microsoft.netcore.app.runtime.linux-x64/10.0.9/microsoft.netcore.app.runtime.linux-x64.10.0.9.nupkg.sha512",
-    "/home/playme/.nuget/packages/microsoft.netcore.app.runtime.linux-arm64/10.0.9/microsoft.netcore.app.runtime.linux-arm64.10.0.9.nupkg.sha512",
-    "/home/playme/.nuget/packages/microsoft.aspnetcore.app.runtime.linux-x64/10.0.9/microsoft.aspnetcore.app.runtime.linux-x64.10.0.9.nupkg.sha512",
+    "/home/playme/.nuget/packages/tmds.dbus/0.94.2/tmds.dbus.0.94.2.nupkg.sha512",
     "/home/playme/.nuget/packages/microsoft.aspnetcore.app.runtime.linux-arm64/10.0.9/microsoft.aspnetcore.app.runtime.linux-arm64.10.0.9.nupkg.sha512",
-    "/home/playme/.nuget/packages/microsoft.netcore.app.host.linux-arm64/10.0.9/microsoft.netcore.app.host.linux-arm64.10.0.9.nupkg.sha512"
+    "/home/playme/.nuget/packages/microsoft.aspnetcore.app.runtime.linux-x64/10.0.9/microsoft.aspnetcore.app.runtime.linux-x64.10.0.9.nupkg.sha512",
+    "/home/playme/.nuget/packages/microsoft.netcore.app.host.linux-arm64/10.0.9/microsoft.netcore.app.host.linux-arm64.10.0.9.nupkg.sha512",
+    "/home/playme/.nuget/packages/microsoft.netcore.app.runtime.linux-arm64/10.0.9/microsoft.netcore.app.runtime.linux-arm64.10.0.9.nupkg.sha512",
+    "/home/playme/.nuget/packages/microsoft.netcore.app.runtime.linux-x64/10.0.9/microsoft.netcore.app.runtime.linux-x64.10.0.9.nupkg.sha512"
   ],
   "logs": []
 }
