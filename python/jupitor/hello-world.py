@@ -1,15 +1,9 @@
-#!./path/to/venv/bin/python3
+a = [1, 2, 3, 8]
+b = [4, 5, 6, 7]
+c = [1, 2, 9, 0]
+num = 5
 
-import numpy as np
-
-print("Hello, World")
-
-arr1 = np.array([1, 2, 3, 4])
-arr2 = np.array([[1, 2], [3, 4]])
-arr3 = np.array([[1, 2, 4], [3, 4, 5]])
-
-print(arr1.ndim)
-print(arr2.ndim)
-print(arr3.shape)
-print(arr1.dtype)
-print(arr1[3:0])
+for i in range(len(a)):
+    print("󰉛 ", a[i] + num, end="  ")
+    print(" ", b[i] * num, end="  ")
+    print(" ", b[i] - num)
