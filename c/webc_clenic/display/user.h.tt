@@ -68,7 +68,7 @@
                 <div class="flex flex-col gap-1 items-center">
                     <td class="px-6 py-4 whitespace-nowrap text-left">
                         <div class="w-10 h-10 relative rounded-full ring-4 ring-white dark:ring-gray-800 shadow-sm bg-gray-100 dark:bg-gray-700 group">
-                            <img src="({ ESCAPED(users.items[i].profile_pic) })"
+                            <img src="https://ui-avatars.com/api/?name=({ ESCAPED(users.items[i].name) })&color=7F9CF5&background=EBF4FF&bold=true"
                                  alt="({ ESCAPED(users.items[i].profile_pic) })"
                                  class="w-full h-full rounded-full object-cover transition-opacity duration-300 opacity-50">
                         </div>
