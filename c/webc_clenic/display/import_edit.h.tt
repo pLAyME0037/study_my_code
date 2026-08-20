@@ -1,0 +1,18 @@
+<div class="max-w-2xl mx-auto">
+    <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Edit Medicine Import</h2>
+    <form method="POST" action="/medicine-imports/({ LLINT(id); })/update"
+          class="p-5 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+        <div class="mb-3">
+            <label class="block text-sm text-gray-600 dark:text-gray-300 mb-1">Date</label>
+            <input name="date" type="date" value="({ ESCAPED(date); })"
+                   class="px-3 py-2 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-white">
+        </div>
+        <div class="mb-3">
+            <label class="block text-sm text-gray-600 dark:text-gray-300 mb-1">Amount</label>
+            <input name="amount" type="number" step="any" value="({ ESCAPED(amount); })"
+                   class="px-3 py-2 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-white">
+        </div>
+        <button type="submit" class="px-4 py-2 rounded bg-indigo-600 hover:bg-indigo-700 text-white font-medium">Save</button>
+        <a href="/medicine-imports" class="ml-2 px-4 py-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200">Cancel</a>
+    </form>
+</div>

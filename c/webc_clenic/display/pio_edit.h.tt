@@ -1,0 +1,38 @@
+<div class="max-w-2xl mx-auto">
+    <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Edit Patient Invoice Out</h2>
+    <form method="POST" action="/patient-invoice-out/({ LLINT(id); })/update"
+          class="p-5 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+        <div class="mb-3">
+            <label class="block text-sm text-gray-600 dark:text-gray-300 mb-1">Patient</label>
+            <input type="text" value="({ ESCAPED(patient_name); })" disabled
+                   class="px-3 py-2 rounded border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400">
+        </div>
+        <div class="mb-3">
+            <label class="block text-sm text-gray-600 dark:text-gray-300 mb-1">Room</label>
+            <input type="text" value="({ ESCAPED(room_name); })" disabled
+                   class="px-3 py-2 rounded border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400">
+        </div>
+        <div class="mb-3">
+            <label class="block text-sm text-gray-600 dark:text-gray-300 mb-1">Room Price</label>
+            <input name="room_price" type="number" step="any" value="({ ESCAPED(room_price); })"
+                   class="px-3 py-2 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-white">
+        </div>
+        <div class="mb-3">
+            <label class="block text-sm text-gray-600 dark:text-gray-300 mb-1">Start Date</label>
+            <input name="start_date" type="date" value="({ ESCAPED(start_date); })"
+                   class="px-3 py-2 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-white">
+        </div>
+        <div class="mb-3">
+            <label class="block text-sm text-gray-600 dark:text-gray-300 mb-1">End Date</label>
+            <input name="end_date" type="date" value="({ ESCAPED(end_date); })"
+                   class="px-3 py-2 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-white">
+        </div>
+        <div class="mb-3">
+            <label class="block text-sm text-gray-600 dark:text-gray-300 mb-1">Room Days</label>
+            <input name="room_day" type="number" step="any" value="({ ESCAPED(room_day); })"
+                   class="px-3 py-2 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-white">
+        </div>
+        <button type="submit" class="px-4 py-2 rounded bg-indigo-600 hover:bg-indigo-700 text-white font-medium">Save</button>
+        <a href="/patient-invoice-out" class="ml-2 px-4 py-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200">Cancel</a>
+    </form>
+</div>

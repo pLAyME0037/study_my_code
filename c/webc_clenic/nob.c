@@ -64,6 +64,7 @@ int build_bundle(const char *webc_build_time) {
     } resources[] = {
         { .file_path = "./css/output.css" },
         { .file_path = "./resource/image/user1.png" },
+        { .file_path = "./resource/image/know_me.png" },
     };
 
     Nob_String_Builder bundle = {0};
@@ -239,7 +240,7 @@ int main(int argc, char **argv) {
     char webc_build_time[64] = {0};
     {
         mkdir_if_not_exists(BUILD_FOLDER);
-        cmd_append(&cmd, "date", "-u", "+%a, %d %b %Y %H:%M:%S GMT");
+        cmd_append(&cmd, "date", "-u", "+%a, %d %b %Y %H:%M:%S UTF");
         if (!cmd_run(&cmd, .stdout_path = BUILD_TIME_PATH)) return 1;
         cmd.count = 0;
 
@@ -261,8 +262,26 @@ int main(int argc, char **argv) {
                "-I"SQLITE3_AMALGAMATION_FOLDER,
                "-o", "./bin/webc",
                "webc.c", "core/serve.c", "core/route.c",
-               "core/notes_controller.c", "core/version_controller.c",
-               "src/db.c", "src/notes.c", SQLITE3_OBJ_PATH);
+               "core/header.c", "core/footer.c",
+               "core/notes.c", "core/version.c",
+               "core/crud.c", "core/crud_modules.c",
+               "core/http/utils.c",
+               "core/dashboard.c",
+               "core/stock.c",
+               "core/import.c",
+               "core/patient_invoice.c",
+               "core/org.c",
+               "core/user.c",
+               "src/db/db.c",
+               "src/crud/crud.c",
+               "src/dashboard/dashboard.c",
+               "src/import/import.c",
+               "src/notes/notes.c",
+               "src/org/org.c",
+               "src/patient_invoice/patient_invoice.c",
+               "src/stock/stock.c",
+               "src/user/user.c",
+               SQLITE3_OBJ_PATH);
     if (!cmd_run_sync_and_reset(&cmd)) return 1;
 
     return 0;

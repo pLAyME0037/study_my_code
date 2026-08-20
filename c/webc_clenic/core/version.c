@@ -1,5 +1,8 @@
-#include "version_controller.h"
+#include "../nob.h"
 #include "../build/bundle.h"
+#include "version.h"
+#include "../core/header.h"
+#include "../core/footer.h"
 
 void render_version_page(Serve_Context *sc) {
     String_Builder *sb = &sc->body;
