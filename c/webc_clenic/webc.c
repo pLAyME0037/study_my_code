@@ -109,6 +109,13 @@ static bool dev_port_in_use(const char *addr, uint16_t port) {
     return in_use;
 }
 
+static void dev_stop_server(pid_t *server_pid) {
+    if (*server_pid <= 0) return;
+    kill(*server_pid, SIGTERM);
+    waitpid(*server_pid, NULL, 0);
+    *server_pid = 0;
+}
+
 static bool dev_server_alive(pid_t *server_pid) {
     if (*server_pid <= 0) return false;
     int status = 0;
@@ -298,11 +305,7 @@ bool dev_run(Command *self, const char *program_name, int argc, char **argv) {
             dirty = true;
         }
         if (dirty) {
-            if (server_pid <= 0) return false;
-            kill(server_pid, SIGTERM);
-            waitpid(server_pid, NULL, 0);
-            server_pid = 0;
-
+            dev_stop_server(&server_pid);
             printf("dev: server rebuilding...\n");
             if (dev_run_build() != 0) {
                 fprintf(stderr, "dev: build failed waiting for the next change...\n");
