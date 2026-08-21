@@ -8,8 +8,26 @@
                    class="px-3 py-2 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-white">
         </div>
         <div class="mb-3">
-            <label class="block text-sm text-gray-600 dark:text-gray-300 mb-1">Amount</label>
-            <input name="amount" type="number" step="any" value="({ ESCAPED(amount); })"
+            <label class="block text-sm text-gray-600 dark:text-gray-300 mb-1">Medicine</label>
+            <select name="medicine_id" required
+                    class="px-3 py-2 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-white">
+                <option value="">select medicine</option>
+                ({ for (size_t i = 0; i < med_opts->count; ++i) { })
+                    <option value="({ LLINT(med_opts->items[i].id); })"
+                            ({ if (med_opts->items[i].id == atoll(medicine_id)) { })selected({ } })>
+                        ({ ESCAPED(med_opts->items[i].name); })
+                    </option>
+                ({ } })
+            </select>
+        </div>
+        <div class="mb-3">
+            <label class="block text-sm text-gray-600 dark:text-gray-300 mb-1">Qty</label>
+            <input name="qty" type="number" step="any" required value="({ ESCAPED(qty); })"
+                   class="px-3 py-2 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-white">
+        </div>
+        <div class="mb-3">
+            <label class="block text-sm text-gray-600 dark:text-gray-300 mb-1">Price</label>
+            <input name="price" type="number" step="any" value="({ ESCAPED(price); })"
                    class="px-3 py-2 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-white">
         </div>
         <button type="submit" class="px-4 py-2 rounded bg-indigo-600 hover:bg-indigo-700 text-white font-medium">Save</button>

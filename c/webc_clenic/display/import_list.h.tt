@@ -11,8 +11,25 @@
                        class="px-3 py-2 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-white">
             </div>
             <div class="mb-3">
-                <label class="block text-sm text-gray-600 dark:text-gray-300 mb-1">Amount</label>
-                <input name="amount" type="number" step="any"
+                <label class="block text-sm text-gray-600 dark:text-gray-300 mb-1">Medicine</label>
+                <select name="medicine_id" required
+                        class="px-3 py-2 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-white">
+                    <option value="">select medicine</option>
+                    ({ for (size_t i = 0; i < med_opts->count; ++i) { })
+                        <option value="({ LLINT(med_opts->items[i].id); })">
+                            ({ ESCAPED(med_opts->items[i].name); })
+                        </option>
+                    ({ } })
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="block text-sm text-gray-600 dark:text-gray-300 mb-1">Qty</label>
+                <input name="qty" type="number" step="any" required
+                       class="px-3 py-2 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-white">
+            </div>
+            <div class="mb-3">
+                <label class="block text-sm text-gray-600 dark:text-gray-300 mb-1">Price</label>
+                <input name="price" type="number" step="any"
                        class="px-3 py-2 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-white">
             </div>
         </div>
@@ -23,25 +40,31 @@
         <table class="w-full text-left border-collapse">
             <thead class="bg-indigo-600 text-white">
                 <tr>
-                    <th class="px-4 py-3 font-semibold">#</th>
+                    <th class="px-4 py-3 font-semibold">Import #</th>
                     <th class="px-4 py-3 font-semibold">Date</th>
+                    <th class="px-4 py-3 font-semibold">Medicine</th>
+                    <th class="px-4 py-3 font-semibold">Qty</th>
+                    <th class="px-4 py-3 font-semibold">Price</th>
                     <th class="px-4 py-3 font-semibold">Amount</th>
-                    <th class="px-4 py-3 font-semibold">Details</th>
                     <th class="px-4 py-3 font-semibold">Actions</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
                 ({ if (rows->count == 0) { })
                     <tr>
-                        <td colspan="5" class="px-4 py-4 text-sm text-gray-500 dark:text-gray-400">No imports yet.</td>
+                        <td colspan="7" class="px-4 py-4 text-sm text-gray-500 dark:text-gray-400">No imports yet.</td>
                     </tr>
                 ({ } else for (size_t i = 0; i < rows->count; ++i) { })
                     <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                        <td class="px-4 py-2 text-gray-500 dark:text-gray-400">({ LLINT(rows->items[i].id); })</td>
+                        <td class="px-4 py-2 text-gray-500 dark:text-gray-400">
+                            <a href="/medicine-imports/({ LLINT(rows->items[i].id); })/edit"
+                               class="text-indigo-600 dark:text-indigo-400 hover:underline">({ LLINT(rows->items[i].id); })</a>
+                        </td>
                         <td class="px-4 py-2 text-gray-700 dark:text-gray-200">({ ESCAPED(rows->items[i].date); })</td>
+                        <td class="px-4 py-2 text-gray-700 dark:text-gray-200">({ ESCAPED(rows->items[i].medicine_name); })</td>
+                        <td class="px-4 py-2 text-gray-700 dark:text-gray-200">({ ESCAPED(rows->items[i].qty); })</td>
+                        <td class="px-4 py-2 text-gray-700 dark:text-gray-200">({ ESCAPED(rows->items[i].price); })</td>
                         <td class="px-4 py-2 text-gray-700 dark:text-gray-200">({ ESCAPED(rows->items[i].amount); })</td>
-                        <td class="px-4 py-2"><a href="/medicine-imports/({ LLINT(rows->items[i].id); })/details"
-                                                class="text-indigo-600 dark:text-indigo-400 hover:underline">({ INT(rows->items[i].detail_count); }) detail(s)</a></td>
                         <td class="px-4 py-2 whitespace-nowrap">
                             <a href="/medicine-imports/({ LLINT(rows->items[i].id); })/edit"
                                class="mr-2 px-2 py-1 rounded text-xs bg-amber-500 hover:bg-amber-600 text-white">Edit</a>

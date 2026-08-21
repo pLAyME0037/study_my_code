@@ -6,28 +6,18 @@
 typedef struct {
     long long id;
     char *date;
-    char *amount;
-    int detail_count;
-} Import_Header;
-
-typedef struct {
-    Import_Header *items;
-    size_t count;
-    size_t capacity;
-} Import_Headers;
-
-typedef struct {
-    long long medicine_id;
+    char *medicine_id;
     char *medicine_name;
     char *qty;
     char *price;
-} Import_Detail;
+    char *amount;
+} Import_Row;
 
 typedef struct {
-    Import_Detail *items;
+    Import_Row *items;
     size_t count;
     size_t capacity;
-} Import_Details;
+} Import_Rows;
 
 typedef struct {
     long long id;
@@ -40,14 +30,12 @@ typedef struct {
     size_t capacity;
 } Medicine_Options;
 
-bool import_rows_load(sqlite3 *db, Import_Headers *rows, long long only_id);
-bool import_details_load(sqlite3 *db, Import_Details *rows, long long import_id);
+bool import_rows_load(sqlite3 *db, Import_Rows *rows, long long only_id);
 bool import_medicines_load(sqlite3 *db, Medicine_Options *opts);
-bool import_insert(sqlite3 *db, const char *date, const char *amount);
-bool import_update(sqlite3 *db, long long id, const char *date, const char *amount);
+bool import_insert_line(sqlite3 *db, const char *date,
+                        long long medicine_id, const char *qty, const char *price);
+bool import_update_line(sqlite3 *db, long long id, const char *date,
+                        long long medicine_id, const char *qty, const char *price);
 bool import_delete(sqlite3 *db, long long id);
-bool import_detail_insert(sqlite3 *db, long long import_id,
-                          long long medicine_id, const char *qty, const char *price);
-bool import_detail_delete(sqlite3 *db, long long import_id, long long medicine_id);
 
 #endif // SRC_IMPORT_H_

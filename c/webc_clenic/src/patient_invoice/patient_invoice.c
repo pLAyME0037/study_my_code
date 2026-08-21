@@ -7,8 +7,11 @@
 // Generic FK option lists
 // ---------------------------------------------------------------------------
 
-bool pio_options_load(sqlite3 *db, Pio_Options *opts,
-                      const char *table, const char *label_col) {
+bool pio_options_load(sqlite3     *db,
+                      Pio_Options *opts,
+                      const char  *table,
+                      const char  *label_col)
+{
     bool result = true;
     sqlite3_stmt *stmt = NULL;
 
@@ -91,15 +94,15 @@ bool pmi_headers_load(sqlite3 *db, Pmi_Headers *rows, long long only_id) {
     for (ret = sqlite3_step(stmt); ret == SQLITE_ROW; ret = sqlite3_step(stmt)) {
         Pmi_Header row = {0};
         row.id = sqlite3_column_int64(stmt, 0);
-        const char *p = (const char *)sqlite3_column_text(stmt, 1);
-        const char *d = (const char *)sqlite3_column_text(stmt, 2);
-        const char *r = (const char *)sqlite3_column_text(stmt, 3);
+        const char *p   = (const char *)sqlite3_column_text(stmt, 1);
+        const char *d   = (const char *)sqlite3_column_text(stmt, 2);
+        const char *r   = (const char *)sqlite3_column_text(stmt, 3);
         const char *usd = (const char *)sqlite3_column_text(stmt, 4);
-        row.patient_name = temp_strdup(p ? p : "");
-        row.invoice_date = temp_strdup(d ? d : "");
-        row.amount_in_riel = temp_strdup(r ? r : "");
+        row.patient_name     = temp_strdup(p   ? p   : "");
+        row.invoice_date     = temp_strdup(d   ? d   : "");
+        row.amount_in_riel   = temp_strdup(r   ? r   : "");
         row.amount_in_dollar = temp_strdup(usd ? usd : "");
-        row.detail_count = sqlite3_column_int(stmt, 5);
+        row.detail_count     = sqlite3_column_int(stmt, 5);
         da_append(rows, row);
     }
     if (ret != SQLITE_DONE) {
@@ -135,10 +138,10 @@ bool pmi_details_load(sqlite3 *db, Pmi_Details *rows, long long invoice_id) {
         const char *a = (const char *)sqlite3_column_text(stmt, 4);
         const char *c = (const char *)sqlite3_column_text(stmt, 5);
         row.medicine_name = temp_strdup(n ? n : "");
-        row.qty = temp_strdup(q ? q : "");
-        row.price = temp_strdup(p ? p : "");
-        row.amount = temp_strdup(a ? a : "");
-        row.currency = temp_strdup(c ? c : "");
+        row.qty           = temp_strdup(q ? q : "");
+        row.price         = temp_strdup(p ? p : "");
+        row.amount        = temp_strdup(a ? a : "");
+        row.currency      = temp_strdup(c ? c : "");
         da_append(rows, row);
     }
     if (ret != SQLITE_DONE) {
@@ -151,9 +154,13 @@ defer:
     return result;
 }
 
-bool pmi_insert(sqlite3 *db, long long *out_id,
-                long long patient_id, const char *invoice_date,
-                const char *riel, const char *dollar) {
+bool pmi_insert(sqlite3    *db,
+                long long  *out_id,
+                long long   patient_id,
+                const char *invoice_date,
+                const char *riel,
+                const char *dollar)
+{
     bool result = true;
     sqlite3_stmt *stmt = NULL;
 
@@ -182,8 +189,12 @@ defer:
     return result;
 }
 
-bool pmi_update(sqlite3 *db, long long id, const char *invoice_date,
-                const char *riel, const char *dollar) {
+bool pmi_update(sqlite3    *db,
+                long long   id,
+                const char *invoice_date,
+                const char *riel,
+                const char *dollar)
+{
     bool result = true;
     sqlite3_stmt *stmt = NULL;
 
@@ -246,9 +257,14 @@ defer:
     return result;
 }
 
-bool pmi_detail_insert(sqlite3 *db, long long invoice_id, long long medicine_id,
-                       const char *qty, const char *price,
-                       const char *amount, const char *currency) {
+bool pmi_detail_insert(sqlite3    *db,
+                       long long   invoice_id,
+                       long long   medicine_id,
+                       const char *qty,
+                       const char *price,
+                       const char *amount,
+                       const char *currency)
+{
     bool result = true;
     sqlite3_stmt *stmt = NULL;
 
@@ -333,18 +349,18 @@ bool pio_headers_load(sqlite3 *db, Pio_Headers *rows, long long only_id) {
     for (ret = sqlite3_step(stmt); ret == SQLITE_ROW; ret = sqlite3_step(stmt)) {
         Pio_Header row = {0};
         row.id = sqlite3_column_int64(stmt, 0);
-        const char *p = (const char *)sqlite3_column_text(stmt, 1);
-        const char *r = (const char *)sqlite3_column_text(stmt, 2);
+        const char *p  = (const char *)sqlite3_column_text(stmt, 1);
+        const char *r  = (const char *)sqlite3_column_text(stmt, 2);
         const char *rp = (const char *)sqlite3_column_text(stmt, 3);
         const char *sd = (const char *)sqlite3_column_text(stmt, 4);
         const char *ed = (const char *)sqlite3_column_text(stmt, 5);
         const char *rd = (const char *)sqlite3_column_text(stmt, 6);
-        row.patient_name = temp_strdup(p ? p : "");
-        row.room_name = temp_strdup(r ? r : "");
-        row.room_price = temp_strdup(rp ? rp : "");
-        row.start_date = temp_strdup(sd ? sd : "");
-        row.end_date = temp_strdup(ed ? ed : "");
-        row.room_day = temp_strdup(rd ? rd : "");
+        row.patient_name = temp_strdup(p  ? p  : "");
+        row.room_name    = temp_strdup(r  ? r  : "");
+        row.room_price   = temp_strdup(rp ? rp : "");
+        row.start_date   = temp_strdup(sd ? sd : "");
+        row.end_date     = temp_strdup(ed ? ed : "");
+        row.room_day     = temp_strdup(rd ? rd : "");
         row.detail_count = sqlite3_column_int(stmt, 7);
         da_append(rows, row);
     }
@@ -390,9 +406,15 @@ defer:
     return result;
 }
 
-bool pio_insert(sqlite3 *db, long long *out_id,
-                long long patient_id, long long room_id, const char *room_price,
-                const char *start_date, const char *end_date, const char *room_day) {
+bool pio_insert(sqlite3   *db,
+                long long *out_id,
+                long long   patient_id,
+                long long   room_id,
+                const char *room_price,
+                const char *start_date,
+                const char *end_date,
+                const char *room_day)
+{
     bool result = true;
     sqlite3_stmt *stmt = NULL;
 
@@ -430,8 +452,13 @@ defer:
     return result;
 }
 
-bool pio_update(sqlite3 *db, long long id, const char *room_price,
-                const char *start_date, const char *end_date, const char *room_day) {
+bool pio_update(sqlite3    *db,
+                long long   id,
+                const char *room_price,
+                const char *start_date,
+                const char *end_date,
+                const char *room_day)
+{
     bool result = true;
     sqlite3_stmt *stmt = NULL;
 

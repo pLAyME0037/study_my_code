@@ -234,8 +234,13 @@ int main(int argc, char **argv) {
 
     if (prepare_cttochtml(cmd)) return 1;
 
-    cmd_append(&cmd, "./bin/tailwindcss-linux-x64", "-i", "css/input.css", "-o", "css/output.css", "--minify");
-    if (!cmd_run_sync_and_reset(&cmd)) return 1;
+    cmd_append(&cmd, "tailwindcss-linux-x64", "-i", "css/input.css", "-o", "css/output.css", "--minify");
+    if (!cmd_run_sync_and_reset(&cmd)) {
+        printf("tailwindcss-linux-x64 not found.\n"
+               "[Recommend:] Download tailwindcss-linux-x64 and keep in ~/.local/bin\n"
+               "Or get href of tailwind web api\n");
+        return 1;
+    }
 
     char webc_build_time[64] = {0};
     {

@@ -1,6 +1,8 @@
 ahk/*.zip
 c/*.zip
 c/painter/
+c/webc/bin/tailwindcss-linux-x64
+c/webc_clenic/bin/tailwindcss-linux-x64
 cc/*.zip
 flutter/*.zip
 flutter/calulator/
