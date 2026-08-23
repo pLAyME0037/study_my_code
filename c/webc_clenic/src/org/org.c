@@ -10,20 +10,23 @@
 bool org_daily_headers_load(sqlite3 *db, Org_Daily_Headers *rows, long long only_id) {
     bool result = true;
     sqlite3_stmt *stmt = NULL;
+    const char *sql;
 
-    const char *sql = only_id < 0
-        ? "SELECT i.id, o.name, p.name, i.invoice_date, i.amount_in_riel, i.amount_in_dollar, "
-          "(SELECT COUNT(*) FROM OrganizationDailyInvoiceDetails d WHERE d.organization_daily_id = i.id) "
-          "FROM OrganizationDailyInvoices i "
-          "LEFT JOIN Organizations o ON o.id = i.organization_id "
-          "LEFT JOIN Patients p ON p.id = i.patient_id "
-          "ORDER BY i.id DESC;"
-        : temp_sprintf("SELECT i.id, o.name, p.name, i.invoice_date, i.amount_in_riel, i.amount_in_dollar, "
-                       "(SELECT COUNT(*) FROM OrganizationDailyInvoiceDetails d WHERE d.organization_daily_id = i.id) "
-                       "FROM OrganizationDailyInvoices i "
-                       "LEFT JOIN Organizations o ON o.id = i.organization_id "
-                       "LEFT JOIN Patients p ON p.id = i.patient_id "
-                       "WHERE i.id = %lld;", only_id);
+    if (only_id < 0) {
+        sql = "SELECT i.id, o.name, p.name, i.invoice_date, i.amount_in_riel, i.amount_in_dollar, "
+            "(SELECT COUNT(*) FROM OrganizationDailyInvoiceDetails d WHERE d.organization_daily_id = i.id) "
+            "FROM OrganizationDailyInvoices i "
+            "LEFT JOIN Organizations o ON o.id = i.organization_id "
+            "LEFT JOIN Patients p ON p.id = i.patient_id "
+            "ORDER BY i.id DESC;";
+    } else {
+        sql = temp_sprintf("SELECT i.id, o.name, p.name, i.invoice_date, i.amount_in_riel, i.amount_in_dollar, "
+            "(SELECT COUNT(*) FROM OrganizationDailyInvoiceDetails d WHERE d.organization_daily_id = i.id) "
+            "FROM OrganizationDailyInvoices i "
+            "LEFT JOIN Organizations o ON o.id = i.organization_id "
+            "LEFT JOIN Patients p ON p.id = i.patient_id "
+            "WHERE i.id = %lld;", only_id);
+    }
 
     if (sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) != SQLITE_OK) {
         LOG_SQLITE3_ERROR(db);
@@ -363,24 +366,27 @@ defer:
 bool org_out_headers_load(sqlite3 *db, Org_Out_Headers *rows, long long only_id) {
     bool result = true;
     sqlite3_stmt *stmt = NULL;
+    const char *sql;
 
-    const char *sql = only_id < 0
-        ? "SELECT i.id, o.name, p.name, rt.type, i.room_price, i.start_date, i.end_date, i.room_day, "
-          "(SELECT COUNT(*) FROM OrganizationInvoiceOutDetails d WHERE d.organization_invoice_out_id = i.id) "
-          "FROM OrganizationInvoiceOut i "
-          "LEFT JOIN Organizations o ON o.id = i.organization_id "
-          "LEFT JOIN Patients p ON p.id = i.patient_id "
-          "LEFT JOIN Rooms r ON r.id = i.room_id "
-          "LEFT JOIN RoomTypes rt ON rt.id = r.room_type_id "
-          "ORDER BY i.id DESC;"
-        : temp_sprintf("SELECT i.id, o.name, p.name, rt.type, i.room_price, i.start_date, i.end_date, i.room_day, "
-                       "(SELECT COUNT(*) FROM OrganizationInvoiceOutDetails d WHERE d.organization_invoice_out_id = i.id) "
-                       "FROM OrganizationInvoiceOut i "
-                       "LEFT JOIN Organizations o ON o.id = i.organization_id "
-                       "LEFT JOIN Patients p ON p.id = i.patient_id "
-                       "LEFT JOIN Rooms r ON r.id = i.room_id "
-                       "LEFT JOIN RoomTypes rt ON rt.id = r.room_type_id "
-                       "WHERE i.id = %lld;", only_id);
+    if (only_id < 0) {
+        sql = "SELECT i.id, o.name, p.name, rt.type, i.room_price, i.start_date, i.end_date, i.room_day, "
+            "(SELECT COUNT(*) FROM OrganizationInvoiceOutDetails d WHERE d.organization_invoice_out_id = i.id) "
+            "FROM OrganizationInvoiceOut i "
+            "LEFT JOIN Organizations o ON o.id = i.organization_id "
+            "LEFT JOIN Patients p ON p.id = i.patient_id "
+            "LEFT JOIN Rooms r ON r.id = i.room_id "
+            "LEFT JOIN RoomTypes rt ON rt.id = r.room_type_id "
+            "ORDER BY i.id DESC;";
+    } else {
+        sql = temp_sprintf("SELECT i.id, o.name, p.name, rt.type, i.room_price, i.start_date, i.end_date, i.room_day, "
+            "(SELECT COUNT(*) FROM OrganizationInvoiceOutDetails d WHERE d.organization_invoice_out_id = i.id) "
+            "FROM OrganizationInvoiceOut i "
+            "LEFT JOIN Organizations o ON o.id = i.organization_id "
+            "LEFT JOIN Patients p ON p.id = i.patient_id "
+            "LEFT JOIN Rooms r ON r.id = i.room_id "
+            "LEFT JOIN RoomTypes rt ON rt.id = r.room_type_id "
+            "WHERE i.id = %lld;", only_id);
+    }
 
     if (sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) != SQLITE_OK) {
         LOG_SQLITE3_ERROR(db);
@@ -463,7 +469,14 @@ bool org_out_insert(sqlite3    *db,
     sqlite3_stmt *stmt = NULL;
 
     const char *sql =
-        "INSERT INTO OrganizationInvoiceOut (organization_id, patient_id, room_id, room_price, start_date, end_date, room_day) "
+        "INSERT INTO OrganizationInvoiceOut("
+        "organization_id, "
+        "patient_id, "
+        "room_id, "
+        "room_price, "
+        "start_date, "
+        "end_date, "
+        "room_day) "
         "VALUES (?, ?, ?, ?, ?, ?, ?);";
     if (sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) != SQLITE_OK) {
         LOG_SQLITE3_ERROR(db);
@@ -502,8 +515,12 @@ bool org_out_update(sqlite3    *db,
     bool result = true;
     sqlite3_stmt *stmt = NULL;
 
-    const char *sql =
-        "UPDATE OrganizationInvoiceOut SET room_price = ?, start_date = ?, end_date = ?, room_day = ? WHERE id = ?;";
+    const char *sql = "UPDATE OrganizationInvoiceOut SET "
+        "room_price = ?, "
+        "start_date = ?, "
+        "end_date = ?, "
+        "room_day = ? "
+        "WHERE id = ?;";
     if (sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) != SQLITE_OK) {
         LOG_SQLITE3_ERROR(db);
         return_defer(false);

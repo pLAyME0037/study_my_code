@@ -10,6 +10,7 @@
 #include "patient_invoice.h"
 #include "org.h"
 #include "user.h"
+#include "patient_dashboard.h"
 
 static const Crud_Module *crud_find_module(String_View uri) {
     for (size_t i = 0; i < crud_modules_count; ++i) {
@@ -428,7 +429,11 @@ void route_request(Serve_Context *sc, String_View method, String_View uri) {
         String_View path = sv_from_cstr(crud_mod->path);
         if (sv_eq(uri, path)) {
             if (CMP_URI(method, "GET")) {
-                serve_crud_list(sc, crud_mod);
+                if (strcmp(crud_mod->path, "/patients") == 0) {
+                    serve_patient_dashboard(sc);
+                } else {
+                    serve_crud_list(sc, crud_mod);
+                }
                 return;
             }
             serve_error(sc, 405);

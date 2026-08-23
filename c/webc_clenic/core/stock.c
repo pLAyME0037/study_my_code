@@ -28,7 +28,10 @@ static void render_stock_list_page(Serve_Context *sc, Stock_Rows rows) {
 
 void serve_stock_list(Serve_Context *sc) {
     sqlite3 *db = open_webc_db();
-    if (!db) { serve_error(sc, 500); return; }
+    if (!db) {
+        serve_error(sc, 500);
+        return;
+    }
 
     Stock_Rows rows = {0};
     load_stocks(db, &rows, -1);

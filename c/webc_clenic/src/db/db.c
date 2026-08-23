@@ -144,6 +144,13 @@ const char *migrations[] = {
     "    amount_in_dollar REAL,\n"
     "    FOREIGN KEY(patient_id) REFERENCES Patients\n"
     ");\n",
+    "CREATE TABLE IF NOT EXISTS PatientDailyInvoicesDetails (\n"
+    "    patient_daily_invoice_id INTEGER PRIMARY KEY ASC,\n"
+    "    ill_type_id INTEGER,\n"
+    "    patientDaily_invoice_detail_price NUMERIC,\n"
+    "    patientDaily_invoice_detail_currency TEXT,\n"
+    "    FOREIGN KEY(ill_type_id) REFERENCES IllTypes\n"
+    ");\n",
     "CREATE TABLE IF NOT EXISTS PatientMedicineInvoices (\n"
     "    id INTEGER PRIMARY KEY ASC,\n"
     "    patient_id INTEGER,\n"

@@ -262,7 +262,7 @@ int main(int argc, char **argv) {
 
     if (build_bundle(webc_build_time)) return 1;
 
-    cmd_append(&cmd, "cc", "-Wall", "-Wextra", "-Wswitch-enum", "-ggdb",
+    cmd_append(&cmd, "cc", "-Wall", "-Wextra", "-Wswitch-enum", "-ggdb", "-fsanitize=address", "-fno-omit-frame-pointer",
                "-I"BUILD_FOLDER,
                "-I"SQLITE3_AMALGAMATION_FOLDER,
                "-o", "./bin/webc",
@@ -277,6 +277,8 @@ int main(int argc, char **argv) {
                "core/patient_invoice.c",
                "core/org.c",
                "core/user.c",
+               "core/patient_dashboard.c",
+               "core/master_detail.c",
                "src/db/db.c",
                "src/crud/crud.c",
                "src/dashboard/dashboard.c",

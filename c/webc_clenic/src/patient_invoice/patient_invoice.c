@@ -75,16 +75,19 @@ defer:
 bool pmi_headers_load(sqlite3 *db, Pmi_Headers *rows, long long only_id) {
     bool result = true;
     sqlite3_stmt *stmt = NULL;
+    const char *sql;
 
-    const char *sql = only_id < 0
-        ? "SELECT i.id, p.name, i.invoice_date, i.amount_in_riel, i.amount_in_dollar, "
-          "(SELECT COUNT(*) FROM PatientMedicineInvoiceDetails d WHERE d.patient_medicine_invoice_id = i.id) "
-          "FROM PatientMedicineInvoices i LEFT JOIN Patients p ON p.id = i.patient_id "
-          "ORDER BY i.id DESC;"
-        : temp_sprintf("SELECT i.id, p.name, i.invoice_date, i.amount_in_riel, i.amount_in_dollar, "
-                       "(SELECT COUNT(*) FROM PatientMedicineInvoiceDetails d WHERE d.patient_medicine_invoice_id = i.id) "
-                       "FROM PatientMedicineInvoices i LEFT JOIN Patients p ON p.id = i.patient_id "
-                       "WHERE i.id = %lld;", only_id);
+    if (only_id < 0) {
+        sql = "SELECT i.id, p.name, i.invoice_date, i.amount_in_riel, i.amount_in_dollar, "
+            "(SELECT COUNT(*) FROM PatientMedicineInvoiceDetails d WHERE d.patient_medicine_invoice_id = i.id) "
+            "FROM PatientMedicineInvoices i LEFT JOIN Patients p ON p.id = i.patient_id "
+            "ORDER BY i.id DESC;";
+    } else {
+        sql = temp_sprintf("SELECT i.id, p.name, i.invoice_date, i.amount_in_riel, i.amount_in_dollar, "
+            "(SELECT COUNT(*) FROM PatientMedicineInvoiceDetails d WHERE d.patient_medicine_invoice_id = i.id) "
+            "FROM PatientMedicineInvoices i LEFT JOIN Patients p ON p.id = i.patient_id "
+            "WHERE i.id = %lld;", only_id);
+    }
 
     if (sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) != SQLITE_OK) {
         LOG_SQLITE3_ERROR(db);
@@ -324,22 +327,25 @@ defer:
 bool pio_headers_load(sqlite3 *db, Pio_Headers *rows, long long only_id) {
     bool result = true;
     sqlite3_stmt *stmt = NULL;
+    const char *sql;
 
-    const char *sql = only_id < 0
-        ? "SELECT i.id, p.name, rt.type, i.room_price, i.start_date, i.end_date, i.room_day, "
-          "(SELECT COUNT(*) FROM PatientInvoiceOutDetails d WHERE d.patient_invoice_out_id = i.id) "
-          "FROM PatientInvoiceOut i "
-          "LEFT JOIN Patients p ON p.id = i.patient_id "
-          "LEFT JOIN Rooms r ON r.id = i.room_id "
-          "LEFT JOIN RoomTypes rt ON rt.id = r.room_type_id "
-          "ORDER BY i.id DESC;"
-        : temp_sprintf("SELECT i.id, p.name, rt.type, i.room_price, i.start_date, i.end_date, i.room_day, "
-                       "(SELECT COUNT(*) FROM PatientInvoiceOutDetails d WHERE d.patient_invoice_out_id = i.id) "
-                       "FROM PatientInvoiceOut i "
-                       "LEFT JOIN Patients p ON p.id = i.patient_id "
-                       "LEFT JOIN Rooms r ON r.id = i.room_id "
-                       "LEFT JOIN RoomTypes rt ON rt.id = r.room_type_id "
-                       "WHERE i.id = %lld;", only_id);
+    if (only_id < 0) {
+        sql = "SELECT i.id, p.name, rt.type, i.room_price, i.start_date, i.end_date, i.room_day, "
+            "(SELECT COUNT(*) FROM PatientInvoiceOutDetails d WHERE d.patient_invoice_out_id = i.id) "
+            "FROM PatientInvoiceOut i "
+            "LEFT JOIN Patients p ON p.id = i.patient_id "
+            "LEFT JOIN Rooms r ON r.id = i.room_id "
+            "LEFT JOIN RoomTypes rt ON rt.id = r.room_type_id "
+            "ORDER BY i.id DESC;";
+    } else {
+        sql = temp_sprintf("SELECT i.id, p.name, rt.type, i.room_price, i.start_date, i.end_date, i.room_day, "
+            "(SELECT COUNT(*) FROM PatientInvoiceOutDetails d WHERE d.patient_invoice_out_id = i.id) "
+            "FROM PatientInvoiceOut i "
+            "LEFT JOIN Patients p ON p.id = i.patient_id "
+            "LEFT JOIN Rooms r ON r.id = i.room_id "
+            "LEFT JOIN RoomTypes rt ON rt.id = r.room_type_id "
+            "WHERE i.id = %lld;", only_id);
+    }
 
     if (sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) != SQLITE_OK) {
         LOG_SQLITE3_ERROR(db);
@@ -406,8 +412,8 @@ defer:
     return result;
 }
 
-bool pio_insert(sqlite3   *db,
-                long long *out_id,
+bool pio_insert(sqlite3    *db,
+                long long  *out_id,
                 long long   patient_id,
                 long long   room_id,
                 const char *room_price,

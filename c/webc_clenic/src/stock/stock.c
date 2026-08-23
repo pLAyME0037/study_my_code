@@ -9,24 +9,27 @@ bool load_stocks(sqlite3 *db, Stock_Rows *rows, int only_medicine_id) {
     bool result = true;
     sqlite3_stmt *stmt = NULL;
 
-    String_View sql = sv_from_cstr(
-        only_medicine_id < 0
-        ? "SELECT m.id, m.name, "
-          "COALESCE(SUM(d.qty), 0) AS stock_qty, "
-          "MAX(mi.date) AS date_last_import "
-          "FROM Medicines m "
-          "LEFT JOIN MedicineImportDetails d ON d.medicine_id = m.id "
-          "LEFT JOIN MedicineImport mi ON mi.id = d.medicine_import_id "
-          "GROUP BY m.id, m.name "
-          "ORDER BY m.name ASC;"
-        : temp_sprintf("SELECT m.id, m.name, "
-                       "COALESCE(SUM(d.qty), 0) AS stock_qty, "
-                       "MAX(mi.date) AS date_last_import "
-                       "FROM Medicines m "
-                       "LEFT JOIN MedicineImportDetails d ON d.medicine_id = m.id "
-                       "LEFT JOIN MedicineImport mi ON mi.id = d.medicine_import_id "
-                       "WHERE m.id = %d "
-                       "GROUP BY m.id, m.name;", only_medicine_id));
+    String_View sql;
+
+    if (only_medicine_id < 0) {
+        sql = sv_from_cstr("SELECT m.id, m.name, "
+            "COALESCE(SUM(d.qty), 0) AS stock_qty, "
+            "MAX(mi.date) AS date_last_import "
+            "FROM Medicines m "
+            "LEFT JOIN MedicineImportDetails d ON d.medicine_id = m.id "
+            "LEFT JOIN MedicineImport mi ON mi.id = d.medicine_import_id "
+            "GROUP BY m.id, m.name "
+            "ORDER BY m.name ASC;");
+    } else {
+        sql = sv_from_cstr(temp_sprintf("SELECT m.id, m.name, "
+            "COALESCE(SUM(d.qty), 0) AS stock_qty, "
+            "MAX(mi.date) AS date_last_import "
+            "FROM Medicines m "
+            "LEFT JOIN MedicineImportDetails d ON d.medicine_id = m.id "
+            "LEFT JOIN MedicineImport mi ON mi.id = d.medicine_import_id "
+            "WHERE m.id = %d "
+            "GROUP BY m.id, m.name;", only_medicine_id));
+    }
 
     if (sqlite3_prepare_v2(db, sql.data, -1, &stmt, NULL) != SQLITE_OK) {
         LOG_SQLITE3_ERROR(db);

@@ -1,0 +1,80 @@
+<div class="max-w-full mx-auto">
+    <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">({ STR(config->title); })</h2>
+    
+    <div class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+        <table class="w-full text-left border-collapse master-table">
+            <thead class="bg-indigo-600 text-white">
+                <tr>
+                    ({ for (size_t i = 0; i < config->column_count; ++i) { })
+                        <th class="px-4 py-3 font-semibold">({ ESCAPED(config->columns[i].label); })</th>
+                    ({ } })
+                    <th class="px-4 py-3 font-semibold">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200 dark:divide-gray-700 master-rows">
+                ({ if (rows->count == 0) { })
+                    <tr>
+                        <td colspan="({ INT(config->column_count + 1); })" class="px-4 py-4 text-sm text-gray-500 dark:text-gray-400 text-center">
+                            No ({ ESCAPED(config->title); }) yet.
+                        </td>
+                    </tr>
+                ({ } else { })
+                    ({ for (size_t ri = 0; ri < rows->count; ++ri) { })
+                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 master-row" data-master-id="({ LLINT(rows->items[ri].id); })">
+                            ({ for (size_t ci = 0; ci < config->column_count; ++ci) { })
+                                <td class="px-4 py-2 text-gray-700 dark:text-gray-200">({ ESCAPED(rows->items[ri].values[ci + 1]); })</td>
+                            ({ } })
+                            <td class="px-4 py-2 whitespace-nowrap">
+                                <button type="button" class="expand-btn px-2 py-1 rounded text-xs bg-indigo-600 hover:bg-indigo-700 text-white" 
+                                        data-master-id="({ LLINT(rows->items[ri].id); })" aria-expanded="false">
+                                    ▼ Detail
+                                </button>
+                            </td>
+                        </tr>
+                        <tr class="detail-panel-row" data-master-id="({ LLINT(rows->items[ri].id); })" style="display: none;">
+                            <td colspan="({ INT(config->column_count + 1); })" class="px-0 py-0">
+                                <div class="detail-panel p-4 bg-gray-50 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+                                    <div class="tab-headers flex border-b border-gray-200 dark:border-gray-700 mb-2">
+                                        ({ for (size_t ti = 0; ti < config->children_count; ++ti) { })
+                                            <button type="button" class="tab-btn px-4 py-2 text-sm font-medium ({ if (ti == 0) { })text-indigo-600 border-b-2 border-indigo-600({ } else { })text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200({ } })" 
+                                                    data-tab="({ ESCAPED(config->children[ti].table); })" data-master-id="({ LLINT(rows->items[ri].id); })">
+                                                ({ ESCAPED(config->children[ti].title); })
+                                            </button>
+                                        ({ } })
+                                    </div>
+                                    
+                                    ({ for (size_t ti = 0; ti < config->children_count; ++ti) { })
+                                        <div class="tab-content ({ if (ti == 0) { })({ } else { })hidden({ } })" data-tab="({ ESCAPED(config->children[ti].table); })" data-master-id="({ LLINT(rows->items[ri].id); })">
+                                            <div class="flex justify-between items-center mb-2">
+                                                <h4 class="font-medium">({ ESCAPED(config->children[ti].title); })</h4>
+                                                <button type="button" class="add-child-btn px-3 py-1 text-sm bg-green-600 hover:bg-green-700 text-white rounded" 
+                                                        data-child-table="({ ESCAPED(config->children[ti].table); })" data-master-id="({ LLINT(rows->items[ri].id); })">
+                                                    + Add ({ ESCAPED(config->children[ti].title); })
+                                                </button>
+                                            </div>
+                                            <div class="child-table-container overflow-x-auto">
+                                                <table class="w-full text-left border-collapse text-sm">
+                                                    <thead class="bg-gray-100 dark:bg-gray-700">
+                                                        <tr>
+                                                            ({ for (size_t cci = 0; cci < config->children[ti].column_count; ++cci) { })
+                                                                <th class="px-3 py-2 font-semibold text-gray-600 dark:text-gray-300">({ ESCAPED(config->children[ti].columns[cci].label); })</th>
+                                                            ({ } })
+                                                            <th class="px-3 py-2 font-semibold text-gray-600 dark:text-gray-300">Actions</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="divide-y divide-gray-200 dark:divide-gray-700 child-rows">
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="child-summary mt-2 text-sm text-gray-600 dark:text-gray-400"></div>
+                                        </div>
+                                    ({ } })
+                                </div>
+                            </td>
+                        </tr>
+                    ({ } })
+                ({ } })
+            </tbody>
+        </table>
+    </div>
+</div>
