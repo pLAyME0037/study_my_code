@@ -24,6 +24,17 @@ typedef struct {
 } MD_Column;
 
 typedef struct {
+    char **values;
+    size_t value_count;
+} MD_ChildRow;
+
+typedef struct {
+    MD_ChildRow *items;
+    size_t count;
+    size_t capacity;
+} MD_ChildRows;
+
+typedef struct {
     const char *table;
     const char *title;
     const char *fk_column;
@@ -50,7 +61,7 @@ typedef struct {
     long long id;
     char **values;
     size_t value_count;
-    void *children;
+    MD_ChildRows *children;  // array of MD_ChildRows, one per child tab
 } MD_MasterRow;
 
 typedef struct {

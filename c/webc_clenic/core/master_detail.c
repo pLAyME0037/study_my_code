@@ -20,6 +20,16 @@ void md_master_rows_free(MD_MasterRows *rows) {
     for (size_t i = 0; i < rows->count; ++i) {
         MD_MasterRow *row = &rows->items[i];
         free(row->values);
+        if (row->children) {
+            for (size_t ci = 0; row->children[ci].items != NULL && ci < 10; ++ci) {
+                MD_ChildRows *crows = &row->children[ci];
+                for (size_t j = 0; j < crows->count; ++j) {
+                    free(crows->items[j].values);
+                }
+                free(crows->items);
+            }
+            free(row->children);
+        }
     }
     free(rows->items);
     free(rows);
@@ -30,41 +40,40 @@ static char *col_to_str(sqlite3_stmt *stmt, int col) {
     return val ? temp_strdup(val) : temp_strdup("");
 }
 
-static bool load_children_for_master(sqlite3               *db,
-                                     const MD_MasterConfig *config,
-                                     long long              master_id)
-{
-    for (size_t ci = 0; ci < config->children_count; ++ci) {
-        const MD_ChildTab *child = &config->children[ci];
-        
-        char *sql = temp_sprintf("SELECT * FROM %s WHERE %s = %lld ORDER BY %s DESC;",
-                                child->table, child->fk_column, master_id, child->id_column);
-        
-        sqlite3_stmt *stmt = NULL;
-        if (sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) != SQLITE_OK) {
-            LOG_SQLITE3_ERROR(db);
-            return false;
-        }
-        
-        int ret;
-        for (ret = sqlite3_step(stmt); ret == SQLITE_ROW; ret = sqlite3_step(stmt)) {
-        }
-        
-        if (ret != SQLITE_DONE) {
-            LOG_SQLITE3_ERROR(db);
-            sqlite3_finalize(stmt);
-            return false;
-        }
-        
-        sqlite3_finalize(stmt);
+static bool load_child_rows(sqlite3 *db, const MD_ChildTab *child, long long master_id, MD_ChildRows *out_rows) {
+    char *sql = temp_sprintf("SELECT * FROM %s WHERE %s = %lld ORDER BY %s DESC;",
+                            child->table, child->fk_column, master_id, child->id_column);
+    
+    sqlite3_stmt *stmt = NULL;
+    if (sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) != SQLITE_OK) {
+        LOG_SQLITE3_ERROR(db);
+        return false;
     }
+    
+    int ret;
+    for (ret = sqlite3_step(stmt); ret == SQLITE_ROW; ret = sqlite3_step(stmt)) {
+        int col_count = sqlite3_column_count(stmt);
+        MD_ChildRow row = {0};
+        row.value_count = col_count;
+        row.values = malloc(col_count * sizeof(char *));
+        
+        for (int i = 0; i < col_count; ++i) {
+            row.values[i] = col_to_str(stmt, i);
+        }
+        da_append(out_rows, row);
+    }
+    
+    if (ret != SQLITE_DONE) {
+        LOG_SQLITE3_ERROR(db);
+        sqlite3_finalize(stmt);
+        return false;
+    }
+    
+    sqlite3_finalize(stmt);
     return true;
 }
 
-bool md_load_master_with_children(sqlite3               *db,
-                                  const MD_MasterConfig *config,
-                                  MD_MasterRows         *rows)
-{
+bool md_load_master_with_children(sqlite3 *db, const MD_MasterConfig *config, MD_MasterRows *rows) {
     char *sql = temp_sprintf("SELECT * FROM %s ORDER BY %s DESC;", config->table, config->id_column);
     
     sqlite3_stmt *stmt = NULL;
@@ -85,11 +94,28 @@ bool md_load_master_with_children(sqlite3               *db,
             row.values[i] = col_to_str(stmt, i);
         }
         
-        if (!load_children_for_master(db, config, row.id)) {
-            for (int i = 0; i < col_count; ++i) free(row.values[i]);
-            free(row.values);
-            sqlite3_finalize(stmt);
-            return false;
+        row.children = malloc(config->children_count * sizeof(MD_ChildRows));
+        for (size_t ci = 0; ci < config->children_count; ++ci) {
+            row.children[ci].items = NULL;
+            row.children[ci].count = 0;
+            row.children[ci].capacity = 0;
+            if (!load_child_rows(db, &config->children[ci], row.id, &row.children[ci])) {
+                for (int i = 0; i < col_count; ++i) free(row.values[i]);
+                free(row.values);
+                for (size_t ci2 = 0; ci2 <= ci; ++ci2) {
+                    MD_ChildRows *cr = &row.children[ci2];
+                    for (size_t j = 0; j < cr->count; ++j) {
+                        for (size_t k = 0; k < cr->items[j].value_count; ++k) {
+                            free(cr->items[j].values[k]);
+                        }
+                        free(cr->items[j].values);
+                    }
+                    free(cr->items);
+                }
+                free(row.children);
+                sqlite3_finalize(stmt);
+                return false;
+            }
         }
         
         da_append(rows, row);

@@ -292,10 +292,52 @@ const char *migrations[] = {
     "CREATE TABLE IF NOT EXISTS Users (\n"
     "    id INTEGER PRIMARY KEY ASC,\n"
     "    name TEXT,\n"
-    "    username TEXT,\n"
+"    username TEXT,\n"
     "    email TEXT,\n"
     "    profile_pic BLOB\n"
-    ");\n"
+    ");\n",
+
+    "CREATE TRIGGER IF NOT EXISTS pdi_trigger_update_patient_totals AFTER INSERT ON PatientDailyInvoicesDetails\n"
+    "BEGIN\n"
+    "    UPDATE PatientDailyInvoices SET\n"
+    "        amount_in_riel = amount_in_riel + NEW.patientDaily_invoice_detail_price * CASE WHEN NEW.patientDaily_invoice_detail_currency = 'riel' THEN 1 ELSE 0 END,\n"
+    "        amount_in_dollar = amount_in_dollar + NEW.patientDaily_invoice_detail_price * CASE WHEN NEW.patientDaily_invoice_detail_currency = 'dollar' THEN 1 ELSE 0 END\n"
+    "    WHERE id = NEW.patient_daily_invoice_id;\n"
+    "END;\n",
+
+    "CREATE TRIGGER IF NOT EXISTS pmi_trigger_update_patient_totals AFTER INSERT ON PatientMedicineInvoiceDetails\n"
+    "BEGIN\n"
+    "    UPDATE PatientMedicineInvoices SET\n"
+    "        amount_in_riel = amount_in_riel + NEW.amount * CASE WHEN NEW.currency = 'riel' THEN 1 ELSE 0 END,\n"
+    "        amount_in_dollar = amount_in_dollar + NEW.amount * CASE WHEN NEW.currency = 'dollar' THEN 1 ELSE 0 END\n"
+    "    WHERE id = NEW.patient_medicine_invoice_id;\n"
+    "END;\n",
+
+    "CREATE TRIGGER IF NOT EXISTS pio_trigger_update_patient_totals AFTER INSERT ON PatientInvoiceOutDetails\n"
+    "BEGIN\n"
+    "    UPDATE PatientInvoiceOut SET room_price = room_price + (\n"
+    "        SELECT room_price FROM Rooms WHERE id = (\n"
+    "            SELECT room_id FROM PatientInvoiceOut WHERE id = NEW.patient_invoice_out_id\n"
+    "        )\n"
+    "    ) WHERE id = NEW.patient_invoice_out_id;\n"
+    "END;\n",
+
+    "CREATE TRIGGER IF NOT EXISTS org_di_trigger_update_org_totals AFTER INSERT ON OrganizationDailyInvoiceDetails\n"
+    "BEGIN\n"
+    "    UPDATE OrganizationDailyInvoices SET\n"
+    "        amount_in_riel = amount_in_riel + NEW.price * CASE WHEN NEW.currency = 'riel' THEN 1 ELSE 0 END,\n"
+    "        amount_in_dollar = amount_in_dollar + NEW.price * CASE WHEN NEW.currency = 'dollar' THEN 1 ELSE 0 END\n"
+    "    WHERE id = NEW.organization_daily_id;\n"
+    "END;\n",
+
+    "CREATE TRIGGER IF NOT EXISTS med_imp_trigger_update_stock AFTER INSERT ON MedicineImportDetails\n"
+    "BEGIN\n"
+    "    INSERT OR REPLACE INTO MedicineStock (medicine_id, stock_qty, date_last_import)\n"
+    "    SELECT NEW.medicine_id,\n"
+    "           COALESCE((SELECT stock_qty FROM MedicineStock WHERE medicine_id = NEW.medicine_id), 0) + NEW.qty,\n"
+    "           (SELECT date FROM MedicineImport WHERE id = NEW.medicine_import_id)\n"
+    "    WHERE NEW.medicine_id IS NOT NULL;\n"
+    "END;\n",
 };
 
 // TODO: can we just extract webc_path from db somehow?

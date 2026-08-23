@@ -63,10 +63,33 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody class="divide-y divide-gray-200 dark:divide-gray-700 child-rows">
+                                                        ({ if (rows->items[ri].children[ti].count == 0) { })
+                                                            <tr>
+                                                                <td colspan="({ INT(config->children[ti].column_count + 1); })" class="px-3 py-3 text-sm text-gray-500 dark:text-gray-400 text-center">
+                                                                    No ({ ESCAPED(config->children[ti].title); }) yet.
+                                                                </td>
+                                                            </tr>
+                                                        ({ } else { })
+                                                            ({ for (size_t ci = 0; ci < rows->items[ri].children[ti].count; ++ci) { })
+                                                                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                                                                    ({ for (size_t cci = 0; cci < config->children[ti].column_count; ++cci) { })
+                                                                        <td class="px-3 py-2 text-gray-700 dark:text-gray-200">({ ESCAPED(rows->items[ri].children[ti].items[ci].values[cci]); })</td>
+                                                                    ({ } })
+                                                                    <td class="px-3 py-2 whitespace-nowrap">
+                                                                        <button type="button" class="px-2 py-1 rounded text-xs bg-amber-500 hover:bg-amber-600 text-white">Edit</button>
+                                                                        <button type="button" class="ml-1 px-2 py-1 rounded text-xs bg-red-500 hover:bg-red-600 text-white">Delete</button>
+                                                                    </td>
+                                                                </tr>
+                                                            ({ } })
+                                                        ({ } })
                                                     </tbody>
                                                 </table>
                                             </div>
-                                            <div class="child-summary mt-2 text-sm text-gray-600 dark:text-gray-400"></div>
+                                            <div class="child-summary mt-2 text-sm text-gray-600 dark:text-gray-400">
+                                                ({ if (rows->items[ri].children[ti].count > 0) { })
+                                                    Showing ({ INT(rows->items[ri].children[ti].count); }) ({ ESCAPED(config->children[ti].title); })
+                                                ({ } })
+                                            </div>
                                         </div>
                                     ({ } })
                                 </div>
