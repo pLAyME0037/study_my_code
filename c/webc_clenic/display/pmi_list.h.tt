@@ -1,6 +1,4 @@
 <div>
-    <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Patient Medicine Invoice</h2>
-
     <form method="POST" action="/patient-medicine-invoices/create"
           class="mb-6 p-5 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
         <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-3">New Invoice</h3>
@@ -11,7 +9,9 @@
                         class="px-3 py-2 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-white">
                     <option value="">-- select --</option>
                     ({ for (size_t i = 0; i < patient_opts->count; ++i) { })
-                        <option value="({ LLINT(patient_opts->items[i].id); })">({ ESCAPED(patient_opts->items[i].label); })</option>
+                        <option value="({ LLINT(patient_opts->items[i].id); })">
+                            ({ ESCAPED(patient_opts->items[i].label); })
+                        </option>
                     ({ } })
                 </select>
             </div>

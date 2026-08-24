@@ -10,8 +10,10 @@
 // Patient Medicine Invoice
 // ---------------------------------------------------------------------------
 
-static void render_pmi_list_page(String_Builder *sb, Pmi_Headers *rows,
-                                 Pio_Options *patient_opts) {
+static void render_pmi_list_page(String_Builder *sb,
+                                 Pmi_Headers    *rows,
+                                 Pio_Options    *patient_opts)
+{
 #define OUT(buf, size) sb_append_buf(sb, buf, size);
 #define INT(v) sb_append_cstr(sb, temp_sprintf("%d", v));
 #define LLINT(v) sb_append_cstr(sb, temp_sprintf("%lld", v));
@@ -27,9 +29,13 @@ static void render_pmi_list_page(String_Builder *sb, Pmi_Headers *rows,
 #undef PAGE_TITLE
 }
 
-static void render_pmi_edit_page(String_Builder *sb, long long id,
-                                 const char *patient_name, const char *invoice_date,
-                                 const char *amount_in_riel, const char *amount_in_dollar) {
+static void render_pmi_edit_page(String_Builder *sb,
+                                 long long       id,
+                                 const char     *patient_name,
+                                 const char     *invoice_date,
+                                 const char     *amount_in_riel,
+                                 const char     *amount_in_dollar)
+{
 #define OUT(buf, size) sb_append_buf(sb, buf, size);
 #define INT(v) sb_append_cstr(sb, temp_sprintf("%d", v));
 #define LLINT(v) sb_append_cstr(sb, temp_sprintf("%lld", v));
@@ -45,9 +51,13 @@ static void render_pmi_edit_page(String_Builder *sb, long long id,
 #undef PAGE_TITLE
 }
 
-static void render_pmi_details_page(String_Builder *sb, long long import_id,
-                                    const char *patient_name, const char *invoice_date,
-                                    Pio_Options *med_opts, Pmi_Details *rows) {
+static void render_pmi_details_page(String_Builder *sb,
+                                    long long       import_id,
+                                    const char     *patient_name,
+                                    const char     *invoice_date,
+                                    Pio_Options    *med_opts,
+                                    Pmi_Details    *rows)
+{                                                  
 #define OUT(buf, size) sb_append_buf(sb, buf, size);
 #define INT(v) sb_append_cstr(sb, temp_sprintf("%d", v));
 #define LLINT(v) sb_append_cstr(sb, temp_sprintf("%lld", v));
@@ -65,7 +75,10 @@ static void render_pmi_details_page(String_Builder *sb, long long import_id,
 
 void serve_pmi_list(Serve_Context *sc) {
     sqlite3 *db = open_webc_db();
-    if (!db) { serve_error(sc, 500); return; }
+    if (!db) {
+		serve_error(sc, 500);
+		return;
+	}
 
     Pmi_Headers rows = {0};
     pmi_headers_load(db, &rows, -1);
@@ -95,19 +108,28 @@ void serve_pmi_create(Serve_Context *sc) {
     form_find(body, "amount_in_dollar", dollar, sizeof(dollar));
 
     sqlite3 *db = open_webc_db();
-    if (!db) { serve_error(sc, 500); return; }
+    if (!db) {
+		serve_error(sc, 500);
+		return;
+	}
 
     long long new_id = 0;
     bool ok = pmi_insert(db, &new_id, atoll(patient_id), invoice_date, riel, dollar);
     sqlite3_close(db);
 
-    if (!ok) { serve_error(sc, 500); return; }
+    if (!ok) {
+		serve_error(sc, 500);
+		return;
+	}
     http_render_redirect(sc, 302, temp_sprintf("/patient-medicine-invoices/%lld/details", new_id));
 }
 
 void serve_pmi_edit(Serve_Context *sc, int id) {
     sqlite3 *db = open_webc_db();
-    if (!db) { serve_error(sc, 500); return; }
+    if (!db) {
+		serve_error(sc, 500);
+		return;
+	}
 
     Pmi_Headers rows = {0};
     pmi_headers_load(db, &rows, id);
@@ -138,29 +160,44 @@ void serve_pmi_update(Serve_Context *sc, int id) {
     form_find(body, "amount_in_dollar", dollar, sizeof(dollar));
 
     sqlite3 *db = open_webc_db();
-    if (!db) { serve_error(sc, 500); return; }
+    if (!db) {
+		serve_error(sc, 500);
+		return;
+	}
 
     bool ok = pmi_update(db, id, invoice_date, riel, dollar);
     sqlite3_close(db);
 
-    if (!ok) { serve_error(sc, 500); return; }
+    if (!ok) {
+		serve_error(sc, 500);
+		return;
+	}
     http_render_redirect(sc, 302, "/patient-medicine-invoices");
 }
 
 void serve_pmi_delete(Serve_Context *sc, int id) {
     sqlite3 *db = open_webc_db();
-    if (!db) { serve_error(sc, 500); return; }
+    if (!db) {
+		serve_error(sc, 500);
+		return;
+	}
 
     bool ok = pmi_delete(db, id);
     sqlite3_close(db);
 
-    if (!ok) { serve_error(sc, 500); return; }
+    if (!ok) {
+		serve_error(sc, 500);
+		return;
+	}
     http_render_redirect(sc, 302, "/patient-medicine-invoices");
 }
 
 void serve_pmi_details(Serve_Context *sc, int id) {
     sqlite3 *db = open_webc_db();
-    if (!db) { serve_error(sc, 500); return; }
+    if (!db) {
+		serve_error(sc, 500);
+		return;
+	}
 
     Pmi_Headers headers = {0};
     pmi_headers_load(db, &headers, id);
@@ -205,23 +242,35 @@ void serve_pmi_detail_create(Serve_Context *sc, int id) {
     form_find(body, "currency", currency, sizeof(currency));
 
     sqlite3 *db = open_webc_db();
-    if (!db) { serve_error(sc, 500); return; }
+    if (!db) {
+        serve_error(sc, 500);
+        return;
+    }
 
     bool ok = pmi_detail_insert(db, id, atoll(medicine_id), qty, price, amount, currency);
     sqlite3_close(db);
 
-    if (!ok) { serve_error(sc, 500); return; }
+    if (!ok) {
+		serve_error(sc, 500);
+		return;
+	}
     http_render_redirect(sc, 302, temp_sprintf("/patient-medicine-invoices/%d/details", id));
 }
 
 void serve_pmi_detail_delete(Serve_Context *sc, int id, int medicine_id) {
     sqlite3 *db = open_webc_db();
-    if (!db) { serve_error(sc, 500); return; }
+    if (!db) {
+		serve_error(sc, 500);
+		return;
+	}
 
     bool ok = pmi_detail_delete(db, id, medicine_id);
     sqlite3_close(db);
 
-    if (!ok) { serve_error(sc, 500); return; }
+    if (!ok) {
+		serve_error(sc, 500);
+		return;
+	}
     http_render_redirect(sc, 302, temp_sprintf("/patient-medicine-invoices/%d/details", id));
 }
 
@@ -229,8 +278,11 @@ void serve_pmi_detail_delete(Serve_Context *sc, int id, int medicine_id) {
 // Patient Invoice Out
 // ---------------------------------------------------------------------------
 
-static void render_pio_list_page(String_Builder *sb, Pio_Headers *rows,
-                                 Pio_Options *patient_opts, Pio_Options *room_opts) {
+static void render_pio_list_page(String_Builder *sb,
+                                 Pio_Headers    *rows,
+                                 Pio_Options    *patient_opts,
+                                 Pio_Options    *room_opts)
+{
 #define OUT(buf, size) sb_append_buf(sb, buf, size);
 #define INT(v) sb_append_cstr(sb, temp_sprintf("%d", v));
 #define LLINT(v) sb_append_cstr(sb, temp_sprintf("%lld", v));
@@ -246,10 +298,15 @@ static void render_pio_list_page(String_Builder *sb, Pio_Headers *rows,
 #undef PAGE_TITLE
 }
 
-static void render_pio_edit_page(String_Builder *sb, long long id,
-                                 const char *patient_name, const char *room_name,
-                                 const char *room_price, const char *start_date,
-                                 const char *end_date, const char *room_day) {
+static void render_pio_edit_page(String_Builder *sb,
+                                 long long       id,
+                                 const char     *patient_name,
+                                 const char     *room_name,
+                                 const char     *room_price,
+                                 const char     *start_date,
+                                 const char     *end_date,
+                                 const char     *room_day)
+{
 #define OUT(buf, size) sb_append_buf(sb, buf, size);
 #define INT(v) sb_append_cstr(sb, temp_sprintf("%d", v));
 #define LLINT(v) sb_append_cstr(sb, temp_sprintf("%lld", v));
@@ -265,9 +322,13 @@ static void render_pio_edit_page(String_Builder *sb, long long id,
 #undef PAGE_TITLE
 }
 
-static void render_pio_details_page(String_Builder *sb, long long import_id,
-                                    const char *patient_name, const char *room_name,
-                                    Pio_Options *daily_opts, Pio_Details *rows) {
+static void render_pio_details_page(String_Builder *sb,
+                                    long long       import_id,
+                                    const char     *patient_name,
+                                    const char     *room_name,
+                                    Pio_Options    *daily_opts,
+                                    Pio_Details    *rows)
+{
 #define OUT(buf, size) sb_append_buf(sb, buf, size);
 #define INT(v) sb_append_cstr(sb, temp_sprintf("%d", v));
 #define LLINT(v) sb_append_cstr(sb, temp_sprintf("%lld", v));
@@ -285,7 +346,10 @@ static void render_pio_details_page(String_Builder *sb, long long import_id,
 
 void serve_pio_list(Serve_Context *sc) {
     sqlite3 *db = open_webc_db();
-    if (!db) { serve_error(sc, 500); return; }
+    if (!db) {
+        serve_error(sc, 500);
+        return;
+    }
 
     Pio_Headers rows = {0};
     pio_headers_load(db, &rows, -1);
@@ -308,20 +372,29 @@ void serve_pio_list(Serve_Context *sc) {
 
 void serve_pio_create(Serve_Context *sc) {
     String_View body = sb_to_sv(sc->body);
-    char patient_id[64] = {0}, room_id[64] = {0}, room_price[128] = {0};
-    char start_date[64] = {0}, end_date[64] = {0}, room_day[128] = {0};
-    if (!form_find(body, "patient_id", patient_id, sizeof(patient_id)) || patient_id[0] == '\0') {
+    char patient_id[64]  = {0};
+    char room_id[64]     = {0};
+    char room_price[128] = {0};
+    char start_date[64]  = {0};
+    char end_date[64]    = {0};
+    char room_day[128]   = {0};
+
+    if (!form_find(body, "patient_id", patient_id, sizeof(patient_id))
+        || patient_id[0] == '\0') {
         serve_error(sc, 400);
         return;
     }
-    form_find(body, "room_id", room_id, sizeof(room_id));
+    form_find(body, "room_id",    room_id,    sizeof(room_id));
     form_find(body, "room_price", room_price, sizeof(room_price));
     form_find(body, "start_date", start_date, sizeof(start_date));
-    form_find(body, "end_date", end_date, sizeof(end_date));
-    form_find(body, "room_day", room_day, sizeof(room_day));
+    form_find(body, "end_date",   end_date,   sizeof(end_date));
+    form_find(body, "room_day",   room_day,   sizeof(room_day));
 
     sqlite3 *db = open_webc_db();
-    if (!db) { serve_error(sc, 500); return; }
+    if (!db) {
+		serve_error(sc, 500);
+		return;
+	}
 
     long long new_id = 0;
     bool ok = pio_insert(db, &new_id, atoll(patient_id),
@@ -329,13 +402,19 @@ void serve_pio_create(Serve_Context *sc) {
                          room_price, start_date, end_date, room_day);
     sqlite3_close(db);
 
-    if (!ok) { serve_error(sc, 500); return; }
+    if (!ok) {
+        serve_error(sc, 500);
+        return;
+    }
     http_render_redirect(sc, 302, temp_sprintf("/patient-invoice-out/%lld/details", new_id));
 }
 
 void serve_pio_edit(Serve_Context *sc, int id) {
     sqlite3 *db = open_webc_db();
-    if (!db) { serve_error(sc, 500); return; }
+    if (!db) {
+        serve_error(sc, 500);
+        return;
+    }
 
     Pio_Headers rows = {0};
     pio_headers_load(db, &rows, id);
@@ -360,36 +439,54 @@ void serve_pio_edit(Serve_Context *sc, int id) {
 
 void serve_pio_update(Serve_Context *sc, int id) {
     String_View body = sb_to_sv(sc->body);
-    char room_price[128] = {0}, start_date[64] = {0}, end_date[64] = {0}, room_day[128] = {0};
+    char room_price[128] = {0};
+    char start_date[64]  = {0};
+    char end_date[64]    = {0};
+    char room_day[128]   = {0};
     form_find(body, "room_price", room_price, sizeof(room_price));
     form_find(body, "start_date", start_date, sizeof(start_date));
-    form_find(body, "end_date", end_date, sizeof(end_date));
-    form_find(body, "room_day", room_day, sizeof(room_day));
+    form_find(body, "end_date",   end_date,   sizeof(end_date));
+    form_find(body, "room_day",   room_day,   sizeof(room_day));
 
     sqlite3 *db = open_webc_db();
-    if (!db) { serve_error(sc, 500); return; }
+    if (!db) {
+        serve_error(sc, 500);
+        return;
+    }
 
     bool ok = pio_update(db, id, room_price, start_date, end_date, room_day);
     sqlite3_close(db);
 
-    if (!ok) { serve_error(sc, 500); return; }
+    if (!ok) {
+        serve_error(sc, 500);
+        return;
+    }
     http_render_redirect(sc, 302, "/patient-invoice-out");
 }
 
 void serve_pio_delete(Serve_Context *sc, int id) {
     sqlite3 *db = open_webc_db();
-    if (!db) { serve_error(sc, 500); return; }
+    if (!db) {
+        serve_error(sc, 500);
+        return;
+    }
 
     bool ok = pio_delete(db, id);
     sqlite3_close(db);
 
-    if (!ok) { serve_error(sc, 500); return; }
+    if (!ok) {
+        serve_error(sc, 500);
+        return;
+    }
     http_render_redirect(sc, 302, "/patient-invoice-out");
 }
 
 void serve_pio_details(Serve_Context *sc, int id) {
     sqlite3 *db = open_webc_db();
-    if (!db) { serve_error(sc, 500); return; }
+    if (!db) {
+        serve_error(sc, 500);
+        return;
+    }
 
     Pio_Headers headers = {0};
     pio_headers_load(db, &headers, id);
@@ -421,28 +518,41 @@ void serve_pio_details(Serve_Context *sc, int id) {
 void serve_pio_detail_create(Serve_Context *sc, int id) {
     String_View body = sb_to_sv(sc->body);
     char daily_id[64] = {0};
-    if (!form_find(body, "patient_daily_invoice_id", daily_id, sizeof(daily_id)) || daily_id[0] == '\0') {
+    if (!form_find(body, "patient_daily_invoice_id", daily_id, sizeof(daily_id))
+        || daily_id[0] == '\0') {
         serve_error(sc, 400);
         return;
     }
 
     sqlite3 *db = open_webc_db();
-    if (!db) { serve_error(sc, 500); return; }
+    if (!db) {
+        serve_error(sc, 500);
+        return;
+    }
 
     bool ok = pio_detail_insert(db, id, atoll(daily_id));
     sqlite3_close(db);
 
-    if (!ok) { serve_error(sc, 500); return; }
+    if (!ok) {
+        serve_error(sc, 500);
+        return;
+    }
     http_render_redirect(sc, 302, temp_sprintf("/patient-invoice-out/%d/details", id));
 }
 
 void serve_pio_detail_delete(Serve_Context *sc, int id, int daily_id) {
     sqlite3 *db = open_webc_db();
-    if (!db) { serve_error(sc, 500); return; }
+    if (!db) {
+        serve_error(sc, 500);
+        return;
+    }
 
     bool ok = pio_detail_delete(db, id, daily_id);
     sqlite3_close(db);
 
-    if (!ok) { serve_error(sc, 500); return; }
+    if (!ok) {
+        serve_error(sc, 500);
+        return;
+    }
     http_render_redirect(sc, 302, temp_sprintf("/patient-invoice-out/%d/details", id));
 }

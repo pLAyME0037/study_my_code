@@ -62,6 +62,16 @@ static bool crud_parse_id(const Crud_Module *mod,
 }
 
 void serve_resource_route(Serve_Context *sc, String_View uri) {
+    if (sv_starts_with(uri, sv_from_cstr("/js/"))) {
+        String_View rest = { .data = uri.data + 4, .count = uri.count - 4 };
+        String_Builder path = {0};
+        sb_append_cstr(&path, "./js/");
+        sb_append_sv(&path, rest);
+        sb_append_null(&path);
+        // determine content_type (text/javascript for .js)
+        serve_resource(sc, path.items, "text/javascript; charset=utf-8");
+        return;
+    }
     if (sv_eq(uri, sv_from_cstr("/css/output.css"))) {
         serve_resource(sc, "./css/output.css", "text/css; charset=utf-8");
         return;
@@ -138,7 +148,7 @@ void route_request(Serve_Context *sc, String_View method, String_View uri) {
         return;
     }
     int user_id = 0;
-    if (CMP_URI(method, "GET") 
+    if (CMP_URI(method, "GET")
         && parse_uri_id(sv_from_cstr("/users"), uri, "/edit", &user_id)) {
         serve_users_edit(sc, uri);
         return;
@@ -190,7 +200,7 @@ void route_request(Serve_Context *sc, String_View method, String_View uri) {
         serve_pmi_list(sc);
         return;
     }
-    if (CMP_URI(method, "POST") 
+    if (CMP_URI(method, "POST")
         && CMP_URI(uri, "/patient-medicine-invoices/create")) {
         serve_pmi_create(sc);
         return;
@@ -465,6 +475,7 @@ void route_request(Serve_Context *sc, String_View method, String_View uri) {
     }
 
     if (sv_starts_with(uri, sv_from_cstr("/css/"))
+        || sv_starts_with(uri, sv_from_cstr("/js/"))
         || sv_starts_with(uri, sv_from_cstr("/resource/"))
         || CMP_URI(uri, "/favicon.ico")) {
         serve_resource_route(sc, uri);
