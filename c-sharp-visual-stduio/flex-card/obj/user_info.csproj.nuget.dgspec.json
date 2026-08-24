@@ -71,6 +71,10 @@
             "OpenMaui.Hosting": {
               "target": "Package",
               "version": "[10.0.*, )"
+            },
+            "sqlite-net-pcl": {
+              "target": "Package",
+              "version": "[1.11.285, )"
             }
           },
           "imports": [

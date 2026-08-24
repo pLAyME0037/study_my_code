@@ -5,7 +5,11 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:pages="clr-namespace:user_info.Pages"
     xmlns:views="clr-namespace:user_info.Views"
+    xmlns:views.student_db="clr-namespace:user_info.Views.StudentDB"
     Title="user_info">
+
+    <ShellContent Title="Student Database"
+                  ContentTemplate="{DataTemplate views.student_db:StudentList}" />
 
     <ShellContent Title="Student Note"
                   ContentTemplate="{DataTemplate views:StudentNote}" />
