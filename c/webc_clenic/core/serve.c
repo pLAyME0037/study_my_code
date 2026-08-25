@@ -123,9 +123,10 @@ void serve_request(Serve_Context *sc) {
     String_View method      = sv_trim(sv_chop_by_delim(&status_line, ' '));
     String_View uri         = sv_trim(sv_chop_by_delim(&status_line, ' '));
 
-    // Drop the query part of the URI, if it exists
+    sc->query_string = sv_from_cstr("");
     for (size_t i = 0; i < uri.count; ++i) {
         if (uri.data[i] == '?') {
+            sc->query_string = sv_from_parts(uri.data + i + 1, uri.count - i - 1);
             uri.count = i;
             break;
         }
@@ -140,6 +141,7 @@ void sc_reset(Serve_Context *sc) {
     sc->body.count = 0;
     sc->response.count = 0;
     sc->request.count = 0;
+    sc->query_string = sv_from_cstr("");
 }
 
 const char *http_reason_phrase_by_status_code(int status_code) {

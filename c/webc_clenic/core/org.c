@@ -94,6 +94,18 @@ void serve_org_daily_create(Serve_Context *sc) {
     char organization_id[64] = {0}, patient_id[64] = {0}, invoice_date[64] = {0};
     char riel[128] = {0}, dollar[128] = {0};
     if (!form_find(body, "organization_id", organization_id, sizeof(organization_id)) || organization_id[0] == '\0') {
+        if (sc->query_string.count > 0) {
+            char param[] = "organization_id=";
+            if (sv_starts_with(sc->query_string, sv_from_cstr(param))) {
+                size_t offset = strlen(param);
+                size_t remaining = sc->query_string.count - offset;
+                size_t copy_len = remaining < sizeof(organization_id) - 1 ? remaining : sizeof(organization_id) - 1;
+                memcpy(organization_id, (char *)sc->query_string.data + offset, copy_len);
+                organization_id[copy_len] = '\0';
+            }
+        }
+    }
+    if (organization_id[0] == '\0') {
         serve_error(sc, 400);
         return;
     }
@@ -283,6 +295,18 @@ void serve_org_balance_create(Serve_Context *sc) {
     char organization_id[64] = {0}, organization_invoice_id[64] = {0};
     char balance_amount[128] = {0}, balance[128] = {0};
     if (!form_find(body, "organization_id", organization_id, sizeof(organization_id)) || organization_id[0] == '\0') {
+        if (sc->query_string.count > 0) {
+            char param[] = "organization_id=";
+            if (sv_starts_with(sc->query_string, sv_from_cstr(param))) {
+                size_t offset = strlen(param);
+                size_t remaining = sc->query_string.count - offset;
+                size_t copy_len = remaining < sizeof(organization_id) - 1 ? remaining : sizeof(organization_id) - 1;
+                memcpy(organization_id, (char *)sc->query_string.data + offset, copy_len);
+                organization_id[copy_len] = '\0';
+            }
+        }
+    }
+    if (organization_id[0] == '\0') {
         serve_error(sc, 400);
         return;
     }
@@ -406,10 +430,34 @@ void serve_org_out_create(Serve_Context *sc) {
     char organization_id[64] = {0}, patient_id[64] = {0}, room_id[64] = {0};
     char room_price[128] = {0}, start_date[64] = {0}, end_date[64] = {0}, room_day[128] = {0};
     if (!form_find(body, "organization_id", organization_id, sizeof(organization_id)) || organization_id[0] == '\0') {
+        if (sc->query_string.count > 0) {
+            char param[] = "organization_id=";
+            if (sv_starts_with(sc->query_string, sv_from_cstr(param))) {
+                size_t offset = strlen(param);
+                size_t remaining = sc->query_string.count - offset;
+                size_t copy_len = remaining < sizeof(organization_id) - 1 ? remaining : sizeof(organization_id) - 1;
+                memcpy(organization_id, (char *)sc->query_string.data + offset, copy_len);
+                organization_id[copy_len] = '\0';
+            }
+        }
+    }
+    if (organization_id[0] == '\0') {
         serve_error(sc, 400);
         return;
     }
     if (!form_find(body, "patient_id", patient_id, sizeof(patient_id)) || patient_id[0] == '\0') {
+        if (sc->query_string.count > 0) {
+            char param[] = "patient_id=";
+            if (sv_starts_with(sc->query_string, sv_from_cstr(param))) {
+                size_t offset = strlen(param);
+                size_t remaining = sc->query_string.count - offset;
+                size_t copy_len = remaining < sizeof(patient_id) - 1 ? remaining : sizeof(patient_id) - 1;
+                memcpy(patient_id, (char *)sc->query_string.data + offset, copy_len);
+                patient_id[copy_len] = '\0';
+            }
+        }
+    }
+    if (patient_id[0] == '\0') {
         serve_error(sc, 400);
         return;
     }

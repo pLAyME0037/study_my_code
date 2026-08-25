@@ -9,6 +9,7 @@ typedef struct {
     String_Builder request;
     String_Builder response;
     String_Builder body;
+    String_View query_string;
 } Serve_Context;
 
 void sc_reset(Serve_Context *sc);

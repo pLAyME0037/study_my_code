@@ -106,11 +106,25 @@ static bool crud_gather_values(String_View        body,
 }
 
 // Validate that all non-nullable columns have a non-empty value.
-static bool crud_validate(String_View body, const Crud_Module *mod) {
+static bool crud_validate(String_View body, String_View query, const Crud_Module *mod) {
     for (size_t i = 0; i < mod->column_count; ++i) {
         if (mod->columns[i].nullable) continue;
+        if (mod->columns[i].type == COL_FK_SELECT) continue;
         char buf[512] = {0};
-        if (!form_find(body, mod->columns[i].name, buf, sizeof(buf)) || buf[0] == '\0') {
+        bool found = form_find(body, mod->columns[i].name, buf, sizeof(buf));
+        if (!found && query.count > 0) {
+            char param[64];
+            snprintf(param, sizeof(param), "%s=", mod->columns[i].name);
+            if (sv_starts_with(query, sv_from_cstr(param))) {
+                size_t offset = strlen(param);
+                size_t remaining = query.count - offset;
+                size_t copy_len = remaining < sizeof(buf) - 1 ? remaining : sizeof(buf) - 1;
+                memcpy(buf, (char *)query.data + offset, copy_len);
+                buf[copy_len] = '\0';
+                found = true;
+            }
+        }
+        if (!found || buf[0] == '\0') {
             return false;
         }
     }
@@ -119,7 +133,7 @@ static bool crud_validate(String_View body, const Crud_Module *mod) {
 
 void serve_crud_create(Serve_Context *sc, const Crud_Module *mod) {
     String_View body = sb_to_sv(sc->body);
-    if (!crud_validate(body, mod)) {
+    if (!crud_validate(body, sc->query_string, mod)) {
         serve_error(sc, 400);
         return;
     }
@@ -128,6 +142,21 @@ void serve_crud_create(Serve_Context *sc, const Crud_Module *mod) {
     if (!values) { serve_error(sc, 500); return; }
     crud_gather_values(body, mod, values);
 
+    if (sc->query_string.count > 0) {
+        for (size_t i = 0; i < mod->column_count; ++i) {
+            const Crud_Column *col = &mod->columns[i];
+            if (col->type == COL_FK_SELECT && values[i] == NULL) {
+                char param[64];
+                snprintf(param, sizeof(param), "%s=", col->name);
+                if (sv_starts_with(sc->query_string, sv_from_cstr(param))) {
+                    size_t offset = strlen(param);
+                    size_t remaining = sc->query_string.count - offset;
+                    values[i] = temp_strndup((char *)sc->query_string.data + offset, remaining);
+                }
+            }
+        }
+    }
+
     sqlite3 *db = open_webc_db();
     if (!db) { free(values); serve_error(sc, 500); return; }
     bool ok = crud_insert(db, mod, values);
@@ -135,7 +164,24 @@ void serve_crud_create(Serve_Context *sc, const Crud_Module *mod) {
     free(values);
 
     if (!ok) { serve_error(sc, 500); return; }
-    http_render_redirect(sc, 302, mod->path);
+    
+    const char *redirect_path = mod->path;
+    if (sc->query_string.count > 0) {
+        for (size_t i = 0; i < mod->column_count; ++i) {
+            const Crud_Column *col = &mod->columns[i];
+            if (col->type == COL_FK_SELECT) {
+                char param[64];
+                snprintf(param, sizeof(param), "%s=", col->name);
+                if (sv_starts_with(sc->query_string, sv_from_cstr(param))) {
+                    if (strstr(col->name, "patient_id")) redirect_path = "/patients";
+                    else if (strstr(col->name, "organization_id")) redirect_path = "/organizations";
+                    else if (strstr(col->name, "medicine_import_id")) redirect_path = "/medicine-imports";
+                    break;
+                }
+            }
+        }
+    }
+    http_render_redirect(sc, 302, redirect_path);
 }
 
 void serve_crud_edit(Serve_Context *sc, const Crud_Module *mod, int id) {
@@ -175,7 +221,7 @@ void serve_crud_edit(Serve_Context *sc, const Crud_Module *mod, int id) {
 
 void serve_crud_update(Serve_Context *sc, const Crud_Module *mod, int id) {
     String_View body = sb_to_sv(sc->body);
-    if (!crud_validate(body, mod)) {
+    if (!crud_validate(body, sv_from_cstr(""), mod)) {
         serve_error(sc, 400);
         return;
     }

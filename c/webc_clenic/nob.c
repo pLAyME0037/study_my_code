@@ -280,7 +280,6 @@ int main(int argc, char **argv) {
                "core/patient_invoice.c",
                "core/org.c",
                "core/user.c",
-               "core/patient_dashboard.c",
                "core/master_detail.c",
                "src/db/db.c",
                "src/crud/crud.c",

@@ -1,0 +1,38 @@
+<tr class="md-row hover:bg-gray-50 dark:hover:bg-gray-700/50">
+    ({ for (size_t cci = 0; cci < config->children[ti].column_count; ++cci) { })
+        <td class="px-3 py-2 text-gray-700 dark:text-gray-200">({ ESCAPED(rows->items[ri].children[ti].items[ci].values[cci + 1]); })</td>
+    ({ } })
+    <td class="px-3 py-2 whitespace-nowrap">
+        <button type="button" class="child-edit-btn px-2 py-1 rounded text-xs bg-amber-500 hover:bg-amber-600 text-white">Edit</button>
+        <form method="POST"
+              action="({ STR(config->children[ti].crud_path); })/({ STR(rows->items[ri].children[ti].items[ci].values[0]); })/delete" class="inline">
+            <button type="submit" class="ml-1 px-2 py-1 rounded text-xs bg-red-500 hover:bg-red-600 text-white">Delete</button>
+        </form>
+    </td>
+</tr>
+<tr class="md-edit-row hidden">
+    <td colspan="({ INT(config->children[ti].column_count + 2); })" class="px-0 py-0 bg-amber-50/50 dark:bg-gray-900/40">
+        <form method="POST"
+              action="({ STR(config->children[ti].crud_path); })/({ STR(rows->items[ri].children[ti].items[ci].values[0]); })/update?({ STR(config->children[ti].fk_column); })=({ LLINT(rows->items[ri].id); })"
+              class="flex flex-wrap gap-3 items-end px-3 py-2">
+            ({ for (size_t cci = 0; cci < config->children[ti].column_count; ++cci) { })
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs text-gray-500 dark:text-gray-400">({ ESCAPED(config->children[ti].columns[cci].label); })</label>
+                    <input name="({ STR(config->children[ti].columns[cci].name); })"
+                           type="({ if (config->children[ti].columns[cci].type == COL_TYPE_DATE) { })date({ } else if (config->children[ti].columns[cci].type == COL_TYPE_NUM) { })number({ } else { })text({ } })"
+                           ({ if (config->children[ti].columns[cci].type == COL_TYPE_NUM) { })step="any" ({ } })
+                           value="({ ESCAPED(rows->items[ri].children[ti].items[ci].values[cci + 1]); })"
+                           class="px-2 py-1 text-sm rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-white">
+                </div>
+            ({ } })
+            <div class="flex flex-col gap-1">
+                <label class="text-xs text-gray-500 dark:text-gray-400">({ ESCAPED(config->children[ti].fk_column); })</label>
+                <input type="text" value="({ LLINT(rows->items[ri].id); })" readonly
+                       class="px-2 py-1 text-sm rounded border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 w-16">
+            </div>
+            <button type="submit"
+                    class="px-3 py-1.5 text-xs rounded bg-green-600 hover:bg-green-700 text-white font-medium">Confirm</button>
+            <button type="button" class="md-discard px-3 py-1.5 text-xs rounded bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200">Discard</button>
+        </form>
+    </td>
+</tr>

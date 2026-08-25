@@ -10,7 +10,7 @@
 #include "patient_invoice.h"
 #include "org.h"
 #include "user.h"
-#include "patient_dashboard.h"
+#include "master_detail.h"
 
 static const Crud_Module *crud_find_module(String_View uri) {
     for (size_t i = 0; i < crud_modules_count; ++i) {
@@ -207,10 +207,6 @@ void route_request(Serve_Context *sc, String_View method, String_View uri) {
     }
     int pmi_id = 0;
    String_View pmi = sv_from_cstr("/patient-medicine-invoices") ;
-    if (CMP_URI(method, "GET") && parse_uri_id(pmi, uri, "/edit", &pmi_id)) {
-        serve_pmi_edit(sc, pmi_id);
-        return;
-    }
     if (CMP_URI(method, "POST") && parse_uri_id(pmi, uri, "/update", &pmi_id)) {
         serve_pmi_update(sc, pmi_id);
         return;
@@ -218,28 +214,6 @@ void route_request(Serve_Context *sc, String_View method, String_View uri) {
     if (CMP_URI(method, "POST") && parse_uri_id(pmi, uri, "/delete", &pmi_id)) {
         serve_pmi_delete(sc, pmi_id);
         return;
-    }
-    if (CMP_URI(method, "GET") && parse_uri_id(pmi, uri, "/details", &pmi_id)) {
-        serve_pmi_details(sc, pmi_id);
-        return;
-    }
-    if (CMP_URI(method, "POST")
-        && parse_uri_id(pmi, uri, "/details/create", &pmi_id)) {
-        serve_pmi_detail_create(sc, pmi_id);
-        return;
-    }
-    if (CMP_URI(method, "POST")
-        && sv_starts_with(uri, pmi)
-        && sv_ends_with(uri, sv_from_cstr("/delete"))) {
-        char buf[512] = {0};
-        size_t n = uri.count < sizeof(buf) - 1 ? uri.count : sizeof(buf) - 1;
-        memcpy(buf, uri.data, n);
-        int med_id = 0;
-        int iid = 0;
-        if (sscanf(buf, "/patient-medicine-invoices/%d/details/%d/delete", &iid, &med_id) == 2) {
-            serve_pmi_detail_delete(sc, iid, med_id);
-            return;
-        }
     }
 
     // ---- Patient Invoice Out (header + details) ----
@@ -253,11 +227,6 @@ void route_request(Serve_Context *sc, String_View method, String_View uri) {
     }
     int pio_id = 0;
    String_View pio = sv_from_cstr("/patient-invoice-out");
-    if (CMP_URI(method, "GET")
-        && parse_uri_id(pio, uri, "/edit", &pio_id)) {
-        serve_pio_edit(sc, pio_id);
-        return;
-    }
     if (CMP_URI(method, "POST")
         && parse_uri_id(pio, uri, "/update", &pio_id)) {
         serve_pio_update(sc, pio_id);
@@ -267,29 +236,6 @@ void route_request(Serve_Context *sc, String_View method, String_View uri) {
         && parse_uri_id(pio, uri, "/delete", &pio_id)) {
         serve_pio_delete(sc, pio_id);
         return;
-    }
-    if (CMP_URI(method, "GET")
-        && parse_uri_id(pio, uri, "/details", &pio_id)) {
-        serve_pio_details(sc, pio_id);
-        return;
-    }
-    if (CMP_URI(method, "POST")
-        && parse_uri_id(pio, uri, "/details/create", &pio_id)) {
-        serve_pio_detail_create(sc, pio_id);
-        return;
-    }
-    if (CMP_URI(method, "POST")
-        && sv_starts_with(uri, sv_from_cstr("/patient-invoice-out/"))
-        && sv_ends_with(uri, sv_from_cstr("/delete"))) {
-        char buf[512] = {0};
-        size_t n = uri.count < sizeof(buf) - 1 ? uri.count : sizeof(buf) - 1;
-        memcpy(buf, uri.data, n);
-        int daily_id = 0;
-        int iid = 0;
-        if (sscanf(buf, "/patient-invoice-out/%d/details/%d/delete", &iid, &daily_id) == 2) {
-            serve_pio_detail_delete(sc, iid, daily_id);
-            return;
-        }
     }
 
     // ---- Organization Daily Invoice (header + details) ----
@@ -440,7 +386,7 @@ void route_request(Serve_Context *sc, String_View method, String_View uri) {
         if (sv_eq(uri, path)) {
             if (CMP_URI(method, "GET")) {
                 if (strcmp(crud_mod->path, "/patients") == 0) {
-                    serve_patient_dashboard(sc);
+                    serve_master_detail_by_table(sc, "Patients");
                 } else {
                     serve_crud_list(sc, crud_mod);
                 }
@@ -453,7 +399,7 @@ void route_request(Serve_Context *sc, String_View method, String_View uri) {
         int id = 0;
         if (CMP_URI(method, "POST")
             && sv_ends_with(uri, sv_from_cstr("/create"))
-            && uri.count == path.count + strlen("/create")) {
+            && sv_starts_with(uri, path)) {
             serve_crud_create(sc, crud_mod);
             return;
         }

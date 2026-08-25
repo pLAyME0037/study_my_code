@@ -1,0 +1,35 @@
+<div class="tab-content ({ if (ti == 0) { })({ } else { })hidden({ } })"
+     data-tab="({ STR(config->children[ti].table); })" data-master-id="({ LLINT(rows->items[ri].id); })">
+    <div class="flex justify-between items-center mb-2">
+        <h4 class="font-medium text-gray-800 dark:text-white">({ ESCAPED(config->children[ti].title); })</h4>
+        <button type="button" class="add-child-btn px-3 py-1 text-sm bg-indigo-600 hover:bg-indigo-700 text-white rounded"
+                data-tab="({ STR(config->children[ti].table); })">+ Add</button>
+    </div>
+
+    <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse text-sm">
+            <thead class="bg-gray-100 dark:bg-gray-700">
+                <tr>
+                    ({ for (size_t cci = 0; cci < config->children[ti].column_count; ++cci) { })
+                        <th class="px-3 py-2 font-semibold text-gray-600 dark:text-gray-300">({ ESCAPED(config->children[ti].columns[cci].label); })</th>
+                    ({ } })
+                    <th class="px-3 py-2 font-semibold text-gray-600 dark:text-gray-300">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                ({ #include "md_child_add_row.h" })
+                ({ if (rows->items[ri].children[ti].count == 0) { })
+                    <tr><td colspan="({ INT(config->children[ti].column_count + 1); })"
+                            class="px-3 py-3 text-sm text-gray-500 dark:text-gray-400 text-center">No ({ ESCAPED(config->children[ti].title); }) yet.</td></tr>
+                ({ } else { })
+                    ({ for (size_t ci = 0; ci < rows->items[ri].children[ti].count; ++ci) { })
+                        ({ #include "md_child_rows.h" })
+                    ({ } })
+                ({ } })
+            </tbody>
+        </table>
+    </div>
+    ({ if (rows->items[ri].children[ti].count > 0) { })
+        <div class="mt-2 text-sm text-gray-600 dark:text-gray-400">Showing ({ INT(rows->items[ri].children[ti].count); }) ({ ESCAPED(config->children[ti].title); })</div>
+    ({ } })
+</div>

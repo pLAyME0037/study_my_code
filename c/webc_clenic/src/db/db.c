@@ -71,8 +71,10 @@ const char *migrations[] = {
     ");\n",
     "CREATE TABLE IF NOT EXISTS Departments (\n"
     "    id INTEGER PRIMARY KEY ASC,\n"
+    "    doctor_id INTEGER,\n" // i add this my self as i think it supposed to
     "    name TEXT,\n"
-    "    description TEXT\n"
+    "    description TEXT,\n"
+    "    FOREIGN KEY(doctor_id) REFERENCES Doctors\n"
     ");\n",
     "CREATE TABLE IF NOT EXISTS DoctorWorkTimes (\n"
     "    id INTEGER PRIMARY KEY ASC,\n"
@@ -292,7 +294,7 @@ const char *migrations[] = {
     "CREATE TABLE IF NOT EXISTS Users (\n"
     "    id INTEGER PRIMARY KEY ASC,\n"
     "    name TEXT,\n"
-"    username TEXT,\n"
+    "    username TEXT,\n"
     "    email TEXT,\n"
     "    profile_pic BLOB\n"
     ");\n",

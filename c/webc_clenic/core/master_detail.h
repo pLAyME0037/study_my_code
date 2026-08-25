@@ -39,6 +39,7 @@ typedef struct {
     const char *title;
     const char *fk_column;
     const char *id_column;
+    const char *crud_path;
     MD_Column  *columns;
     size_t      column_count;
     const char **sum_columns;
@@ -62,6 +63,7 @@ typedef struct {
     char        **values;
     size_t        value_count;
     MD_ChildRows *children;  // array of MD_ChildRows, one per child tab
+    size_t        children_count;
 } MD_MasterRow;
 
 typedef struct {
@@ -82,5 +84,8 @@ void md_render_master_detail_list(Serve_Context         *sc,
                                   MD_MasterRows         *rows);
 
 void serve_master_detail_list(Serve_Context *sc, const MD_MasterConfig *config);
+
+void serve_master_detail_by_table(Serve_Context *sc, const char *master_table);
+const MD_MasterConfig *find_master_config(const char *table);
 
 #endif // CORE_MASTER_DETAIL_H_
