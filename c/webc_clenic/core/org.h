@@ -14,9 +14,6 @@ void serve_org_daily_detail_create(Serve_Context *sc, int id);
 void serve_org_daily_detail_delete(Serve_Context *sc, int id, int ill_id);
 
 // Organization Balance (composite PK: org + invoice)
-void serve_org_balance_list(Serve_Context *sc);
-void serve_org_balance_create(Serve_Context *sc);
-void serve_org_balance_delete(Serve_Context *sc, int org_id, int invoice_id);
 
 // Organization Invoice Out (header + linked org-invoice detail rows)
 void serve_org_out_list(Serve_Context *sc);

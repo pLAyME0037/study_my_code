@@ -68,11 +68,6 @@ typedef struct {
     size_t capacity;
 } Org_Balance_Rows;
 
-bool org_balances_load(sqlite3 *db, Org_Balance_Rows *rows);
-bool org_balance_insert(sqlite3 *db, long long organization_id, long long invoice_id,
-                        const char *balance_amount, const char *balance);
-bool org_balance_delete(sqlite3 *db, long long organization_id, long long invoice_id);
-
 // ---------------------------------------------------------------------------
 // Organization Invoice Out (header + linked org-invoice detail rows)
 // ---------------------------------------------------------------------------

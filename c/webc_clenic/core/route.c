@@ -13,12 +13,13 @@
 #include "master_detail.h"
 
 static const Crud_Module *crud_find_module(String_View uri) {
+    const Crud_Module *best = NULL;
     for (size_t i = 0; i < crud_modules_count; ++i) {
-        if (sv_starts_with(uri, sv_from_cstr(crud_modules[i]->path))) {
-            return crud_modules[i];
-        }
+        String_View p = sv_from_cstr(crud_modules[i]->path);
+        if (!sv_starts_with(uri, p)) continue;
+        if (!best || strlen(crud_modules[i]->path) > strlen(best->path)) best = crud_modules[i];
     }
-    return NULL;
+    return best;
 }
 
 // Extract the integer id from "/<path>/<id>/<suffix>".
@@ -197,7 +198,7 @@ void route_request(Serve_Context *sc, String_View method, String_View uri) {
 
     // ---- Patient Medicine Invoice (header + details) ----
     if (CMP_URI(method, "GET") && CMP_URI(uri, "/patient-medicine-invoices")) {
-        serve_pmi_list(sc);
+        serve_master_detail_by_table(sc, "PatientMedicineInvoices");
         return;
     }
     if (CMP_URI(method, "POST")
@@ -218,7 +219,7 @@ void route_request(Serve_Context *sc, String_View method, String_View uri) {
 
     // ---- Patient Invoice Out (header + details) ----
     if (CMP_URI(method, "GET") && CMP_URI(uri, "/patient-invoice-out")) {
-        serve_pio_list(sc);
+        serve_master_detail_by_table(sc, "PatientInvoiceOut");
         return;
     }
     if (CMP_URI(method, "POST") && CMP_URI(uri, "/patient-invoice-out/create")) {
@@ -240,7 +241,7 @@ void route_request(Serve_Context *sc, String_View method, String_View uri) {
 
     // ---- Organization Daily Invoice (header + details) ----
     if (CMP_URI(method, "GET") && CMP_URI(uri, "/organization-daily-invoices")) {
-        serve_org_daily_list(sc);
+        serve_master_detail_by_table(sc, "OrganizationDailyInvoices");
         return;
     }
     if (CMP_URI(method, "POST") && CMP_URI(uri, "/organization-daily-invoices/create")) {
@@ -289,32 +290,9 @@ void route_request(Serve_Context *sc, String_View method, String_View uri) {
         }
     }
 
-    // ---- Organization Balance (composite PK) ----
-    if (CMP_URI(method, "GET") && CMP_URI(uri, "/organization-balance")) {
-        serve_org_balance_list(sc);
-        return;
-    }
-    if (CMP_URI(method, "POST") && CMP_URI(uri, "/organization-balance/create")) {
-        serve_org_balance_create(sc);
-        return;
-    }
-    if (CMP_URI(method, "POST")
-        && sv_starts_with(uri, sv_from_cstr("/organization-balance/"))
-        && sv_ends_with(uri, sv_from_cstr("/delete"))) {
-        char buf[512] = {0};
-        size_t n = uri.count < sizeof(buf) - 1 ? uri.count : sizeof(buf) - 1;
-        memcpy(buf, uri.data, n);
-        int org_id = 0;
-        int inv_id = 0;
-        if (sscanf(buf, "/organization-balance/%d/%d/delete", &org_id, &inv_id) == 2) {
-            serve_org_balance_delete(sc, org_id, inv_id);
-            return;
-        }
-    }
-
     // ---- Organization Invoice Out (header + details) ----
     if (CMP_URI(method, "GET") && CMP_URI(uri, "/organization-invoice-out")) {
-        serve_org_out_list(sc);
+        serve_master_detail_by_table(sc, "OrganizationInvoiceOut");
         return;
     }
     if (CMP_URI(method, "POST") && CMP_URI(uri, "/organization-invoice-out/create")) {
@@ -385,8 +363,8 @@ void route_request(Serve_Context *sc, String_View method, String_View uri) {
         String_View path = sv_from_cstr(crud_mod->path);
         if (sv_eq(uri, path)) {
             if (CMP_URI(method, "GET")) {
-                if (strcmp(crud_mod->path, "/patients") == 0) {
-                    serve_master_detail_by_table(sc, "Patients");
+                if (find_master_config(crud_mod->table)) {
+                    serve_master_detail_by_table(sc, crud_mod->table);
                 } else {
                     serve_crud_list(sc, crud_mod);
                 }

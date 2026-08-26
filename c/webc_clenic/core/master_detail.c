@@ -63,6 +63,42 @@ static MD_ChildTab patient_children[] = {
       .columns = appointment_columns,      .column_count = ARRAY_LEN(appointment_columns) },
 };
 
+static MD_Column pdi_detail_columns[] = {
+    { .name = "ill_type_id", .label = "Illness",  .type = COL_TYPE_FK_SELECT, .nullable = false, .fk_table = "IllTypes", .fk_label = "type", .fk_value = "id" },
+    { .name = "patientDaily_invoice_detail_price",    .label = "Price",    .type = COL_TYPE_NUM,  .nullable = true },
+    { .name = "patientDaily_invoice_detail_currency", .label = "Currency", .type = COL_TYPE_TEXT, .nullable = true },
+};
+static MD_ChildTab pdi_children[] = {
+    { .table = "PatientDailyInvoicesDetails", .title = "Details",
+      .fk_column = "patient_daily_invoice_id", .id_column = "rowid",
+      .crud_path = "/patient-daily-invoices-details",
+      .columns = pdi_detail_columns, .column_count = ARRAY_LEN(pdi_detail_columns) },
+};
+
+static MD_Column pmi_detail_columns[] = {
+    { .name = "medicine_id", .label = "Medicine", .type = COL_TYPE_FK_SELECT, .nullable = false, .fk_table = "Medicines", .fk_label = "name", .fk_value = "id" },
+    { .name = "qty",         .label = "Qty",      .type = COL_TYPE_NUM,       .nullable = true },
+    { .name = "price",       .label = "Price",    .type = COL_TYPE_NUM,       .nullable = true },
+    { .name = "amount",      .label = "Amount",   .type = COL_TYPE_NUM,       .nullable = true },
+    { .name = "currency",    .label = "Currency", .type = COL_TYPE_TEXT,      .nullable = true },
+};
+static MD_ChildTab pmi_children[] = {
+    { .table = "PatientMedicineInvoiceDetails", .title = "Details",
+      .fk_column = "patient_medicine_invoice_id", .id_column = "rowid",
+      .crud_path = "/patient-medicine-invoices-details",
+      .columns = pmi_detail_columns, .column_count = ARRAY_LEN(pmi_detail_columns) },
+};
+
+static MD_Column pio_detail_columns[] = {
+    { .name = "patient_daily_invoice_id", .label = "Daily Invoice", .type = COL_TYPE_FK_SELECT, .nullable = true, .fk_table = "PatientDailyInvoices", .fk_label = "id", .fk_value = "id" },
+};
+static MD_ChildTab pio_children[] = {
+    { .table = "PatientInvoiceOutDetails", .title = "Details",
+      .fk_column = "patient_invoice_out_id", .id_column = "rowid",
+      .crud_path = "/patient-invoice-out-details",
+      .columns = pio_detail_columns, .column_count = ARRAY_LEN(pio_detail_columns) },
+};
+
 static MD_Column org_columns[] = {
     { .name = "name",        .label = "Name",        .type = COL_TYPE_TEXT,     .nullable = false },
     { .name = "start_date",  .label = "Start Date",  .type = COL_TYPE_DATE,     .nullable = true  },
@@ -82,13 +118,6 @@ static MD_Column org_invoice_columns[] = {
     { .name = "amount_in_dollar", .label = "Amount ($)",    .type = COL_TYPE_NUM,  .nullable = true },
 };
 
-static MD_Column org_invoice_detail_columns[] = {
-    { .name = "medicine_id", .label = "Medicine", .type = COL_TYPE_FK_SELECT, .nullable = false, .fk_table = "Medicines", .fk_label = "name", .fk_value = "id" },
-    { .name = "qty",         .label = "Qty",      .type = COL_TYPE_NUM,       .nullable = true },
-    { .name = "price",       .label = "Price",    .type = COL_TYPE_NUM,       .nullable = true },
-    { .name = "amount",      .label = "Amount",   .type = COL_TYPE_NUM,       .nullable = true },
-    { .name = "currency",    .label = "Currency", .type = COL_TYPE_TEXT,      .nullable = true },
-};
 
 static MD_Column org_payment_columns[] = {
     { .name = "organization_id",        .label = "Organization", .type = COL_TYPE_FK_SELECT, .nullable = false, .fk_table = "Organizations",   .fk_label = "name", .fk_value = "id" },
@@ -96,6 +125,34 @@ static MD_Column org_payment_columns[] = {
     { .name = "date",                   .label = "Date",          .type = COL_TYPE_DATE,     .nullable = true },
     { .name = "price",                  .label = "Price",         .type = COL_TYPE_NUM,      .nullable = true },
     { .name = "currency",               .label = "Currency",      .type = COL_TYPE_TEXT,     .nullable = true },
+};
+
+static MD_Column org_balance_columns[] = {
+    { .name = "balance_amount", .label = "Balance Amount", .type = COL_TYPE_NUM,  .nullable = true },
+    { .name = "balance",        .label = "Balance",        .type = COL_TYPE_NUM,  .nullable = true },
+};
+
+static MD_Column org_invoice_detail_columns[] = {
+    { .name = "medicine_id", .label = "Medicine", .type = COL_TYPE_FK_SELECT, .nullable = false, .fk_table = "Medicines", .fk_label = "name", .fk_value = "id" },
+    { .name = "qty",         .label = "Qty",      .type = COL_TYPE_NUM,       .nullable = true },
+    { .name = "price",       .label = "Price",    .type = COL_TYPE_NUM,       .nullable = true },
+    { .name = "amount",      .label = "Amount",   .type = COL_TYPE_NUM,       .nullable = true },
+    { .name = "currency",    .label = "Currency", .type = COL_TYPE_TEXT,      .nullable = true },
+};
+static MD_ChildTab org_inv_detail_children[] = {
+    { .table = "OrganizationInvoiceDetail", .title = "Details",
+      .fk_column = "organization_invoice_id", .id_column = "rowid",
+      .crud_path = "/organization-invoice-details",
+      .columns = org_invoice_detail_columns, .column_count = ARRAY_LEN(org_invoice_detail_columns) },
+};
+
+static MD_Column org_out_columns[] = {
+    { .name = "patient_id",   .label = "Patient",    .type = COL_TYPE_FK_SELECT, .nullable = false, .fk_table = "Patients", .fk_label = "name", .fk_value = "id" },
+    { .name = "room_id",      .label = "Room",       .type = COL_TYPE_FK_SELECT, .nullable = true,  .fk_table = "Rooms",    .fk_label = "price", .fk_value = "id" },
+    { .name = "room_price",   .label = "Room Price", .type = COL_TYPE_NUM,       .nullable = true },
+    { .name = "start_date",   .label = "Start Date", .type = COL_TYPE_DATE,      .nullable = true },
+    { .name = "end_date",     .label = "End Date",   .type = COL_TYPE_DATE,      .nullable = true },
+    { .name = "room_day",     .label = "Days",       .type = COL_TYPE_NUM,       .nullable = true },
 };
 
 static MD_ChildTab org_children[] = {
@@ -107,14 +164,40 @@ static MD_ChildTab org_children[] = {
       .fk_column = "organization_id", .id_column = "id",
       .crud_path = "/organization-invoices",
       .columns = org_invoice_columns, .column_count = ARRAY_LEN(org_invoice_columns) },
-    { .table = "OrganizationInvoiceDetail", .title = "Invoice Details",
-      .fk_column = "organization_id", .id_column = "id",
-      .crud_path = "/organization-invoice-details",
-      .columns = org_invoice_detail_columns, .column_count = ARRAY_LEN(org_invoice_detail_columns) },
     { .table = "OrganizationPayment",       .title = "Payments",
       .fk_column = "organization_id", .id_column = "id",
       .crud_path = "/organization-payments",
       .columns = org_payment_columns, .column_count = ARRAY_LEN(org_payment_columns) },
+    { .table = "OrganizationBalance",       .title = "Balances",
+      .fk_column = "organization_id", .id_column = "rowid",
+      .crud_path = "/organization-balances",
+      .columns = org_balance_columns, .column_count = ARRAY_LEN(org_balance_columns) },
+    { .table = "OrganizationInvoiceOut",    .title = "Invoice Out",
+      .fk_column = "organization_id", .id_column = "id",
+      .crud_path = "/organization-invoice-out",
+      .columns = org_out_columns, .column_count = ARRAY_LEN(org_out_columns) },
+};
+
+static MD_Column org_di_detail_columns[] = {
+    { .name = "ill_id",   .label = "Illness",  .type = COL_TYPE_FK_SELECT, .nullable = false, .fk_table = "IllTypes", .fk_label = "type", .fk_value = "id" },
+    { .name = "price",    .label = "Price",    .type = COL_TYPE_NUM,  .nullable = true },
+    { .name = "currency", .label = "Currency", .type = COL_TYPE_TEXT, .nullable = true },
+};
+static MD_ChildTab org_di_children[] = {
+    { .table = "OrganizationDailyInvoiceDetails", .title = "Details",
+      .fk_column = "organization_daily_id", .id_column = "rowid",
+      .crud_path = "/organization-daily-invoices-details",
+      .columns = org_di_detail_columns, .column_count = ARRAY_LEN(org_di_detail_columns) },
+};
+
+static MD_Column org_io_detail_columns[] = {
+    { .name = "organization_invoice_id", .label = "Org Invoice", .type = COL_TYPE_FK_SELECT, .nullable = true, .fk_table = "OrganizationInvoices", .fk_label = "invoice_date", .fk_value = "id" },
+};
+static MD_ChildTab org_io_children[] = {
+    { .table = "OrganizationInvoiceOutDetails", .title = "Details",
+      .fk_column = "organization_invoice_out_id", .id_column = "rowid",
+      .crud_path = "/organization-invoice-out-details",
+      .columns = org_io_detail_columns, .column_count = ARRAY_LEN(org_io_detail_columns) },
 };
 
 static MD_Column med_import_columns[] = {
@@ -144,6 +227,30 @@ static MD_MasterConfig master_configs[] = {
     { .table = "MedicineImport",  .title = "Medicine Import", .id_column = "id",
       .columns = med_import_columns, .column_count = ARRAY_LEN(med_import_columns),
       .children = med_import_children, .children_count = ARRAY_LEN(med_import_children) },
+    { .table = "PatientDailyInvoices",    .title = "Patient Daily Invoices",
+      .id_column = "id",
+      .columns = daily_invoice_columns, .column_count = ARRAY_LEN(daily_invoice_columns),
+      .children = pdi_children, .children_count = ARRAY_LEN(pdi_children) },
+    { .table = "PatientMedicineInvoices", .title = "Patient Medicine Invoices",
+      .id_column = "id",
+      .columns = medicine_invoice_columns, .column_count = ARRAY_LEN(medicine_invoice_columns),
+      .children = pmi_children, .children_count = ARRAY_LEN(pmi_children) },
+    { .table = "PatientInvoiceOut",       .title = "Patient Room Invoices",
+      .id_column = "id",
+      .columns = room_invoice_columns, .column_count = ARRAY_LEN(room_invoice_columns),
+      .children = pio_children, .children_count = ARRAY_LEN(pio_children) },
+    { .table = "OrganizationDailyInvoices", .title = "Org Daily Invoices",
+      .id_column = "id",
+      .columns = org_daily_invoice_columns, .column_count = ARRAY_LEN(org_daily_invoice_columns),
+      .children = org_di_children, .children_count = ARRAY_LEN(org_di_children) },
+    { .table = "OrganizationInvoiceOut",    .title = "Org Invoice Out",
+      .id_column = "id",
+      .columns = org_out_columns, .column_count = ARRAY_LEN(org_out_columns),
+      .children = org_io_children, .children_count = ARRAY_LEN(org_io_children) },
+    { .table = "OrganizationInvoices",      .title = "Org Invoices",
+      .id_column = "id",
+      .columns = org_invoice_columns, .column_count = ARRAY_LEN(org_invoice_columns),
+      .children = org_inv_detail_children, .children_count = ARRAY_LEN(org_inv_detail_children) },
 };
 
 static size_t master_configs_count = ARRAY_LEN(master_configs);
@@ -258,7 +365,6 @@ bool md_load_master_with_children(sqlite3               *db,
             row.children[ci].count = 0;
             row.children[ci].capacity = 0;
             if (!load_child_rows(db, &config->children[ci], row.id, &row.children[ci])) {
-                for (int i = 0; i < col_count; ++i) free(row.values[i]);
                 free(row.values);
                 for (size_t ci2 = 0; ci2 <= ci; ++ci2) {
                     MD_ChildRows *cr = &row.children[ci2];

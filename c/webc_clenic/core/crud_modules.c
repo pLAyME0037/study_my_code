@@ -135,6 +135,173 @@ static Crud_Column patient_daily_invoice_columns[] = {
     { .name = "amount_in_dollar", .label = "Amount ($)",    .type = COL_NUM,  .nullable = true },
 };
 
+static Crud_Column patient_daily_invoice_detail_columns[] = {
+    {
+        .name = "patient_daily_invoice_id",
+        .label = "Daily Invoice",
+        .type = COL_FK_SELECT,
+        .nullable = false,
+        .fk_table = "PatientDailyInvoices",
+        .fk_label = "id",
+        .fk_value = "id"
+    },
+    {
+        .name = "ill_type_id",
+        .label = "Illness",
+        .type = COL_FK_SELECT,
+        .nullable = false,
+        .fk_table = "IllTypes",
+        .fk_label = "type",
+        .fk_value = "id"
+    },
+    { .name = "patientDaily_invoice_detail_price",    .label = "Price",    .type = COL_NUM,  .nullable = true },
+    { .name = "patientDaily_invoice_detail_currency", .label = "Currency", .type = COL_TEXT, .nullable = true },
+};
+
+static Crud_Column patient_medicine_invoice_columns[] = {
+    {
+        .name = "patient_id",
+        .label = "Patient",
+        .type = COL_FK_SELECT,
+        .nullable = false,
+        .fk_table = "Patients",
+        .fk_label = "name",
+        .fk_value = "id"
+    },
+    { .name = "invoice_date",     .label = "Invoice Date",  .type = COL_DATE, .nullable = true },
+    { .name = "amount_in_riel",   .label = "Amount (Riel)", .type = COL_NUM,  .nullable = true },
+    { .name = "amount_in_dollar", .label = "Amount ($)",    .type = COL_NUM,  .nullable = true },
+};
+
+static Crud_Column patient_medicine_invoice_detail_columns[] = {
+    {
+        .name = "patient_medicine_invoice_id",
+        .label = "Medicine Invoice",
+        .type = COL_FK_SELECT,
+        .nullable = false,
+        .fk_table = "PatientDailyInvoices",
+        .fk_label = "id",
+        .fk_value = "id"
+    },
+    {
+        .name = "medicine_id",
+        .label = "Medicine",
+        .type = COL_FK_SELECT,
+        .nullable = false,
+        .fk_table = "Medicines",
+        .fk_label = "name",
+        .fk_value = "id"
+    },
+    { .name = "qty",      .label = "Qty",      .type = COL_NUM,  .nullable = true },
+    { .name = "price",    .label = "Price",    .type = COL_NUM,  .nullable = true },
+    { .name = "amount",   .label = "Amount",   .type = COL_NUM,  .nullable = true },
+    { .name = "currency", .label = "Currency", .type = COL_TEXT, .nullable = true },
+};
+
+static Crud_Column patient_invoice_out_detail_columns[] = {
+    {
+        .name = "patient_invoice_out_id",
+        .label = "Room Invoice",
+        .type = COL_FK_SELECT,
+        .nullable = false,
+        .fk_table = "PatientInvoiceOut",
+        .fk_label = "id",
+        .fk_value = "id"
+    },
+    {
+        .name = "patient_daily_invoice_id",
+        .label = "Daily Invoice",
+        .type = COL_FK_SELECT,
+        .nullable = true,
+        .fk_table = "PatientDailyInvoices",
+        .fk_label = "id",
+        .fk_value = "id"
+    },
+};
+
+static Crud_Column org_daily_invoice_detail_columns[] = {
+    {
+        .name = "organization_daily_id",
+        .label = "Daily Invoice",
+        .type = COL_FK_SELECT,
+        .nullable = false,
+        .fk_table = "PatientDailyInvoices",
+        .fk_label = "id",
+        .fk_value = "id"
+    },
+    {
+        .name = "ill_id",
+        .label = "Illness",
+        .type = COL_FK_SELECT,
+        .nullable = false,
+        .fk_table = "IllTypes",
+        .fk_label = "type",
+        .fk_value = "id"
+    },
+    { .name = "price",    .label = "Price",    .type = COL_NUM,  .nullable = true },
+    { .name = "currency", .label = "Currency", .type = COL_TEXT, .nullable = true },
+};
+
+static Crud_Column org_invoice_out_detail_columns[] = {
+    {
+        .name = "organization_invoice_out_id",
+        .label = "Invoice Out",
+        .type = COL_FK_SELECT,
+        .nullable = false,
+        .fk_table = "OrganizationInvoiceOut",
+        .fk_label = "id",
+        .fk_value = "id"
+    },
+    {
+        .name = "organization_invoice_id",
+        .label = "Org Invoice",
+        .type = COL_FK_SELECT,
+        .nullable = true,
+        .fk_table = "OrganizationInvoices",
+        .fk_label = "invoice_date",
+        .fk_value = "id"
+    },
+};
+
+static Crud_Column org_balance_columns[] = {
+    {
+        .name = "organization_id",
+        .label = "Organization",
+        .type = COL_FK_SELECT,
+        .nullable = false,
+        .fk_table = "Organizations",
+        .fk_label = "name",
+        .fk_value = "id"
+    },
+    { .name = "balance_amount", .label = "Balance Amount", .type = COL_NUM, .nullable = true },
+    { .name = "balance",        .label = "Balance",        .type = COL_NUM, .nullable = true },
+};
+
+static Crud_Column org_invoice_detail_columns[] = {
+    {
+        .name = "organization_invoice_id",
+        .label = "Org Invoice",
+        .type = COL_FK_SELECT,
+        .nullable = false,
+        .fk_table = "OrganizationInvoices",
+        .fk_label = "invoice_date",
+        .fk_value = "id"
+    },
+    {
+        .name = "medicine_id",
+        .label = "Medicine",
+        .type = COL_FK_SELECT,
+        .nullable = false,
+        .fk_table = "Medicines",
+        .fk_label = "name",
+        .fk_value = "id"
+    },
+    { .name = "qty",      .label = "Qty",      .type = COL_NUM,  .nullable = true },
+    { .name = "price",    .label = "Price",    .type = COL_NUM,  .nullable = true },
+    { .name = "amount",   .label = "Amount",   .type = COL_NUM,  .nullable = true },
+    { .name = "currency", .label = "Currency", .type = COL_TEXT, .nullable = true },
+};
+
 static Crud_Column room_type_columns[] = {
     { .name = "type",        .label = "Type",        .type = COL_TEXT,     .nullable = false },
     { .name = "description", .label = "Description", .type = COL_TEXTAREA, .nullable = true  },
@@ -174,22 +341,6 @@ static Crud_Column org_invoice_columns[] = {
     { .name = "invoice_date",     .label = "Invoice Date",  .type = COL_DATE, .nullable = true },
     { .name = "amount_in_riel",   .label = "Amount (Riel)", .type = COL_NUM,  .nullable = true },
     { .name = "amount_in_dollar", .label = "Amount ($)",    .type = COL_NUM,  .nullable = true },
-};
-
-static Crud_Column org_invoice_detail_columns[] = {
-    {
-        .name     = "medicine_id",
-        .label    = "Medicine",
-        .type     = COL_FK_SELECT,
-        .nullable = false,
-        .fk_table = "Medicines",
-        .fk_label = "name",
-        .fk_value = "id"
-    },
-    { .name = "qty",      .label = "Qty",      .type = COL_NUM, .nullable = true },
-    { .name = "price",    .label = "Price",    .type = COL_NUM, .nullable = true },
-    { .name = "amount",   .label = "Amount",   .type = COL_NUM, .nullable = true },
-    { .name = "currency", .label = "Currency", .type = COL_TEXT, .nullable = true },
 };
 
 static Crud_Column org_payment_columns[] = {
@@ -297,6 +448,77 @@ Crud_Module crud_module_patient_daily_invoices = {
     .column_count = ARRAY_LEN(patient_daily_invoice_columns),
 };
 
+Crud_Module crud_module_patient_daily_invoice_details = {
+    .pk_name = "rowid",
+    .path = "/patient-daily-invoices-details",
+    .title = "Daily Invoice Detail",
+    .table = "PatientDailyInvoicesDetails",
+    .columns = patient_daily_invoice_detail_columns,
+    .column_count = ARRAY_LEN(patient_daily_invoice_detail_columns),
+};
+
+Crud_Module crud_module_patient_medicine_invoices = {
+    .path = "/patient-medicine-invoices",
+    .title = "Patient Medicine Invoice",
+    .table = "PatientMedicineInvoices",
+    .columns = patient_medicine_invoice_columns,
+    .column_count = ARRAY_LEN(patient_medicine_invoice_columns),
+};
+
+Crud_Module crud_module_patient_medicine_invoice_details = {
+    .pk_name = "rowid",
+    .path = "/patient-medicine-invoices-details",
+    .title = "Medicine Invoice Detail",
+    .table = "PatientMedicineInvoiceDetails",
+    .columns = patient_medicine_invoice_detail_columns,
+    .column_count = ARRAY_LEN(patient_medicine_invoice_detail_columns),
+};
+
+Crud_Module crud_module_patient_invoice_out_details = {
+    .pk_name = "rowid",
+    .path = "/patient-invoice-out-details",
+    .title = "Room Invoice Detail",
+    .table = "PatientInvoiceOutDetails",
+    .columns = patient_invoice_out_detail_columns,
+    .column_count = ARRAY_LEN(patient_invoice_out_detail_columns),
+};
+
+Crud_Module crud_module_org_daily_invoice_details = {
+    .pk_name = "rowid",
+    .path = "/organization-daily-invoices-details",
+    .title = "Org Daily Invoice Detail",
+    .table = "OrganizationDailyInvoiceDetails",
+    .columns = org_daily_invoice_detail_columns,
+    .column_count = ARRAY_LEN(org_daily_invoice_detail_columns),
+};
+
+Crud_Module crud_module_org_invoice_out_details = {
+    .pk_name = "rowid",
+    .path = "/organization-invoice-out-details",
+    .title = "Org Invoice Out Detail",
+    .table = "OrganizationInvoiceOutDetails",
+    .columns = org_invoice_out_detail_columns,
+    .column_count = ARRAY_LEN(org_invoice_out_detail_columns),
+};
+
+Crud_Module crud_module_org_invoice_details = {
+    .pk_name = "rowid",
+    .path = "/organization-invoice-details",
+    .title = "Org Invoice Detail",
+    .table = "OrganizationInvoiceDetail",
+    .columns = org_invoice_detail_columns,
+    .column_count = ARRAY_LEN(org_invoice_detail_columns),
+};
+
+Crud_Module crud_module_org_balances = {
+    .pk_name = "rowid",
+    .path = "/organization-balances",
+    .title = "Organization Balance",
+    .table = "OrganizationBalance",
+    .columns = org_balance_columns,
+    .column_count = ARRAY_LEN(org_balance_columns),
+};
+
 Crud_Module crud_module_appointments = {
     .path = "/appointments",
     .title = "Appointment",
@@ -338,14 +560,6 @@ Crud_Module crud_module_org_invoices = {
 };
 
 
-Crud_Module crud_module_org_invoice_details = {
-    .path = "/organization-invoice-details",
-    .title = "Organization Invoice Detail",
-    .table = "OrganizationInvoiceDetail",
-    .columns = org_invoice_detail_columns,
-    .column_count = ARRAY_LEN(org_invoice_detail_columns),
-};
-
 
 Crud_Module crud_module_org_payments = {
     .path = "/organization-payments",
@@ -367,6 +581,15 @@ Crud_Module *crud_modules[] = {
     &crud_module_medicines,
     &crud_module_patients,
     &crud_module_patient_daily_invoices,
+    &crud_module_patient_daily_invoice_details,
+    &crud_module_patient_medicine_invoices,
+    &crud_module_patient_medicine_invoice_details,
+    &crud_module_patient_invoice_out_details,
+    &crud_module_org_daily_invoice_details,
+    &crud_module_org_invoice_out_details,
+    &crud_module_org_balances,
+    &crud_module_org_invoice_details,
+    &crud_module_org_invoice_out_details,
     &crud_module_appointments,
     &crud_module_room_types,
     &crud_module_rooms,

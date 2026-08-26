@@ -340,6 +340,9 @@ const char *migrations[] = {
     "           (SELECT date FROM MedicineImport WHERE id = NEW.medicine_import_id)\n"
     "    WHERE NEW.medicine_id IS NOT NULL;\n"
     "END;\n",
+
+    "ALTER TABLE OrganizationInvoiceDetail ADD COLUMN organization_invoice_id INTEGER;\n"
+    "CREATE INDEX idx_org_inv_detail_invoice ON OrganizationInvoiceDetail(organization_invoice_id);\n",
 };
 
 // TODO: can we just extract webc_path from db somehow?

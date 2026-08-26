@@ -167,19 +167,15 @@ void serve_crud_create(Serve_Context *sc, const Crud_Module *mod) {
     
     const char *redirect_path = mod->path;
     if (sc->query_string.count > 0) {
-        for (size_t i = 0; i < mod->column_count; ++i) {
-            const Crud_Column *col = &mod->columns[i];
-            if (col->type == COL_FK_SELECT) {
-                char param[64];
-                snprintf(param, sizeof(param), "%s=", col->name);
-                if (sv_starts_with(sc->query_string, sv_from_cstr(param))) {
-                    if (strstr(col->name, "patient_id")) redirect_path = "/patients";
-                    else if (strstr(col->name, "organization_id")) redirect_path = "/organizations";
-                    else if (strstr(col->name, "medicine_import_id")) redirect_path = "/medicine-imports";
-                    break;
-                }
-            }
-        }
+        redirect_path = "/patients";
+        if (sv_starts_with(sc->query_string, sv_from_cstr("organization_id="))) redirect_path = "/organizations";
+        else if (sv_starts_with(sc->query_string, sv_from_cstr("medicine_import_id="))) redirect_path = "/medicine-imports";
+        else if (sv_starts_with(sc->query_string, sv_from_cstr("patient_daily_invoice_id="))) redirect_path = "/patient-daily-invoices";
+        else if (sv_starts_with(sc->query_string, sv_from_cstr("patient_medicine_invoice_id="))) redirect_path = "/patient-medicine-invoices";
+        else if (sv_starts_with(sc->query_string, sv_from_cstr("patient_invoice_out_id="))) redirect_path = "/patient-invoice-out";
+        else if (sv_starts_with(sc->query_string, sv_from_cstr("organization_daily_id="))) redirect_path = "/organization-daily-invoices";
+        else if (sv_starts_with(sc->query_string, sv_from_cstr("organization_invoice_id="))) redirect_path = "/organization-invoices";
+        else if (sv_starts_with(sc->query_string, sv_from_cstr("organization_invoice_out_id="))) redirect_path = "/organization-invoice-out";
     }
     http_render_redirect(sc, 302, redirect_path);
 }

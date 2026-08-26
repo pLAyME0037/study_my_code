@@ -1,4 +1,6 @@
 #include "patient_invoice.h"
+
+
 #include "../src/db/db.h"
 #include "../src/patient_invoice/patient_invoice.h"
 #include "../core/crud.h"
@@ -9,48 +11,6 @@
 // ---------------------------------------------------------------------------
 // Patient Medicine Invoice
 // ---------------------------------------------------------------------------
-
-static void render_pmi_list_page(String_Builder *sb,
-                                 Pmi_Headers    *rows,
-                                 Pio_Options    *patient_opts)
-{
-#define OUT(buf, size) sb_append_buf(sb, buf, size);
-#define INT(v) sb_append_cstr(sb, temp_sprintf("%d", v));
-#define LLINT(v) sb_append_cstr(sb, temp_sprintf("%lld", v));
-#define STR(s) sb_append_cstr(sb, s);
-#define ESCAPED(s) sb_append_html_escaped(sb, s ? s : "");
-#define PAGE_TITLE(s) sb_append_cstr(sb, s);
-#include "../auto_ctrl/cttochtml/pmi_list.h"
-#undef OUT
-#undef INT
-#undef LLINT
-#undef STR
-#undef ESCAPED
-#undef PAGE_TITLE
-}
-
-void serve_pmi_list(Serve_Context *sc) {
-    sqlite3 *db = open_webc_db();
-    if (!db) {
-		serve_error(sc, 500);
-		return;
-	}
-
-    Pmi_Headers rows = {0};
-    pmi_headers_load(db, &rows, -1);
-    Pio_Options patient_opts = {0};
-    pio_options_load(db, &patient_opts, "Patients", "name");
-
-    String_Builder *sb = &sc->body;
-    render_page_header(sb, "Patient Medicine Invoice", "/patient-medicine-invoices");
-    render_pmi_list_page(sb, &rows, &patient_opts);
-    render_page_footer(sb);
-
-    free(rows.items);
-    free(patient_opts.items);
-    sqlite3_close(db);
-    http_render_response(sc, 200, "text/html", sb_to_sv(sc->body));
-}
 
 void serve_pmi_create(Serve_Context *sc) {
     String_View body = sb_to_sv(sc->body);
@@ -89,7 +49,9 @@ void serve_pmi_create(Serve_Context *sc) {
 		serve_error(sc, 500);
 		return;
 	}
-    http_render_redirect(sc, 302, "/patients");
+    http_render_redirect(sc, 302, sc->query_string.count > 0
+        && sv_starts_with(sc->query_string, sv_from_cstr("patient_id=")) ? "/patients"
+        : "/patient-medicine-invoices");
 }
 
 void serve_pmi_update(Serve_Context *sc, int id) {
@@ -112,7 +74,9 @@ void serve_pmi_update(Serve_Context *sc, int id) {
 		serve_error(sc, 500);
 		return;
 	}
-    http_render_redirect(sc, 302, "/patients");
+    http_render_redirect(sc, 302, sc->query_string.count > 0
+        && sv_starts_with(sc->query_string, sv_from_cstr("patient_id=")) ? "/patients"
+        : "/patient-medicine-invoices");
 }
 
 void serve_pmi_delete(Serve_Context *sc, int id) {
@@ -129,58 +93,14 @@ void serve_pmi_delete(Serve_Context *sc, int id) {
 		serve_error(sc, 500);
 		return;
 	}
-    http_render_redirect(sc, 302, "/patients");
+    http_render_redirect(sc, 302, sc->query_string.count > 0
+        && sv_starts_with(sc->query_string, sv_from_cstr("patient_id=")) ? "/patients"
+        : "/patient-medicine-invoices");
 }
 
 // ---------------------------------------------------------------------------
 // Patient Invoice Out
 // ---------------------------------------------------------------------------
-
-static void render_pio_list_page(String_Builder *sb,
-                                 Pio_Headers    *rows,
-                                 Pio_Options    *patient_opts,
-                                 Pio_Options    *room_opts)
-{
-#define OUT(buf, size) sb_append_buf(sb, buf, size);
-#define INT(v) sb_append_cstr(sb, temp_sprintf("%d", v));
-#define LLINT(v) sb_append_cstr(sb, temp_sprintf("%lld", v));
-#define STR(s) sb_append_cstr(sb, s);
-#define ESCAPED(s) sb_append_html_escaped(sb, s ? s : "");
-#define PAGE_TITLE(s) sb_append_cstr(sb, s);
-#include "../auto_ctrl/cttochtml/pio_list.h"
-#undef OUT
-#undef INT
-#undef LLINT
-#undef STR
-#undef ESCAPED
-#undef PAGE_TITLE
-}
-
-void serve_pio_list(Serve_Context *sc) {
-    sqlite3 *db = open_webc_db();
-    if (!db) {
-        serve_error(sc, 500);
-        return;
-    }
-
-    Pio_Headers rows = {0};
-    pio_headers_load(db, &rows, -1);
-    Pio_Options patient_opts = {0};
-    pio_options_load(db, &patient_opts, "Patients", "name");
-    Pio_Options room_opts = {0};
-    pio_room_options_load(db, &room_opts);
-
-    String_Builder *sb = &sc->body;
-    render_page_header(sb, "Patient Invoice Out", "/patient-invoice-out");
-    render_pio_list_page(sb, &rows, &patient_opts, &room_opts);
-    render_page_footer(sb);
-
-    free(rows.items);
-    free(patient_opts.items);
-    free(room_opts.items);
-    sqlite3_close(db);
-    http_render_response(sc, 200, "text/html", sb_to_sv(sc->body));
-}
 
 void serve_pio_create(Serve_Context *sc) {
     String_View body = sb_to_sv(sc->body);
@@ -230,7 +150,9 @@ void serve_pio_create(Serve_Context *sc) {
         serve_error(sc, 500);
         return;
     }
-    http_render_redirect(sc, 302, "/patients");
+    http_render_redirect(sc, 302, sc->query_string.count > 0
+        && sv_starts_with(sc->query_string, sv_from_cstr("patient_id=")) ? "/patients"
+        : "/patient-invoice-out");
 }
 
 void serve_pio_update(Serve_Context *sc, int id) {
@@ -257,7 +179,9 @@ void serve_pio_update(Serve_Context *sc, int id) {
         serve_error(sc, 500);
         return;
     }
-    http_render_redirect(sc, 302, "/patients");
+    http_render_redirect(sc, 302, sc->query_string.count > 0
+        && sv_starts_with(sc->query_string, sv_from_cstr("patient_id=")) ? "/patients"
+        : "/patient-invoice-out");
 }
 
 void serve_pio_delete(Serve_Context *sc, int id) {
@@ -274,5 +198,7 @@ void serve_pio_delete(Serve_Context *sc, int id) {
         serve_error(sc, 500);
         return;
     }
-    http_render_redirect(sc, 302, "/patients");
+    http_render_redirect(sc, 302, sc->query_string.count > 0
+        && sv_starts_with(sc->query_string, sv_from_cstr("patient_id=")) ? "/patients"
+        : "/patient-invoice-out");
 }
