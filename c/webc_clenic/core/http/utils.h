@@ -3,6 +3,9 @@
 
 #include "../../nob.h"
 
+/* 1 USD = 4000 KHR */
+#define WEBC_FX_RATE 4000.0
+
 bool form_find(String_View body,
               const char  *key,
               char        *out,

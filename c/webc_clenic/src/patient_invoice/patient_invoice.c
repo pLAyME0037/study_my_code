@@ -118,45 +118,6 @@ defer:
     return result;
 }
 
-bool pmi_details_load(sqlite3 *db, Pmi_Details *rows, long long invoice_id) {
-    bool result = true;
-    sqlite3_stmt *stmt = NULL;
-
-    const char *sql = temp_sprintf(
-        "SELECT d.medicine_id, m.name, d.qty, d.price, d.amount, d.currency "
-        "FROM PatientMedicineInvoiceDetails d JOIN Medicines m ON m.id = d.medicine_id "
-        "WHERE d.patient_medicine_invoice_id = %lld ORDER BY m.name ASC;", invoice_id);
-
-    if (sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) != SQLITE_OK) {
-        LOG_SQLITE3_ERROR(db);
-        return_defer(false);
-    }
-    int ret = SQLITE_DONE;
-    for (ret = sqlite3_step(stmt); ret == SQLITE_ROW; ret = sqlite3_step(stmt)) {
-        Pmi_Detail row = {0};
-        row.medicine_id = sqlite3_column_int64(stmt, 0);
-        const char *n = (const char *)sqlite3_column_text(stmt, 1);
-        const char *q = (const char *)sqlite3_column_text(stmt, 2);
-        const char *p = (const char *)sqlite3_column_text(stmt, 3);
-        const char *a = (const char *)sqlite3_column_text(stmt, 4);
-        const char *c = (const char *)sqlite3_column_text(stmt, 5);
-        row.medicine_name = temp_strdup(n ? n : "");
-        row.qty           = temp_strdup(q ? q : "");
-        row.price         = temp_strdup(p ? p : "");
-        row.amount        = temp_strdup(a ? a : "");
-        row.currency      = temp_strdup(c ? c : "");
-        da_append(rows, row);
-    }
-    if (ret != SQLITE_DONE) {
-        LOG_SQLITE3_ERROR(db);
-        return_defer(false);
-    }
-
-defer:
-    sqlite3_finalize(stmt);
-    return result;
-}
-
 bool pmi_insert(sqlite3    *db,
                 long long  *out_id,
                 long long   patient_id,
@@ -368,38 +329,6 @@ bool pio_headers_load(sqlite3 *db, Pio_Headers *rows, long long only_id) {
         row.end_date     = temp_strdup(ed ? ed : "");
         row.room_day     = temp_strdup(rd ? rd : "");
         row.detail_count = sqlite3_column_int(stmt, 7);
-        da_append(rows, row);
-    }
-    if (ret != SQLITE_DONE) {
-        LOG_SQLITE3_ERROR(db);
-        return_defer(false);
-    }
-
-defer:
-    sqlite3_finalize(stmt);
-    return result;
-}
-
-bool pio_details_load(sqlite3 *db, Pio_Details *rows, long long out_id) {
-    bool result = true;
-    sqlite3_stmt *stmt = NULL;
-
-    const char *sql = temp_sprintf(
-        "SELECT d.patient_daily_invoice_id, di.invoice_date "
-        "FROM PatientInvoiceOutDetails d "
-        "LEFT JOIN PatientDailyInvoices di ON di.id = d.patient_daily_invoice_id "
-        "WHERE d.patient_invoice_out_id = %lld ORDER BY d.patient_daily_invoice_id DESC;", out_id);
-
-    if (sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) != SQLITE_OK) {
-        LOG_SQLITE3_ERROR(db);
-        return_defer(false);
-    }
-    int ret = SQLITE_DONE;
-    for (ret = sqlite3_step(stmt); ret == SQLITE_ROW; ret = sqlite3_step(stmt)) {
-        Pio_Detail row = {0};
-        row.daily_id = sqlite3_column_int64(stmt, 0);
-        const char *d = (const char *)sqlite3_column_text(stmt, 1);
-        row.daily_label = d ? temp_strdup(d) : NULL;
         da_append(rows, row);
     }
     if (ret != SQLITE_DONE) {

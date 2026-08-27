@@ -38,6 +38,18 @@ window.masterDetailController = {
             });
         });
 
+        // Master inline edit: hide master row, show paired edit row
+        document.querySelectorAll('.master-edit-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const row = e.currentTarget.closest('tr');
+                const editRow = row.nextElementSibling;
+                if (editRow && editRow.classList.contains('md-master-edit-row')) {
+                    row.classList.add('hidden');
+                    editRow.classList.remove('hidden');
+                }
+            });
+        });
+
         // Edit: hide display row, show its paired edit row
         document.querySelectorAll('.child-edit-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
@@ -58,7 +70,7 @@ window.masterDetailController = {
                 if (form) form.reset();
                 tr.classList.add('hidden');
                 const prev = tr.previousElementSibling;
-                if (prev && prev.classList.contains('md-row')) prev.classList.remove('hidden');
+                if (prev && !prev.classList.contains('md-add-row') && !prev.classList.contains('md-edit-row') && !prev.classList.contains('md-master-edit-row')) prev.classList.remove('hidden');
             });
         });
 
@@ -72,6 +84,35 @@ window.masterDetailController = {
             if (!start || !days || !start.value || !e.target.value) return;
             const diff = (new Date(e.target.value) - new Date(start.value)) / 86400000;
             days.value = diff > 0 ? diff : '';
+        });
+
+        // ---- auto calculations (FX 1 USD = 4000 KHR) ----
+        const FX = 4000;
+
+        // amount_in_riel <-> amount_in_dollar inside same form/row
+        document.addEventListener('input', (e) => {
+            const n = e.target.name;
+            if (n !== 'amount_in_riel' && n !== 'amount_in_dollar') return;
+            const scope = e.target.closest('tr, form');
+            if (!scope) return;
+            const v = parseFloat(e.target.value);
+            if (isNaN(v)) return;
+            const other = scope.querySelector(
+                n === 'amount_in_riel' ? '[name="amount_in_dollar"]' : '[name="amount_in_riel"]');
+            if (!other || other === e.target) return;
+            other.value = (n === 'amount_in_riel' ? v / FX : v * FX).toFixed(2);
+        });
+
+        // amount = qty * price on detail rows
+        document.addEventListener('input', (e) => {
+            const n = e.target.name;
+            if (n !== 'qty' && n !== 'price') return;
+            const row = e.target.closest('tr');
+            if (!row) return;
+            const qty = parseFloat(row.querySelector('[name="qty"]')?.value);
+            const price = parseFloat(row.querySelector('[name="price"]')?.value);
+            const amount = row.querySelector('[name="amount"]');
+            if (amount && !isNaN(qty) && !isNaN(price)) amount.value = (qty * price).toFixed(2);
         });
     }
 };

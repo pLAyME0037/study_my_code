@@ -8,7 +8,9 @@
 typedef struct {
     long long medicine_id;
     const char *medicine_name;
-    const char *stock_qty;
+    const char *in_qty;
+    const char *sold_qty;
+    const char *stock_qty;      /* left = in - sold */
     const char *date_last_import;
 } Stock_Row;
 

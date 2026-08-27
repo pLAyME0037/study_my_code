@@ -143,24 +143,6 @@
             Medicine
         </div>
 
-        <div class="relative group/item mb-1">
-            <a href="/medicines"
-               class="nav-link flex items-center rounded-lg transition-all duration-200 ease-in-out p-2 ({ CLS(NAV_ACTIVE("/medicines"),
-                   "bg-indigo-50 text-indigo-600 dark:bg-indigo-900/50 dark:text-indigo-300",
-                   "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-200") })">
-                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                </svg>
-
-                <span class="ml-3 text-sm font-medium whitespace-nowrap flex-1 nav-label">
-                    Medicine
-                </span>
-            </a>
-            <div class="sidebar-tooltip">
-                Medicine
-            </div>
-        </div>
 
         <div class="relative group/item mb-1">
             <a href="/medicine-types"
@@ -372,9 +354,6 @@
                 Invoice
             </div>
         </div>
-
-
-
 
         <div class="relative group/item mb-1">
             <a href="/organization-invoice-out"

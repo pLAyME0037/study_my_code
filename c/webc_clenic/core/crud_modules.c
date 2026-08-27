@@ -36,16 +36,24 @@ static Crud_Column doctor_columns[] = {
 
 static Crud_Column doctor_work_time_columns[] = {
     {
+        .name = "doctor_id",
+        .label = "Doctor",
+        .type = COL_FK_SELECT,
+        .nullable = false,
+        .fk_table = "Doctors",
+        .fk_label = "name",
+        .fk_value = "id"
+    },
+    {
         .name = "department_id",
         .label = "Department",
         .type = COL_FK_SELECT,
-        .nullable = false,
+        .nullable = true,
         .fk_table = "Departments",
         .fk_label = "name",
         .fk_value = "id"
     },
-    { .name = "table_name", .label = "Table", .type = COL_TEXT, .nullable = false },
-    { .name = "time",       .label = "Time",  .type = COL_TEXT, .nullable = false },
+    { .name = "time", .label = "Time", .type = COL_TEXT, .nullable = false },
 };
 
 static Crud_Column supplier_columns[] = {
@@ -310,13 +318,14 @@ static Crud_Column room_type_columns[] = {
 static Crud_Column room_columns[] = {
     {
         .name = "room_type_id",
-        .label = "Room Type",
+        .label = "Room Types",
         .type = COL_FK_SELECT,
         .nullable = false,
         .fk_table = "RoomTypes",
         .fk_label = "type",
         .fk_value = "id"
     },
+    { .name = "name",     .label = "Name",     .type = COL_TEXT, .nullable = false },
     { .name = "price",    .label = "Price",    .type = COL_NUM,  .nullable = false },
     { .name = "currency", .label = "Currency", .type = COL_TEXT, .nullable = true  },
 };
@@ -368,207 +377,204 @@ static Crud_Column org_payment_columns[] = {
 };
 
 Crud_Module crud_module_ill_types = {
-    .path = "/ill-types",
-    .title = "Illness Category",
-    .table = "IllTypes",
-    .columns = ill_type_columns,
+    .path         = "/ill-types",
+    .title        = "Illness Category",
+    .table        = "IllTypes",
+    .columns      = ill_type_columns,
     .column_count = ARRAY_LEN(ill_type_columns),
 };
 
 Crud_Module crud_module_ill_prices = {
-    .path = "/ill-prices",
-    .title = "Ill Price",
-    .table = "IllPrices",
-    .columns = ill_price_columns,
+    .path         = "/ill-prices",
+    .title        = "Ill Price",
+    .table        = "IllPrices",
+    .columns      = ill_price_columns,
     .column_count = ARRAY_LEN(ill_price_columns),
 };
 
 Crud_Module crud_module_departments = {
-    .path = "/departments",
-    .title = "Department",
-    .table = "Departments",
-    .columns = department_columns,
+    .path         = "/departments",
+    .title        = "Department",
+    .table        = "Departments",
+    .columns      = department_columns,
     .column_count = ARRAY_LEN(department_columns),
 };
 
 Crud_Module crud_module_doctors = {
-    .path = "/doctors",
-    .title = "Doctor",
-    .table = "Doctors",
-    .columns = doctor_columns,
+    .path         = "/doctors",
+    .title        = "Doctor",
+    .table        = "Doctors",
+    .columns      = doctor_columns,
     .column_count = ARRAY_LEN(doctor_columns),
 };
 
 
 Crud_Module crud_module_doctor_work_times = {
-    .path = "/doctor-work-times",
-    .title = "Doctor Work Time",
-    .table = "DoctorWorkTimes",
-    .columns = doctor_work_time_columns,
+    .path         = "/doctor-work-times",
+    .title        = "Doctor Work Time",
+    .table        = "DoctorWorkTimes",
+    .columns      = doctor_work_time_columns,
     .column_count = ARRAY_LEN(doctor_work_time_columns),
 };
 
 Crud_Module crud_module_suppliers = {
-    .path = "/suppliers",
-    .title = "Medicine Supplier",
-    .table = "Supplier",
-    .columns = supplier_columns,
+    .path         = "/suppliers",
+    .title        = "Medicine Supplier",
+    .table        = "Supplier",
+    .columns      = supplier_columns,
     .column_count = ARRAY_LEN(supplier_columns),
 };
 
 Crud_Module crud_module_medicine_types = {
-    .path = "/medicine-types",
-    .title = "Medicine Category",
-    .table = "MedicineTypes",
-    .columns = medicine_type_columns,
+    .path         = "/medicine-types",
+    .title        = "Medicine Category",
+    .table        = "MedicineTypes",
+    .columns      = medicine_type_columns,
     .column_count = ARRAY_LEN(medicine_type_columns),
 };
 
 Crud_Module crud_module_medicines = {
-    .path = "/medicines",
-    .title = "Medicine",
-    .table = "Medicines",
-    .columns = medicine_columns,
+    .path         = "/medicines",
+    .title        = "Medicine",
+    .table        = "Medicines",
+    .columns      = medicine_columns,
     .column_count = ARRAY_LEN(medicine_columns),
 };
 
 Crud_Module crud_module_patients = {
-    .path = "/patients",
-    .title = "Patient",
-    .table = "Patients",
-    .columns = patient_columns,
+    .path         = "/patients",
+    .title        = "Patient",
+    .table        = "Patients",
+    .columns      = patient_columns,
     .column_count = ARRAY_LEN(patient_columns),
 };
 
 Crud_Module crud_module_patient_daily_invoices = {
-    .path = "/patient-daily-invoices",
-    .title = "Patient Daily Invoice",
-    .table = "PatientDailyInvoices",
-    .columns = patient_daily_invoice_columns,
+    .path         = "/patient-daily-invoices",
+    .title        = "Patient Daily Invoice",
+    .table        = "PatientDailyInvoices",
+    .columns      = patient_daily_invoice_columns,
     .column_count = ARRAY_LEN(patient_daily_invoice_columns),
 };
 
 Crud_Module crud_module_patient_daily_invoice_details = {
-    .pk_name = "rowid",
-    .path = "/patient-daily-invoices-details",
-    .title = "Daily Invoice Detail",
-    .table = "PatientDailyInvoicesDetails",
-    .columns = patient_daily_invoice_detail_columns,
+    .pk_name      = "rowid",
+    .path         = "/patient-daily-invoices-details",
+    .title        = "Daily Invoice Detail",
+    .table        = "PatientDailyInvoicesDetails",
+    .columns      = patient_daily_invoice_detail_columns,
     .column_count = ARRAY_LEN(patient_daily_invoice_detail_columns),
 };
 
 Crud_Module crud_module_patient_medicine_invoices = {
-    .path = "/patient-medicine-invoices",
-    .title = "Patient Medicine Invoice",
-    .table = "PatientMedicineInvoices",
-    .columns = patient_medicine_invoice_columns,
+    .path         = "/patient-medicine-invoices",
+    .title        = "Patient Medicine Invoice",
+    .table        = "PatientMedicineInvoices",
+    .columns      = patient_medicine_invoice_columns,
     .column_count = ARRAY_LEN(patient_medicine_invoice_columns),
 };
 
 Crud_Module crud_module_patient_medicine_invoice_details = {
-    .pk_name = "rowid",
-    .path = "/patient-medicine-invoices-details",
-    .title = "Medicine Invoice Detail",
-    .table = "PatientMedicineInvoiceDetails",
-    .columns = patient_medicine_invoice_detail_columns,
+    .pk_name      = "rowid",
+    .path         = "/patient-medicine-invoices-details",
+    .title        = "Medicine Invoice Detail",
+    .table        = "PatientMedicineInvoiceDetails",
+    .columns      = patient_medicine_invoice_detail_columns,
     .column_count = ARRAY_LEN(patient_medicine_invoice_detail_columns),
 };
 
 Crud_Module crud_module_patient_invoice_out_details = {
-    .pk_name = "rowid",
-    .path = "/patient-invoice-out-details",
-    .title = "Room Invoice Detail",
-    .table = "PatientInvoiceOutDetails",
-    .columns = patient_invoice_out_detail_columns,
+    .pk_name      = "rowid",
+    .path         = "/patient-invoice-out-details",
+    .title        = "Room Invoice Detail",
+    .table        = "PatientInvoiceOutDetails",
+    .columns      = patient_invoice_out_detail_columns,
     .column_count = ARRAY_LEN(patient_invoice_out_detail_columns),
 };
 
 Crud_Module crud_module_org_daily_invoice_details = {
-    .pk_name = "rowid",
-    .path = "/organization-daily-invoices-details",
-    .title = "Org Daily Invoice Detail",
-    .table = "OrganizationDailyInvoiceDetails",
-    .columns = org_daily_invoice_detail_columns,
+    .pk_name      = "rowid",
+    .path         = "/organization-daily-invoices-details",
+    .title        = "Org Daily Invoice Detail",
+    .table        = "OrganizationDailyInvoiceDetails",
+    .columns      = org_daily_invoice_detail_columns,
     .column_count = ARRAY_LEN(org_daily_invoice_detail_columns),
 };
 
 Crud_Module crud_module_org_invoice_out_details = {
-    .pk_name = "rowid",
-    .path = "/organization-invoice-out-details",
-    .title = "Org Invoice Out Detail",
-    .table = "OrganizationInvoiceOutDetails",
-    .columns = org_invoice_out_detail_columns,
+    .pk_name      = "rowid",
+    .path         = "/organization-invoice-out-details",
+    .title        = "Org Invoice Out Detail",
+    .table        = "OrganizationInvoiceOutDetails",
+    .columns      = org_invoice_out_detail_columns,
     .column_count = ARRAY_LEN(org_invoice_out_detail_columns),
 };
 
 Crud_Module crud_module_org_invoice_details = {
-    .pk_name = "rowid",
-    .path = "/organization-invoice-details",
-    .title = "Org Invoice Detail",
-    .table = "OrganizationInvoiceDetail",
-    .columns = org_invoice_detail_columns,
+    .pk_name      = "rowid",
+    .path         = "/organization-invoice-details",
+    .title        = "Org Invoice Detail",
+    .table        = "OrganizationInvoiceDetail",
+    .columns      = org_invoice_detail_columns,
     .column_count = ARRAY_LEN(org_invoice_detail_columns),
 };
 
 Crud_Module crud_module_org_balances = {
-    .pk_name = "rowid",
-    .path = "/organization-balances",
-    .title = "Organization Balance",
-    .table = "OrganizationBalance",
-    .columns = org_balance_columns,
+    .pk_name      = "rowid",
+    .path         = "/organization-balances",
+    .title        = "Organization Balance",
+    .table        = "OrganizationBalance",
+    .columns      = org_balance_columns,
     .column_count = ARRAY_LEN(org_balance_columns),
 };
 
 Crud_Module crud_module_appointments = {
-    .path = "/appointments",
-    .title = "Appointment",
-    .table = "Appointment",
-    .columns = appointment_columns,
+    .path         = "/appointments",
+    .title        = "Appointment",
+    .table        = "Appointment",
+    .columns      = appointment_columns,
     .column_count = ARRAY_LEN(appointment_columns),
 };
 
 Crud_Module crud_module_room_types = {
-    .path = "/room-types",
-    .title = "Room Type",
-    .table = "RoomTypes",
-    .columns = room_type_columns,
+    .path         = "/room-types",
+    .title        = "Room Type",
+    .table        = "RoomTypes",
+    .columns      = room_type_columns,
     .column_count = ARRAY_LEN(room_type_columns),
 };
 
 Crud_Module crud_module_rooms = {
-    .path = "/rooms",
-    .title = "Room",
-    .table = "Rooms",
-    .columns = room_columns,
+    .path         = "/rooms",
+    .title        = "Room",
+    .table        = "Rooms",
+    .columns      = room_columns,
     .column_count = ARRAY_LEN(room_columns),
 };
 
 Crud_Module crud_module_organizations = {
-    .path = "/organizations",
-    .title = "Organization",
-    .table = "Organizations",
-    .columns = organization_columns,
+    .path         = "/organizations",
+    .title        = "Organization",
+    .table        = "Organizations",
+    .columns      = organization_columns,
     .column_count = ARRAY_LEN(organization_columns),
 };
 
 Crud_Module crud_module_org_invoices = {
-    .path = "/organization-invoices",
-    .title = "Organization Invoice",
-    .table = "OrganizationInvoices",
-    .columns = org_invoice_columns,
+    .path         = "/organization-invoices",
+    .title        = "Organization Invoice",
+    .table        = "OrganizationInvoices",
+    .columns      = org_invoice_columns,
     .column_count = ARRAY_LEN(org_invoice_columns),
 };
 
-
-
 Crud_Module crud_module_org_payments = {
-    .path = "/organization-payments",
-    .title = "Organization Payment",
-    .table = "OrganizationPayment",
-    .columns = org_payment_columns,
+    .path         = "/organization-payments",
+    .title        = "Organization Payment",
+    .table        = "OrganizationPayment",
+    .columns      = org_payment_columns,
     .column_count = ARRAY_LEN(org_payment_columns),
 };
-
 
 Crud_Module *crud_modules[] = {
     &crud_module_ill_types,

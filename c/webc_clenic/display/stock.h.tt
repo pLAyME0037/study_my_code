@@ -9,14 +9,16 @@
                 <tr>
                     <th class="px-4 py-3 font-semibold">#</th>
                     <th class="px-4 py-3 font-semibold">Medicine</th>
-                    <th class="px-4 py-3 font-semibold">Stock Qty</th>
-                    <th class="px-4 py-3 font-semibold">Last Import Date</th>
+                    <th class="px-4 py-3 font-semibold">In</th>
+                    <th class="px-4 py-3 font-semibold">Sold</th>
+                    <th class="px-4 py-3 font-semibold">Left</th>
+                    <th class="px-4 py-3 font-semibold">Last Import</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
                 ({ if (rows.count == 0) { })
                     <tr>
-                        <td colspan="4" class="px-4 py-4 text-sm text-gray-500 dark:text-gray-400">
+                        <td colspan="6" class="px-4 py-4 text-sm text-gray-500 dark:text-gray-400">
                             No medicines yet.
                         </td>
                     </tr>
@@ -24,7 +26,9 @@
                     <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
                         <td class="px-4 py-2 text-gray-500 dark:text-gray-400">({ LLINT(rows.items[i].medicine_id); })</td>
                         <td class="px-4 py-2 text-gray-700 dark:text-gray-200">({ ESCAPED(rows.items[i].medicine_name); })</td>
-                        <td class="px-4 py-2 text-gray-700 dark:text-gray-200">({ ESCAPED(rows.items[i].stock_qty); })</td>
+                        <td class="px-4 py-2 text-emerald-600 dark:text-emerald-400">({ ESCAPED(rows.items[i].in_qty); })</td>
+                        <td class="px-4 py-2 text-amber-600 dark:text-amber-400">({ ESCAPED(rows.items[i].sold_qty); })</td>
+                        <td class="px-4 py-2 font-medium text-gray-800 dark:text-gray-100">({ ESCAPED(rows.items[i].stock_qty); })</td>
                         <td class="px-4 py-2 text-gray-600 dark:text-gray-300">({ ESCAPED(rows.items[i].date_last_import); })</td>
                     </tr>
                 ({ } })

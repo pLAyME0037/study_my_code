@@ -5,6 +5,11 @@
 #include <stddef.h>
 #include <sqlite3.h>
 
+typedef struct {
+    long long id;
+    char     *label;
+} MD_Option;
+
 typedef enum {
     COL_TYPE_TEXT,
     COL_TYPE_NUM,
@@ -21,10 +26,15 @@ typedef struct {
     const char *fk_table;
     const char *fk_label;
     const char *fk_value;
+    MD_Option  *opt;        /* runtime: FK dropdown options */
+    size_t      opt_count;
+    int         hidden;     /* never displayed; preserved via hidden input on edit */
+    int         computed;   /* display-only value (server-derived); no form input */
 } MD_Column;
 
 typedef struct {
     char  **values;
+    char  **disp;
     size_t  value_count;
 } MD_ChildRow;
 
@@ -50,6 +60,7 @@ typedef struct {
     const char  *table;
     const char  *title;
     const char  *id_column;
+    const char  *crud_path;   /* POST base: /create, /{id}/update|delete */
     MD_Column   *columns;
     size_t       column_count;
     const char **sum_columns;
@@ -58,11 +69,26 @@ typedef struct {
     size_t       children_count;
 } MD_MasterConfig;
 
+/* column + resolved FK dropdown options for the generic create form */
+typedef struct {
+    MD_Column *col;
+    MD_Option *items;
+    size_t     count;
+    size_t     capacity;
+} MD_FormCol;
+
+typedef struct {
+    MD_FormCol *items;
+    size_t      count;
+    size_t      capacity;
+} MD_FormCols;
+
 typedef struct {
     long long     id;
-    char        **values;
+    char        **values;   /* raw ids for FK cols (edit prefill) */
+    char        **disp;     /* display text (FK cols show label) */
     size_t        value_count;
-    MD_ChildRows *children;  // array of MD_ChildRows, one per child tab
+    MD_ChildRows *children;
     size_t        children_count;
 } MD_MasterRow;
 
@@ -74,10 +100,10 @@ typedef struct {
 
 MD_MasterRows *md_master_rows_new(void);
 void md_master_rows_free(MD_MasterRows *rows);
-
 bool md_load_master_with_children(sqlite3               *db,
                                   const MD_MasterConfig *config,
                                   MD_MasterRows         *rows);
+bool md_form_cols_load(sqlite3 *db, const MD_MasterConfig *config, MD_FormCols *out);
 
 void md_render_master_detail_list(Serve_Context         *sc,
                                   const MD_MasterConfig *config,

@@ -227,7 +227,7 @@ void route_request(Serve_Context *sc, String_View method, String_View uri) {
         return;
     }
     int pio_id = 0;
-   String_View pio = sv_from_cstr("/patient-invoice-out");
+    String_View pio = sv_from_cstr("/patient-invoice-out");
     if (CMP_URI(method, "POST")
         && parse_uri_id(pio, uri, "/update", &pio_id)) {
         serve_pio_update(sc, pio_id);

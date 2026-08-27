@@ -60,7 +60,6 @@ typedef struct {
 } Pmi_Details;
 
 bool pmi_headers_load(sqlite3 *db, Pmi_Headers *rows, long long only_id);
-bool pmi_details_load(sqlite3 *db, Pmi_Details *rows, long long invoice_id);
 bool pmi_insert(sqlite3 *db, long long *out_id,
                 long long patient_id, const char *invoice_date,
                 const char *riel, const char *dollar);
@@ -105,7 +104,6 @@ typedef struct {
 } Pio_Details;
 
 bool pio_headers_load(sqlite3 *db, Pio_Headers *rows, long long only_id);
-bool pio_details_load(sqlite3 *db, Pio_Details *rows, long long out_id);
 bool pio_insert(sqlite3 *db, long long *out_id,
                 long long patient_id, long long room_id, const char *room_price,
                 const char *start_date, const char *end_date, const char *room_day);

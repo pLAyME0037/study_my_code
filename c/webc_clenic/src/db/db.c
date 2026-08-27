@@ -43,9 +43,10 @@ const char *migrations[] = {
     "CREATE TABLE IF NOT EXISTS Rooms (\n"
     "    id INTEGER PRIMARY KEY ASC,\n"
     "    room_type_id INTEGER,\n"
+    "    name TEXT,\n"
     "    price REAL,\n"
     "    currency TEXT,\n"
-    "    FOREIGN KEY(room_type_id) REFERENCES RoomTypes\n"
+    "    FOREIGN KEY(room_type_id) REFERENCES RoomTypes ON DELETE CASCADE\n"
     ");\n",
     "CREATE TABLE IF NOT EXISTS IllTypes (\n"
     "    id INTEGER PRIMARY KEY ASC,\n"
@@ -59,7 +60,7 @@ const char *migrations[] = {
     "    price REAL,\n"
     "    currency TEXT,\n"
     "    description TEXT,\n"
-    "    FOREIGN KEY(ill_type_id) REFERENCES IllTypes\n"
+    "    FOREIGN KEY(ill_type_id) REFERENCES IllTypes ON DELETE CASCADE\n"
     ");\n",
     "CREATE TABLE IF NOT EXISTS Doctors (\n"
     "    id INTEGER PRIMARY KEY ASC,\n"
@@ -74,14 +75,15 @@ const char *migrations[] = {
     "    doctor_id INTEGER,\n" // i add this my self as i think it supposed to
     "    name TEXT,\n"
     "    description TEXT,\n"
-    "    FOREIGN KEY(doctor_id) REFERENCES Doctors\n"
+    "    FOREIGN KEY(doctor_id) REFERENCES Doctors ON DELETE CASCADE\n"
     ");\n",
     "CREATE TABLE IF NOT EXISTS DoctorWorkTimes (\n"
     "    id INTEGER PRIMARY KEY ASC,\n"
+    "    doctor_id INTEGER,\n"
     "    department_id INTEGER,\n"
-    "    table_name TEXT,\n"
     "    time TEXT,\n"
-    "    FOREIGN KEY(department_id) REFERENCES Departments\n"
+    "    FOREIGN KEY(doctor_id) REFERENCES Doctors ON DELETE CASCADE,\n"
+    "    FOREIGN KEY(department_id) REFERENCES Departments ON DELETE CASCADE\n"
     ");\n",
     "CREATE TABLE IF NOT EXISTS Supplier (\n"
     "    id INTEGER PRIMARY KEY ASC,\n"
@@ -104,8 +106,8 @@ const char *migrations[] = {
     "    currency TEXT,\n"
     "    percent NUMERIC,\n"
     "    description TEXT,\n"
-    "    FOREIGN KEY(medicine_type_id) REFERENCES MedicineTypes,\n"
-    "    FOREIGN KEY(supplier_id) REFERENCES Supplier\n"
+    "    FOREIGN KEY(medicine_type_id) REFERENCES MedicineTypes ON DELETE CASCADE,\n"
+    "    FOREIGN KEY(supplier_id) REFERENCES Supplier ON DELETE CASCADE\n"
     ");\n",
     "CREATE TABLE IF NOT EXISTS MedicineImport (\n"
     "    id INTEGER PRIMARY KEY ASC,\n"
@@ -118,14 +120,8 @@ const char *migrations[] = {
     "    qty NUMERIC,\n"
     "    price REAL,\n"
     "    PRIMARY KEY (medicine_import_id, medicine_id),\n"
-    "    FOREIGN KEY(medicine_import_id) REFERENCES MedicineImport,\n"
-    "    FOREIGN KEY(medicine_id) REFERENCES Medicines\n"
-    ");\n",
-    "CREATE TABLE IF NOT EXISTS MedicineStock (\n"
-    "    medicine_id INTEGER PRIMARY KEY ASC,\n"
-    "    stock_qty NUMERIC,\n"
-    "    date_last_import NUMERIC,\n"
-    "    FOREIGN KEY(medicine_id) REFERENCES Medicines\n"
+    "    FOREIGN KEY(medicine_import_id) REFERENCES MedicineImport ON DELETE CASCADE,\n"
+    "    FOREIGN KEY(medicine_id) REFERENCES Medicines ON DELETE CASCADE\n"
     ");\n",
     "CREATE TABLE IF NOT EXISTS Patients (\n"
     "    id INTEGER PRIMARY KEY ASC,\n"
@@ -144,14 +140,14 @@ const char *migrations[] = {
     "    invoice_date NUMERIC,\n"
     "    amount_in_riel REAL,\n"
     "    amount_in_dollar REAL,\n"
-    "    FOREIGN KEY(patient_id) REFERENCES Patients\n"
+    "    FOREIGN KEY(patient_id) REFERENCES Patients ON DELETE CASCADE\n"
     ");\n",
     "CREATE TABLE IF NOT EXISTS PatientDailyInvoicesDetails (\n"
     "    patient_daily_invoice_id INTEGER PRIMARY KEY ASC,\n"
     "    ill_type_id INTEGER,\n"
     "    patientDaily_invoice_detail_price NUMERIC,\n"
     "    patientDaily_invoice_detail_currency TEXT,\n"
-    "    FOREIGN KEY(ill_type_id) REFERENCES IllTypes\n"
+    "    FOREIGN KEY(ill_type_id) REFERENCES IllTypes ON DELETE CASCADE\n"
     ");\n",
     "CREATE TABLE IF NOT EXISTS PatientMedicineInvoices (\n"
     "    id INTEGER PRIMARY KEY ASC,\n"
@@ -159,7 +155,7 @@ const char *migrations[] = {
     "    invoice_date NUMERIC,\n"
     "    amount_in_riel REAL,\n"
     "    amount_in_dollar REAL,\n"
-    "    FOREIGN KEY(patient_id) REFERENCES Patients\n"
+    "    FOREIGN KEY(patient_id) REFERENCES Patients ON DELETE CASCADE\n"
     ");\n",
     "CREATE TABLE IF NOT EXISTS PatientMedicineInvoiceDetails (\n"
     "    patient_medicine_invoice_id INTEGER,\n"
@@ -169,8 +165,8 @@ const char *migrations[] = {
     "    amount NUMERIC,\n"
     "    currency TEXT,\n"
     "    PRIMARY KEY (patient_medicine_invoice_id, medicine_id),\n"
-    "    FOREIGN KEY(patient_medicine_invoice_id) REFERENCES PatientMedicineInvoices,\n"
-    "    FOREIGN KEY(medicine_id) REFERENCES Medicines\n"
+    "    FOREIGN KEY(patient_medicine_invoice_id) REFERENCES PatientMedicineInvoices ON DELETE CASCADE,\n"
+    "    FOREIGN KEY(medicine_id) REFERENCES Medicines ON DELETE CASCADE\n"
     ");\n",
     "CREATE TABLE IF NOT EXISTS PatientInvoiceOut (\n"
     "    id INTEGER PRIMARY KEY ASC,\n"
@@ -180,14 +176,14 @@ const char *migrations[] = {
     "    start_date NUMERIC,\n"
     "    end_date NUMERIC,\n"
     "    room_day INTEGER,\n"
-    "    FOREIGN KEY(patient_id) REFERENCES Patients,\n"
-    "    FOREIGN KEY(room_id) REFERENCES Rooms\n"
+    "    FOREIGN KEY(patient_id) REFERENCES Patients ON DELETE CASCADE,\n"
+    "    FOREIGN KEY(room_id) REFERENCES Rooms ON DELETE CASCADE\n"
     ");\n",
     "CREATE TABLE IF NOT EXISTS PatientInvoiceOutDetails (\n"
     "    patient_invoice_out_id INTEGER,\n"
     "    patient_daily_invoice_id INTEGER,\n"
-    "    FOREIGN KEY(patient_invoice_out_id) REFERENCES PatientInvoiceOut,\n"
-    "    FOREIGN KEY(patient_daily_invoice_id) REFERENCES PatientDailyInvoices\n"
+    "    FOREIGN KEY(patient_invoice_out_id) REFERENCES PatientInvoiceOut ON DELETE CASCADE,\n"
+    "    FOREIGN KEY(patient_daily_invoice_id) REFERENCES PatientDailyInvoices ON DELETE CASCADE\n"
     ");\n",
     "CREATE TABLE IF NOT EXISTS Organizations (\n"
     "    id INTEGER PRIMARY KEY ASC,\n"
@@ -203,8 +199,8 @@ const char *migrations[] = {
     "    invoice_date NUMERIC,\n"
     "    amount_in_riel REAL,\n"
     "    amount_in_dollar REAL,\n"
-    "    FOREIGN KEY(organization_id) REFERENCES Organizations,\n"
-    "    FOREIGN KEY(patient_id) REFERENCES Patients\n"
+    "    FOREIGN KEY(organization_id) REFERENCES Organizations ON DELETE CASCADE,\n"
+    "    FOREIGN KEY(patient_id) REFERENCES Patients ON DELETE CASCADE\n"
     ");\n",
     "CREATE TABLE IF NOT EXISTS OrganizationDailyInvoiceDetails (\n"
     "    organization_daily_id INTEGER,\n"
@@ -212,8 +208,8 @@ const char *migrations[] = {
     "    price REAL,\n"
     "    currency TEXT,\n"
     "    PRIMARY KEY (organization_daily_id, ill_id),\n"
-    "    FOREIGN KEY(organization_daily_id) REFERENCES OrganizationDailyInvoices,\n"
-    "    FOREIGN KEY(ill_id) REFERENCES IllTypes\n"
+    "    FOREIGN KEY(organization_daily_id) REFERENCES OrganizationDailyInvoices ON DELETE CASCADE,\n"
+    "    FOREIGN KEY(ill_id) REFERENCES IllTypes ON DELETE CASCADE\n"
     ");\n",
     "CREATE TABLE IF NOT EXISTS OrganizationInvoices (\n"
     "    id INTEGER PRIMARY KEY ASC,\n"
@@ -221,16 +217,18 @@ const char *migrations[] = {
     "    invoice_date NUMERIC,\n"
     "    amount_in_riel REAL,\n"
     "    amount_in_dollar REAL,\n"
-    "    FOREIGN KEY(organization_id) REFERENCES Organizations\n"
+    "    FOREIGN KEY(organization_id) REFERENCES Organizations ON DELETE CASCADE\n"
     ");\n",
     "CREATE TABLE IF NOT EXISTS OrganizationInvoiceDetail (\n"
     "    id INTEGER PRIMARY KEY ASC,\n"
+    "    organization_invoice_id INTEGER,\n"
     "    medicine_id INTEGER,\n"
     "    qty NUMERIC,\n"
     "    price REAL,\n"
     "    amount NUMERIC,\n"
     "    currency TEXT,\n"
-    "    FOREIGN KEY(medicine_id) REFERENCES Medicines\n"
+    "    FOREIGN KEY(organization_invoice_id) REFERENCES OrganizationInvoices ON DELETE CASCADE,\n"
+    "    FOREIGN KEY(medicine_id) REFERENCES Medicines ON DELETE CASCADE\n"
     ");\n",
     "CREATE TABLE IF NOT EXISTS OrganizationPayment (\n"
     "    id INTEGER PRIMARY KEY ASC,\n"
@@ -239,8 +237,8 @@ const char *migrations[] = {
     "    date NUMERIC,\n"
     "    price REAL,\n"
     "    currency TEXT,\n"
-    "    FOREIGN KEY(organization_id) REFERENCES Organizations,\n"
-    "    FOREIGN KEY(organization_invoice_id) REFERENCES OrganizationInvoices\n"
+    "    FOREIGN KEY(organization_id) REFERENCES Organizations ON DELETE CASCADE,\n"
+    "    FOREIGN KEY(organization_invoice_id) REFERENCES OrganizationInvoices ON DELETE CASCADE\n"
     ");\n",
     "CREATE TABLE IF NOT EXISTS OrganizationBalance (\n"
     "    organization_id INTEGER,\n"
@@ -248,8 +246,8 @@ const char *migrations[] = {
     "    balance_amount INTEGER,\n"
     "    balance REAL,\n"
     "    PRIMARY KEY (organization_id, organization_invoice_id),\n"
-    "    FOREIGN KEY(organization_id) REFERENCES Organizations,\n"
-    "    FOREIGN KEY(organization_invoice_id) REFERENCES OrganizationInvoices\n"
+    "    FOREIGN KEY(organization_id) REFERENCES Organizations ON DELETE CASCADE,\n"
+    "    FOREIGN KEY(organization_invoice_id) REFERENCES OrganizationInvoices ON DELETE CASCADE\n"
     ");\n",
     "CREATE TABLE IF NOT EXISTS OrganizationInvoiceOut (\n"
     "    id INTEGER PRIMARY KEY ASC,\n"
@@ -260,23 +258,23 @@ const char *migrations[] = {
     "    start_date NUMERIC,\n"
     "    end_date NUMERIC,\n"
     "    room_day INTEGER,\n"
-    "    FOREIGN KEY(organization_id) REFERENCES Organizations,\n"
-    "    FOREIGN KEY(patient_id) REFERENCES Patients,\n"
-    "    FOREIGN KEY(room_id) REFERENCES Rooms\n"
+    "    FOREIGN KEY(organization_id) REFERENCES Organizations ON DELETE CASCADE,\n"
+    "    FOREIGN KEY(patient_id) REFERENCES Patients ON DELETE CASCADE,\n"
+    "    FOREIGN KEY(room_id) REFERENCES Rooms ON DELETE CASCADE\n"
     ");\n",
     "CREATE TABLE IF NOT EXISTS OrganizationInvoiceOutDetails (\n"
     "    organization_invoice_out_id INTEGER,\n"
     "    organization_invoice_id INTEGER,\n"
-    "    FOREIGN KEY(organization_invoice_out_id) REFERENCES OrganizationInvoiceOut,\n"
-    "    FOREIGN KEY(organization_invoice_id) REFERENCES OrganizationInvoices\n"
+    "    FOREIGN KEY(organization_invoice_out_id) REFERENCES OrganizationInvoiceOut ON DELETE CASCADE,\n"
+    "    FOREIGN KEY(organization_invoice_id) REFERENCES OrganizationInvoices ON DELETE CASCADE\n"
     ");\n",
     "CREATE TABLE IF NOT EXISTS Appointment (\n"
     "    doctor_id INTEGER,\n"
     "    patient_id INTEGER,\n"
     "    date NUMERIC,\n"
     "    time NUMERIC,\n"
-    "    FOREIGN KEY(doctor_id) REFERENCES Doctors,\n"
-    "    FOREIGN KEY(patient_id) REFERENCES Patients\n"
+    "    FOREIGN KEY(doctor_id) REFERENCES Doctors ON DELETE CASCADE,\n"
+    "    FOREIGN KEY(patient_id) REFERENCES Patients ON DELETE CASCADE\n"
     ");\n",
     "CREATE TABLE IF NOT EXISTS Appointment_old (\n"
     "    id INTEGER PRIMARY KEY ASC,\n"
@@ -284,8 +282,8 @@ const char *migrations[] = {
     "    patient_id INTEGER,\n"
     "    date NUMERIC,\n"
     "    time NUMERIC,\n"
-    "    FOREIGN KEY(doctor_id) REFERENCES Doctors,\n"
-    "    FOREIGN KEY(patient_id) REFERENCES Patients\n"
+    "    FOREIGN KEY(doctor_id) REFERENCES Doctors ON DELETE CASCADE,\n"
+    "    FOREIGN KEY(patient_id) REFERENCES Patients ON DELETE CASCADE\n"
     ");\n"
     "INSERT INTO Appointment_old (doctor_id, patient_id, date, time)\n"
     "    SELECT doctor_id, patient_id, date, time FROM Appointment;\n"
@@ -299,50 +297,112 @@ const char *migrations[] = {
     "    profile_pic BLOB\n"
     ");\n",
 
-    "CREATE TRIGGER IF NOT EXISTS pdi_trigger_update_patient_totals AFTER INSERT ON PatientDailyInvoicesDetails\n"
+    // ---- header total recalcs (per-currency) ----
+    "CREATE TRIGGER IF NOT EXISTS pdi_totals_insert AFTER INSERT ON PatientDailyInvoicesDetails\n"
     "BEGIN\n"
     "    UPDATE PatientDailyInvoices SET\n"
-    "        amount_in_riel = amount_in_riel + NEW.patientDaily_invoice_detail_price * CASE WHEN NEW.patientDaily_invoice_detail_currency = 'riel' THEN 1 ELSE 0 END,\n"
-    "        amount_in_dollar = amount_in_dollar + NEW.patientDaily_invoice_detail_price * CASE WHEN NEW.patientDaily_invoice_detail_currency = 'dollar' THEN 1 ELSE 0 END\n"
-    "    WHERE id = NEW.patient_daily_invoice_id;\n"
+    "        amount_in_riel   = (SELECT COALESCE(SUM(patientDaily_invoice_detail_price),0) FROM PatientDailyInvoicesDetails WHERE patient_daily_invoice_id=NEW.patient_daily_invoice_id AND patientDaily_invoice_detail_currency='riel'),\n"
+    "        amount_in_dollar = (SELECT COALESCE(SUM(patientDaily_invoice_detail_price),0) FROM PatientDailyInvoicesDetails WHERE patient_daily_invoice_id=NEW.patient_daily_invoice_id AND patientDaily_invoice_detail_currency='dollar')\n"
+    "    WHERE id=NEW.patient_daily_invoice_id;\n"
     "END;\n",
-
-    "CREATE TRIGGER IF NOT EXISTS pmi_trigger_update_patient_totals AFTER INSERT ON PatientMedicineInvoiceDetails\n"
+    "CREATE TRIGGER IF NOT EXISTS pdi_totals_update AFTER UPDATE ON PatientDailyInvoicesDetails\n"
+    "BEGIN\n"
+    "    UPDATE PatientDailyInvoices SET\n"
+    "        amount_in_riel   = (SELECT COALESCE(SUM(patientDaily_invoice_detail_price),0) FROM PatientDailyInvoicesDetails WHERE patient_daily_invoice_id=NEW.patient_daily_invoice_id AND patientDaily_invoice_detail_currency='riel'),\n"
+    "        amount_in_dollar = (SELECT COALESCE(SUM(patientDaily_invoice_detail_price),0) FROM PatientDailyInvoicesDetails WHERE patient_daily_invoice_id=NEW.patient_daily_invoice_id AND patientDaily_invoice_detail_currency='dollar')\n"
+    "    WHERE id=NEW.patient_daily_invoice_id;\n"
+    "END;\n",
+    "CREATE TRIGGER IF NOT EXISTS pdi_totals_delete AFTER DELETE ON PatientDailyInvoicesDetails\n"
+    "BEGIN\n"
+    "    UPDATE PatientDailyInvoices SET\n"
+    "        amount_in_riel   = (SELECT COALESCE(SUM(patientDaily_invoice_detail_price),0) FROM PatientDailyInvoicesDetails WHERE patient_daily_invoice_id=OLD.patient_daily_invoice_id AND patientDaily_invoice_detail_currency='riel'),\n"
+    "        amount_in_dollar = (SELECT COALESCE(SUM(patientDaily_invoice_detail_price),0) FROM PatientDailyInvoicesDetails WHERE patient_daily_invoice_id=OLD.patient_daily_invoice_id AND patientDaily_invoice_detail_currency='dollar')\n"
+    "    WHERE id=OLD.patient_daily_invoice_id;\n"
+    "END;\n",
+    "CREATE TRIGGER IF NOT EXISTS pmi_totals_insert AFTER INSERT ON PatientMedicineInvoiceDetails\n"
     "BEGIN\n"
     "    UPDATE PatientMedicineInvoices SET\n"
-    "        amount_in_riel = amount_in_riel + NEW.amount * CASE WHEN NEW.currency = 'riel' THEN 1 ELSE 0 END,\n"
-    "        amount_in_dollar = amount_in_dollar + NEW.amount * CASE WHEN NEW.currency = 'dollar' THEN 1 ELSE 0 END\n"
-    "    WHERE id = NEW.patient_medicine_invoice_id;\n"
+    "        amount_in_riel   = (SELECT COALESCE(SUM(COALESCE(qty,0)*COALESCE(price,0)),0) FROM PatientMedicineInvoiceDetails WHERE patient_medicine_invoice_id=NEW.patient_medicine_invoice_id AND currency='riel'),\n"
+    "        amount_in_dollar = (SELECT COALESCE(SUM(COALESCE(qty,0)*COALESCE(price,0)),0) FROM PatientMedicineInvoiceDetails WHERE patient_medicine_invoice_id=NEW.patient_medicine_invoice_id AND currency='dollar')\n"
+    "    WHERE id=NEW.patient_medicine_invoice_id;\n"
     "END;\n",
-
-    "CREATE TRIGGER IF NOT EXISTS pio_trigger_update_patient_totals AFTER INSERT ON PatientInvoiceOutDetails\n"
+    "CREATE TRIGGER IF NOT EXISTS pmi_totals_update AFTER UPDATE ON PatientMedicineInvoiceDetails\n"
     "BEGIN\n"
-    "    UPDATE PatientInvoiceOut SET room_price = room_price + (\n"
-    "        SELECT room_price FROM Rooms WHERE id = (\n"
-    "            SELECT room_id FROM PatientInvoiceOut WHERE id = NEW.patient_invoice_out_id\n"
-    "        )\n"
-    "    ) WHERE id = NEW.patient_invoice_out_id;\n"
+    "    UPDATE PatientMedicineInvoices SET\n"
+    "        amount_in_riel   = (SELECT COALESCE(SUM(COALESCE(qty,0)*COALESCE(price,0)),0) FROM PatientMedicineInvoiceDetails WHERE patient_medicine_invoice_id=NEW.patient_medicine_invoice_id AND currency='riel'),\n"
+    "        amount_in_dollar = (SELECT COALESCE(SUM(COALESCE(qty,0)*COALESCE(price,0)),0) FROM PatientMedicineInvoiceDetails WHERE patient_medicine_invoice_id=NEW.patient_medicine_invoice_id AND currency='dollar')\n"
+    "    WHERE id=NEW.patient_medicine_invoice_id;\n"
     "END;\n",
-
-    "CREATE TRIGGER IF NOT EXISTS org_di_trigger_update_org_totals AFTER INSERT ON OrganizationDailyInvoiceDetails\n"
+    "CREATE TRIGGER IF NOT EXISTS pmi_totals_delete AFTER DELETE ON PatientMedicineInvoiceDetails\n"
+    "BEGIN\n"
+    "    UPDATE PatientMedicineInvoices SET\n"
+    "        amount_in_riel   = (SELECT COALESCE(SUM(COALESCE(qty,0)*COALESCE(price,0)),0) FROM PatientMedicineInvoiceDetails WHERE patient_medicine_invoice_id=OLD.patient_medicine_invoice_id AND currency='riel'),\n"
+    "        amount_in_dollar = (SELECT COALESCE(SUM(COALESCE(qty,0)*COALESCE(price,0)),0) FROM PatientMedicineInvoiceDetails WHERE patient_medicine_invoice_id=OLD.patient_medicine_invoice_id AND currency='dollar')\n"
+    "    WHERE id=OLD.patient_medicine_invoice_id;\n"
+    "END;\n",
+    "CREATE TRIGGER IF NOT EXISTS org_di_totals_insert AFTER INSERT ON OrganizationDailyInvoiceDetails\n"
     "BEGIN\n"
     "    UPDATE OrganizationDailyInvoices SET\n"
-    "        amount_in_riel = amount_in_riel + NEW.price * CASE WHEN NEW.currency = 'riel' THEN 1 ELSE 0 END,\n"
-    "        amount_in_dollar = amount_in_dollar + NEW.price * CASE WHEN NEW.currency = 'dollar' THEN 1 ELSE 0 END\n"
-    "    WHERE id = NEW.organization_daily_id;\n"
+    "        amount_in_riel   = (SELECT COALESCE(SUM(price),0) FROM OrganizationDailyInvoiceDetails WHERE organization_daily_id=NEW.organization_daily_id AND currency='riel'),\n"
+    "        amount_in_dollar = (SELECT COALESCE(SUM(price),0) FROM OrganizationDailyInvoiceDetails WHERE organization_daily_id=NEW.organization_daily_id AND currency='dollar')\n"
+    "    WHERE id=NEW.organization_daily_id;\n"
     "END;\n",
-
-    "CREATE TRIGGER IF NOT EXISTS med_imp_trigger_update_stock AFTER INSERT ON MedicineImportDetails\n"
+    "CREATE TRIGGER IF NOT EXISTS org_di_totals_update AFTER UPDATE ON OrganizationDailyInvoiceDetails\n"
     "BEGIN\n"
-    "    INSERT OR REPLACE INTO MedicineStock (medicine_id, stock_qty, date_last_import)\n"
-    "    SELECT NEW.medicine_id,\n"
-    "           COALESCE((SELECT stock_qty FROM MedicineStock WHERE medicine_id = NEW.medicine_id), 0) + NEW.qty,\n"
-    "           (SELECT date FROM MedicineImport WHERE id = NEW.medicine_import_id)\n"
-    "    WHERE NEW.medicine_id IS NOT NULL;\n"
+    "    UPDATE OrganizationDailyInvoices SET\n"
+    "        amount_in_riel   = (SELECT COALESCE(SUM(price),0) FROM OrganizationDailyInvoiceDetails WHERE organization_daily_id=NEW.organization_daily_id AND currency='riel'),\n"
+    "        amount_in_dollar = (SELECT COALESCE(SUM(price),0) FROM OrganizationDailyInvoiceDetails WHERE organization_daily_id=NEW.organization_daily_id AND currency='dollar')\n"
+    "    WHERE id=NEW.organization_daily_id;\n"
     "END;\n",
-
-    "ALTER TABLE OrganizationInvoiceDetail ADD COLUMN organization_invoice_id INTEGER;\n"
-    "CREATE INDEX idx_org_inv_detail_invoice ON OrganizationInvoiceDetail(organization_invoice_id);\n",
+    "CREATE TRIGGER IF NOT EXISTS org_di_totals_delete AFTER DELETE ON OrganizationDailyInvoiceDetails\n"
+    "BEGIN\n"
+    "    UPDATE OrganizationDailyInvoices SET\n"
+    "        amount_in_riel   = (SELECT COALESCE(SUM(price),0) FROM OrganizationDailyInvoiceDetails WHERE organization_daily_id=OLD.organization_daily_id AND currency='riel'),\n"
+    "        amount_in_dollar = (SELECT COALESCE(SUM(price),0) FROM OrganizationDailyInvoiceDetails WHERE organization_daily_id=OLD.organization_daily_id AND currency='dollar')\n"
+    "    WHERE id=OLD.organization_daily_id;\n"
+    "END;\n",
+    "CREATE TRIGGER IF NOT EXISTS org_inv_totals_insert AFTER INSERT ON OrganizationInvoiceDetail\n"
+    "BEGIN\n"
+    "    UPDATE OrganizationInvoices SET\n"
+    "        amount_in_riel   = (SELECT COALESCE(SUM(COALESCE(qty,0)*COALESCE(price,0)),0) FROM OrganizationInvoiceDetail WHERE organization_invoice_id=NEW.organization_invoice_id AND currency='riel'),\n"
+    "        amount_in_dollar = (SELECT COALESCE(SUM(COALESCE(qty,0)*COALESCE(price,0)),0) FROM OrganizationInvoiceDetail WHERE organization_invoice_id=NEW.organization_invoice_id AND currency='dollar')\n"
+    "    WHERE id=NEW.organization_invoice_id;\n"
+    "END;\n",
+    "CREATE TRIGGER IF NOT EXISTS org_inv_totals_update AFTER UPDATE ON OrganizationInvoiceDetail\n"
+    "BEGIN\n"
+    "    UPDATE OrganizationInvoices SET\n"
+    "        amount_in_riel   = (SELECT COALESCE(SUM(COALESCE(qty,0)*COALESCE(price,0)),0) FROM OrganizationInvoiceDetail WHERE organization_invoice_id=NEW.organization_invoice_id AND currency='riel'),\n"
+    "        amount_in_dollar = (SELECT COALESCE(SUM(COALESCE(qty,0)*COALESCE(price,0)),0) FROM OrganizationInvoiceDetail WHERE organization_invoice_id=NEW.organization_invoice_id AND currency='dollar')\n"
+    "    WHERE id=NEW.organization_invoice_id;\n"
+    "END;\n",
+    "CREATE TRIGGER IF NOT EXISTS org_inv_totals_delete AFTER DELETE ON OrganizationInvoiceDetail\n"
+    "BEGIN\n"
+    "    UPDATE OrganizationInvoices SET\n"
+    "        amount_in_riel   = (SELECT COALESCE(SUM(COALESCE(qty,0)*COALESCE(price,0)),0) FROM OrganizationInvoiceDetail WHERE organization_invoice_id=OLD.organization_invoice_id AND currency='riel'),\n"
+    "        amount_in_dollar = (SELECT COALESCE(SUM(COALESCE(qty,0)*COALESCE(price,0)),0) FROM OrganizationInvoiceDetail WHERE organization_invoice_id=OLD.organization_invoice_id AND currency='dollar')\n"
+    "    WHERE id=OLD.organization_invoice_id;\n"
+    "END;\n",
+    // ---- room day + price auto-calc ----
+    "CREATE TRIGGER IF NOT EXISTS pio_room_ai AFTER INSERT ON PatientInvoiceOut BEGIN\n"
+    "    UPDATE PatientInvoiceOut SET\n"
+    "        room_day   = CAST(julianday(end_date) - julianday(start_date) AS INTEGER),\n"
+    "        room_price = (SELECT COALESCE(price,0) FROM Rooms WHERE id = room_id)\n"
+    "                   * CAST(julianday(end_date) - julianday(start_date) AS INTEGER)\n"
+    "    WHERE id = NEW.id;\n"
+    "END;\n",
+    "CREATE TRIGGER IF NOT EXISTS pio_room_au AFTER UPDATE ON PatientInvoiceOut BEGIN\n"
+    "    UPDATE PatientInvoiceOut SET\n"
+    "        room_day   = CAST(julianday(end_date) - julianday(start_date) AS INTEGER),\n"
+    "        room_price = (SELECT COALESCE(price,0) FROM Rooms WHERE id = room_id)\n"
+    "                   * CAST(julianday(end_date) - julianday(start_date) AS INTEGER)\n"
+    "    WHERE id = NEW.id;\n"
+    "END;\n",
+    "DROP TRIGGER IF EXISTS pdi_trigger_update_patient_totals;\n"
+    "DROP TRIGGER IF EXISTS pmi_trigger_update_patient_totals;\n"
+    "DROP TRIGGER IF EXISTS pio_trigger_update_patient_totals;\n"
+    "DROP TRIGGER IF EXISTS org_di_trigger_update_org_totals;\n"
+    "DROP TRIGGER IF EXISTS med_imp_trigger_update_stock;\n"
+    "DROP TABLE IF EXISTS MedicineStock;\n"
 };
 
 // TODO: can we just extract webc_path from db somehow?
@@ -473,6 +533,12 @@ sqlite3 *open_webc_db(void) {
     }
 
     if (!create_schema(result, WEBC_DB_PATH)) {
+        sqlite3_close(result);
+        return_defer(NULL);
+    }
+
+    if (sqlite3_exec(result, "PRAGMA foreign_keys=ON;", NULL, NULL, NULL) != SQLITE_OK) {
+        LOG_SQLITE3_ERROR(result);
         sqlite3_close(result);
         return_defer(NULL);
     }
