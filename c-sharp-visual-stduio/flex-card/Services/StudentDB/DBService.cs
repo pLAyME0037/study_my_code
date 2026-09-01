@@ -33,6 +33,21 @@ public class DBService
                                .Where(f => f.Name.Contains(name))
                                .ToListAsync();
     }
+
+    public async Task<List<string>> GetDistinctMajorAsync() {
+        string sql = @"SELECT DISTINCT Major
+                       FROM Student
+                       WHERE Major IS NOT NULL AND Major<>''
+                       ORDER BY Major";
+        return await _database!.QueryScalarsAsync<string>(sql);
+    }
+
+    public async Task<List<Student>> SearchStudentsByMajorAsync(string major) {
+        await InitializeDatabaseAsync();
+        return await _database!.Table<Student>()
+                               .Where(f => f.Major.Contains(major))
+                               .ToListAsync();
+    }
 }
 
 

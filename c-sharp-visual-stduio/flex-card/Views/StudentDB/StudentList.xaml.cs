@@ -15,8 +15,12 @@ public partial class StudentList : ContentPage
         base.OnAppearing();
         try {
             await _dbService.InitializeDatabaseAsync();
+
             var students = await _dbService.GetStudentAsync();
             StudentCollectionView.ItemsSource = students;
+
+            var major = await _dbService.GetDistinctMajorAsync();
+            PickerMajor.ItemsSource = major;
         } catch (Exception ex) {
             await DisplayAlertAsync("Error: ", ex.Message, "OK");
         }
@@ -31,6 +35,21 @@ public partial class StudentList : ContentPage
                 return;
             }
             var results = await _dbService.SearchStudentsByNameAsync(searchName);
+            StudentCollectionView.ItemsSource = results;
+        } catch (Exception ex) {
+            await DisplayAlertAsync("Error: ", ex.Message, "OK");
+        }
+    }
+    
+    protected async void OnSearchMajorClicked(object sender, EventArgs e) {
+        try {
+            string pickerMajor = PickerMajor.SelectedItem.ToString() ?? "";
+            if (string.IsNullOrWhiteSpace(pickerMajor)) {
+                var students = await _dbService.GetStudentAsync();
+                StudentCollectionView.ItemsSource = students;
+                return;
+            }
+            var results = await _dbService.SearchStudentsByMajorAsync(pickerMajor);
             StudentCollectionView.ItemsSource = results;
         } catch (Exception ex) {
             await DisplayAlertAsync("Error: ", ex.Message, "OK");

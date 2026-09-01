@@ -6,6 +6,7 @@
 <ScrollView>
     <VerticalStackLayout
         Padding="30.0"
+        Background="#121218"
         Spacing="25">
         <Label
             Text="Student List"
@@ -14,7 +15,25 @@
             HorizontalOptions="Center"/>
 
         <HorizontalStackLayout Spacing="10">
-            <Border 
+            <!-- <Border -->
+            <!--     Stroke="#C49B33" -->
+            <!--     StrokeThickness="4" -->
+            <!--     StrokeShape="RoundRectangle 1,1,1,1" -->
+            <!--     Background="#2B0B98" -->
+            <!--     Padding="16,9" -->
+            <!--     HorizontalOptions="Center"> -->
+            <!-- </Border> -->
+            <Picker
+                x:Name="PickerMajor"
+                Title="Select a Major"
+                ItemDisplayBinding="{Binding .}" />
+            <Button
+                Text="Search"
+                Clicked="OnSearchMajorClicked" />
+        </HorizontalStackLayout>
+
+        <HorizontalStackLayout Spacing="10">
+            <Border
                 Stroke="#C49B33"
                 StrokeThickness="4"
                 StrokeShape="RoundRectangle 1,1,1,1"
@@ -33,50 +52,60 @@
         </HorizontalStackLayout>
 
         <CollectionView x:Name="StudentCollectionView">
-            <CollectionView.HeaderTemplate>
-                <DataTemplate>
-                    <Grid
-                        ColumnDefinitions="60,*,*,80"
-                        Padding="10"
-                        BackgroundColor="#1e1e2e">
-                        <Label
-                            Text="ID"
-                            Grid.Column="0"
-                            FontAttributes="Bold"/>
-                        <Label
-                            Text="Name"
-                            Grid.Column="1"
-                            FontAttributes="Bold"/>
-                        <Label
-                            Text="Email"
-                            Grid.Column="2"
-                            FontAttributes="Bold"/>
-                        <Label
-                            Text="Age"
-                            Grid.Column="3"
-                            FontAttributes="Bold"/>
-                    </Grid>
-                </DataTemplate>
-            </CollectionView.HeaderTemplate>
+            <CollectionView.Header>
+                <Grid
+                    ColumnDefinitions="60,*,*,80,*"
+                    Padding="10"
+                    BackgroundColor="#1e1e2e">
+                    <Label
+                        Text="ID"
+                        Grid.Column="0"
+                        FontAttributes="Bold"/>
+                    <Label
+                        Text="Name"
+                        Grid.Column="1"
+                        FontAttributes="Bold"/>
+                    <Label
+                        Text="Email"
+                        Grid.Column="2"
+                        FontAttributes="Bold"/>
+                    <Label
+                        Text="Major"
+                        Grid.Column="3"
+                        FontAttributes="Bold"/>
+                    <Label
+                        Text="Age"
+                        Grid.Column="4"
+                        FontAttributes="Bold"/>
+                </Grid>
+            </CollectionView.Header>
 
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Grid
-                        ColumnDefinitions="60,*,*,80"
+                        ColumnDefinitions="60,*,*,80,*"
                         Padding="10"
                         BackgroundColor="#1e1e2e">
                         <Label
                             Text="{Binding Id}"
+                            FontSize="18"
                             Grid.Column="0" />
                         <Label
                             Text="{Binding Name}"
+                            FontSize="18"
                             Grid.Column="1" />
                         <Label
                             Text="{Binding Email}"
+                            FontSize="18"
                             Grid.Column="2" />
                         <Label
                             Text="{Binding Age}"
+                            FontSize="18"
                             Grid.Column="3" />
+                        <Label
+                            Text="{Binding Major}"
+                            FontSize="18"
+                            Grid.Column="4" />
                     </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
