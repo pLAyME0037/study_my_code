@@ -1,17 +1,19 @@
 #!/usr/bin/env bash
 
-# PASS="linux"
-# INPUT=""
-#
-# while [[ $INPUT != $PASS ]]; do
-#     echo ""
-#     read -s -p "Enter password: " INPUT
-#     if [[ $INPUT != $PASS ]]; then
-#         echo "incorrect password"
-#     fi
-# done
-#
-# echo "Access Granted!"
+set -e
+
+PASS="linux"
+INPUT=""
+
+while [[ $INPUT != $PASS ]]; do
+    echo ""
+    read -s -p "Enter password: " INPUT
+    if [[ $INPUT != $PASS ]]; then
+        echo -e "\nincorrect password"
+    fi
+done
+
+echo -e "\nAccess Granted!"
 
 # -----------------------------------------------
 
@@ -27,9 +29,9 @@
 
 # -----------------------------------------------
 
-while [[ 1 -gt 2 ]]; do
-    echo "Hello, World!"
-done
+# while [[ 1 -gt 2 ]]; do
+#     echo "Hello, World!"
+# done
 
 # -----------------------------------------------
 
@@ -73,21 +75,21 @@ done
 # done
 
 # -----------------------------------------------
-
 # 142.250.198.142
-IP=""
-read -p "Enter IP Address: " IP
 
-echo -e "Mornitoring $IP ...\nwaiting for host to come online"
-
-while true; do
-    ping -c 3 $IP
-
-    if [[ $? -eq 0 ]]; then
-        echo "[SUCCESS] Host $IP is online!"
-        break
-    fi
-    echo -e "\n[FAILED] Host $IP can't be reach\nTry again\n"
-done
+# IP=""
+# read -p "Enter IP Address: " IP
+#
+# echo -e "Mornitoring $IP ...\nwaiting for host to come online"
+#
+# while true; do
+#     ping -c 3 $IP
+#
+#     if [[ $? -eq 0 ]]; then
+#         echo "[SUCCESS] Host $IP is online!"
+#         break
+#     fi
+#     echo -e "\n[FAILED] Host $IP can't be reach\nTry again\n"
+# done
 
 # -----------------------------------------------

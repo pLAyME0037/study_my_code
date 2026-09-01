@@ -7,36 +7,36 @@
 #include "../core/footer.h"
 #include "../core/http/utils.h"
 
-static MD_Column room_type_columns[] = {
-    { .name = "type",        .label = "Type",        .type = COL_TYPE_TEXT,     .nullable = false },
-    { .name = "description", .label = "Description", .type = COL_TYPE_TEXTAREA, .nullable = true },
-};
-
-static MD_Column room_columns[] = {
-    {
-        .name = "room_type_id",
-        .label = "Room Type",
-        .type = COL_TYPE_FK_SELECT,
-        .nullable = false,
-        .fk_table = "RoomTypes",
-        .fk_label = "type",
-        .fk_value = "id"
-    },
-    { .name = "price",    .label = "Price",    .type = COL_TYPE_NUM,  .nullable = false },
-    { .name = "currency", .label = "Currency", .type = COL_TYPE_TEXT, .nullable = false },
-};
-
-static MD_ChildTab room_type_children[] = {
-    {
-        .table = "RoomTypes",
-        .title = "Room Types",
-        .fk_column = "room_type_id",
-        .id_column = "id",
-        .crud_path = "/room-types",
-        .columns = room_columns,
-        .column_count = ARRAY_LEN(room_columns)
-    },
-};
+// static MD_Column room_type_columns[] = {
+//     { .name = "type",        .label = "Type",        .type = COL_TYPE_TEXT,     .nullable = false },
+//     { .name = "description", .label = "Description", .type = COL_TYPE_TEXTAREA, .nullable = true },
+// };
+//
+// static MD_Column room_columns[] = {
+//     {
+//         .name = "room_type_id",
+//         .label = "Room Type",
+//         .type = COL_TYPE_FK_SELECT,
+//         .nullable = false,
+//         .fk_table = "RoomTypes",
+//         .fk_label = "type",
+//         .fk_value = "id"
+//     },
+//     { .name = "price",    .label = "Price",    .type = COL_TYPE_NUM,  .nullable = false },
+//     { .name = "currency", .label = "Currency", .type = COL_TYPE_TEXT, .nullable = false },
+// };
+//
+// static MD_ChildTab room_type_children[] = {
+//     {
+//         .table = "RoomTypes",
+//         .title = "Room Types",
+//         .fk_column = "room_type_id",
+//         .id_column = "id",
+//         .crud_path = "/room-types",
+//         .columns = room_columns,
+//         .column_count = ARRAY_LEN(room_columns)
+//     },
+// };
 
 static MD_Column patient_columns[] = {
     { .name = "name",          .label = "Name",     .type = COL_TYPE_TEXT, .nullable = false },
@@ -625,16 +625,16 @@ static MD_ChildTab med_import_children[] = {
 };
 
 static MD_MasterConfig master_configs[] = {
-    {
-        .table          = "RoomTypes",
-        .title          = "Room Types",
-        .id_column      = "id",
-        .crud_path      = "/room-types",
-        .columns        = room_type_columns,
-        .column_count   = ARRAY_LEN(room_type_columns),
-        .children       = room_type_children,
-        .children_count = ARRAY_LEN(room_type_children)
-    },
+    // {
+    //     .table          = "RoomTypes",
+    //     .title          = "Room Types",
+    //     .id_column      = "id",
+    //     .crud_path      = "/room-types",
+    //     .columns        = room_type_columns,
+    //     .column_count   = ARRAY_LEN(room_type_columns),
+    //     .children       = room_type_children,
+    //     .children_count = ARRAY_LEN(room_type_children)
+    // },
     {
         .table          = "Patients",
         .title          = "Patients",
