@@ -6,6 +6,8 @@
 #include <string.h>
 #include "modules/raylib-6.0/include/raylib.h"
 
+#define ARRAY_LEN(s) (sizeof(s)/sizeof(s[0]))
+
 #define BUFFER_SIZE 1024
 #define SAMPLERATE 44100
 #define SAMPLESIZE 32
@@ -13,47 +15,54 @@
 #define ROOT_NOTE 440.0f
 #define NEXT_SEMITONE powf(2.0f, 1.0f/12.0f)
 
-float semitone_to_freq(float semitone) {
-    return ROOT_NOTE * powf(NEXT_SEMITONE, semitone);
-}
-
-typedef struct {
-    float frequency[BUFFER_SIZE];
-    int frame_count; // used as active frequency count
-} Note;
-
-float note_freq(float semitone) {
-    return semitone_to_freq(semitone);
-}
-
-void note_init(Note *n) {
-    n->frame_count = 0;
-}
-
-void note_add(Note *n, float freq) {
-    if (n->frame_count < BUFFER_SIZE) {
-        n->frequency[n->frame_count++] = freq;
-    }
-}
-
 float clamp_f(float d, float min, float max) {
     const float t = d < min ? min : d;
     return t > max ? max : t;
 }
 
-void note_update(Note   *n,
-                 float   buffer[],
-                 size_t  buf_size,
-                 size_t *global_frame)
-{
-    for (size_t i = 0; i < buf_size; ++i) {
-        float time = (float)(*global_frame) / SAMPLERATE;
-        for (int j = 0; j < n->frame_count; ++j) {
-            buffer[i] += sinf(2.0f * PI * n->frequency[j] * time) * 0.2f;
-        }
-        *global_frame += 1;
+float semitone_to_freq(float semitone) {
+    return ROOT_NOTE * powf(NEXT_SEMITONE, semitone);
+}
+
+typedef struct {
+    bool  playing;
+    float frequency[BUFFER_SIZE];
+    int   frame_count;
+} Note;
+
+void note_new(Note *note) {
+    note->frame_count = 0;
+    note->playing = false;
+}
+
+float note_freq(float semitone) {
+    return semitone_to_freq(semitone);
+}
+
+void note_add(Note *note, float freq) {
+    if (note->frame_count < BUFFER_SIZE) {
+        note->frequency[note->frame_count++] = freq;
     }
 }
+
+void note_update(Note   *note,
+                 float   amp,
+                 float   buffer[],
+                 size_t  buf_size,
+                 size_t  global_frame)
+{
+    if (!note->playing) return;
+    for (size_t i = 0; i < buf_size; ++i) {
+        float time = (float)(global_frame + i) / SAMPLERATE;
+        for (int j = 0; j < note->frame_count; ++j) {
+            buffer[i] += sinf(2.0f * PI * time * note->frequency[j]) * amp;
+        }
+    }
+}
+
+const KeyboardKey KEYBOARD[] = { KEY_Z, KEY_S, KEY_X };
+
+Note notes[ARRAY_LEN(KEYBOARD)];
 
 int main(void) {
     InitWindow(800, 600, "Music Key");
@@ -64,11 +73,10 @@ int main(void) {
     AudioStream synth = LoadAudioStream(SAMPLERATE, SAMPLESIZE, CHANNELS);
     PlayAudioStream(synth);
 
-    Note notes = {0};
-    note_init(&notes);
-    note_add(&notes, note_freq(0)); // A4
-    note_add(&notes, note_freq(4)); // C#5
-    note_add(&notes, note_freq(7)); // E5
+    for (size_t i = 0; i < ARRAY_LEN(KEYBOARD); ++i) {
+        note_new(&notes[i]);
+        note_add(&notes[i], note_freq((float)i));
+    }
 
     size_t global_frame = 0;
 
@@ -77,13 +85,25 @@ int main(void) {
         BeginDrawing();
         ClearBackground(GetColor(0x121218FF));
 
+        int note_playing = 0;
+        for (size_t key = 0; key < ARRAY_LEN(KEYBOARD); ++key) {
+            notes[key].playing = IsKeyDown(KEYBOARD[key]);
+            if (notes[key].playing) note_playing += 1;
+        }
+
         if (IsAudioStreamProcessed(synth)) {
             memset(buffer, 0, sizeof(buffer));
-            note_update(&notes, buffer, BUFFER_SIZE, &global_frame);
-            for (size_t i = 0; i < BUFFER_SIZE; ++i) {
-                buffer[i] = clamp_f(buffer[i], -1.0f, 1.0f);
+            if (note_playing > 0) {
+                float amp = 1.0f / (float)note_playing;
+                for (size_t key = 0; key < ARRAY_LEN(KEYBOARD); ++key) {
+                    note_update(&notes[key], amp, buffer, BUFFER_SIZE, global_frame);
+                }
+                for (size_t i = 0; i < ARRAY_LEN(buffer); ++i) {
+                    buffer[i] = clamp_f(buffer[i], -1.0f, 1.0f);
+                }
             }
-            UpdateAudioStream(synth, buffer, BUFFER_SIZE);
+            global_frame += BUFFER_SIZE;
+            UpdateAudioStream(synth, buffer, ARRAY_LEN(buffer));
         }
         EndDrawing();
     }
@@ -91,5 +111,6 @@ int main(void) {
     UnloadAudioStream(synth);
     CloseAudioDevice();
     CloseWindow();
+
     return 0;
 }

@@ -16,42 +16,12 @@
 #define ROOT_NOTE 440.0
 #define NEXT_SEMITONE powf(2.0, 1.0/12.0)
 
-float semitone_to_freq(float semitone) {
-    return ROOT_NOTE*powf(NEXT_SEMITONE, semitone);
-}
+const KeyboardKey KEYBOARD[] = {
+    KEY_Z, KEY_S, KEY_X, KEY_D, KEY_C, KEY_F, KEY_V, KEY_G, KEY_B, KEY_H, KEY_N,
+    KEY_J, KEY_M, KEY_K, KEY_COMMA
+};
 
-typedef struct {
-    float frequency[BUFFER_SIZE];
-    int frame_count;
-} Note;
-
-void note_update(Note   *note,
-                 float   buffer[],
-                 size_t  buf_size,
-                 size_t *global_frame)
-{
-    for (size_t i = 0; i < buf_size; ++i) {
-        float time = (float)(*global_frame)/SAMPLERATE;
-        for (int j = 0; j < note->frame_count; ++j) {
-            buffer[i] += sinf(2.*PI*time*note->frequency[j])*0.2;
-        }
-        *global_frame += 1;
-    }
-}
-
-void note_new(Note *note) {
-    note->frame_count = 0;
-}
-
-float note(float semitone) {
-    return semitone_to_freq(semitone);
-}
-
-void note_add(Note *note, float freq) {
-    if (note->frame_count < BUFFER_SIZE) {
-        note->frequency[note->frame_count++] = freq;
-    }
-}
+bool notes[ARRAY_LEN(KEYBOARD)];
 
 float clamp_f(float d, float min, float max) {
     const float t = d < min ? min : d;
@@ -63,9 +33,23 @@ float clamp_f(float d, float min, float max) {
 //     if(ptr > height) ptr = height;
 // }
 
-int main(void) {
-    int result = 0;
+float semitone_to_freq(float semitone) {
+    return ROOT_NOTE*powf(NEXT_SEMITONE, semitone);
+}
 
+void note_update(int    frame_count,
+                 float  frequency,
+                 float  amp,
+                 float  buffer[],
+                 size_t buf_size)
+{
+    for (size_t i = 0; i < buf_size; ++i) {
+        float time = (float)(frame_count + i)/SAMPLERATE;
+        buffer[i] += sinf(2.*PI*time*frequency)*amp;
+    }
+}
+
+int main(void) {
     InitWindow(800, 600, "Music Key");
     InitAudioDevice();
 
@@ -74,38 +58,40 @@ int main(void) {
     AudioStream synth = LoadAudioStream(SAMPLERATE, SAMPLESIZE, CHANNELS);
     PlayAudioStream(synth);
 
-    Note notes = {0};
-
-    note_new(&notes);
-    note_add(&notes, note(0)); // A4
-    note_add(&notes, note(4)); // C#5
-    note_add(&notes, note(7)); // E5
-
-    size_t global_frame = 0;
+    size_t frame_count = 0;
 
     SetTargetFPS(60);
     while (!WindowShouldClose()) {
         BeginDrawing();
         ClearBackground(GetColor(0x121218FF));
 
+        int note_playing = 0;
+        for (size_t key = 0; key < ARRAY_LEN(KEYBOARD); ++key) {
+            notes[key] = IsKeyDown(KEYBOARD[key]);
+            if (notes[key]) note_playing += 1;
+        }
+
         if (IsAudioStreamProcessed(synth)) {
             memset(buffer, 0, sizeof(buffer));
-            note_update(&notes, buffer, BUFFER_SIZE, &global_frame);
-            for (size_t i = 0; i < ARRAY_LEN(buffer); ++i) {
-                buffer[i] = clamp_f(buffer[i], -1., 1.);
+            if (note_playing > 0) {
+                for (size_t key = 0; key < ARRAY_LEN(KEYBOARD); ++key) {
+                    if (notes[key]) {
+                        note_update(frame_count, semitone_to_freq(key), 1.0/note_playing, buffer, BUFFER_SIZE);
+                    }
+                }
+                for (size_t i = 0; i < ARRAY_LEN(buffer); ++i) {
+                    buffer[i] = clamp_f(buffer[i], -1., 1.);
+                }
             }
+            frame_count += BUFFER_SIZE;
             UpdateAudioStream(synth, buffer, ARRAY_LEN(buffer));
         }
         EndDrawing();
     }
-    return_defer(1);
 
-defer:
-    if (result) {
-        UnloadAudioStream(synth);
-        CloseAudioDevice();
-        CloseWindow();
-    }
+    UnloadAudioStream(synth);
+    CloseAudioDevice();
+    CloseWindow();
 
     return 0;
 }
