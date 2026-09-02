@@ -9,11 +9,11 @@ typedef struct {
     char **items;
     size_t count;
     size_t capacity;
-} List;
+} Events;
 
-static List *list = {0};
+static Events *list = {0};
 
-List *list_new(void) {
+Events *list_new(void) {
     list = malloc(sizeof(*list));
 
     list->capacity = 5;
@@ -23,7 +23,7 @@ List *list_new(void) {
     return list;
 }
 
-List *add(char *item) {
+Events *add(char *item) {
     if (list->capacity == list->count) {
         list->capacity *= 2;
         list->items = realloc(list->items, list->capacity * sizeof(char*));
@@ -33,7 +33,7 @@ List *add(char *item) {
     return list;
 }
 
-List *pop(void) {
+Events *pop(void) {
     if (list->count < 1) return list;
     list->items[list->count] = NULL;
     free(list->items[list->count]);
@@ -46,7 +46,7 @@ List *pop(void) {
     return list;
 }
 
-List *dump(void) {
+Events *dump(void) {
     if (list->count < 1) return list;
     if (list->capacity == list->capacity/list->count) {
         list->capacity /= 2;
@@ -65,7 +65,7 @@ typedef enum {
     NONE,
 } TYPE;
 
-List *del(TYPE type, ...) {
+Events *del(TYPE type, ...) {
     if (list->count < 1) return list;
     if (list->capacity == list->capacity/list->count) {
         list->capacity /= 2;
