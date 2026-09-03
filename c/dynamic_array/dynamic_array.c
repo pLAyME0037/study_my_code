@@ -95,7 +95,12 @@ Events *del(TYPE type, ...) {
     return list;
 }
 
-List *list_print(void) {
+inline Lists *peek(Lists *e) {
+    if (e == NULL || e->count == 0) return NULL;
+    return &e->items[e->count - 1];
+}
+
+Lists *list_print(void) {
     printf("[");
     size_t full_list = list->count;
     for (size_t i = 0; i < list->count; ++i) {
